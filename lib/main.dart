@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sina_mobile/View/Murid/DashboardMurid.dart';
 import 'package:sina_mobile/View/dashboard.dart';
 
 void main() {
@@ -46,7 +47,7 @@ class MyApp extends StatelessWidget {
           titleSmall: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
-      home: dashboard(),
+      home: DashboardMurid(),
     );
   }
 }

@@ -33,8 +33,16 @@ class _PengumumanState extends State<Pengumuman> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
              children: [
-               CardPengumuman(),
-               CardPengumuman(),
+               CardPengumuman(
+                 Action: (){
+
+                 },
+               ),
+               CardPengumuman(
+                 Action: (){
+
+                 },
+               ),
              ],
           ),
         ),
