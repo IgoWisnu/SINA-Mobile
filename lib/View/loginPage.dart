@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sina_mobile/View/dashboard.dart';
+import 'package:sina_mobile/View/OrangTua/DashboardOrangTua.dart';
+// import 'package:sina_mobile/View/dashboard.dart';
 import '../ViewModel/AuthViewModel.dart';
 import 'package:provider/provider.dart';
 
@@ -108,7 +109,9 @@ class _LoginPageState extends State<LoginPage> {
                         if (success) {
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (_) => dashboard()),
+                            MaterialPageRoute(
+                              builder: (_) => Dashboardorangtua(),
+                            ),
                           );
                         }
                       },

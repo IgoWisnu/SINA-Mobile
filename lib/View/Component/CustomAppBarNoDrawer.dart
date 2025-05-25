@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../Lib/Colors.dart';
 
-class CustomAppBarNoDrawer extends StatelessWidget implements PreferredSizeWidget {
-
+class CustomAppBarNoDrawer extends StatelessWidget
+    implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -25,10 +25,14 @@ class CustomAppBarNoDrawer extends StatelessWidget implements PreferredSizeWidge
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.blue
+                      color: Colors.blue,
                     ),
                     child: IconButton(
-                      icon: const Icon(Icons.arrow_back, color: Colors.black, size: 30),
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.black,
+                        size: 30,
+                      ),
                       onPressed: () {
                         Navigator.pop(context);
                       },

@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sina_mobile/View/Lib/Colors.dart';
 
-class Box extends StatelessWidget{
+class Box extends StatelessWidget {
   final int jumlah;
   final String keterangan;
 
-  const Box({
-    super.key,
-    required this.jumlah,
-    required this.keterangan
-});
+  const Box({super.key, required this.jumlah, required this.keterangan});
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +22,25 @@ class Box extends StatelessWidget{
         child: Column(
           //mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(jumlah.toString(), style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.white),),
-            Text(keterangan, style: TextStyle(fontSize:16,fontWeight: FontWeight.bold ,color: Colors.white),)
+            Text(
+              jumlah.toString(),
+              style: TextStyle(
+                fontSize: 40,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            Text(
+              keterangan,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
           ],
         ),
       ),
     );
   }
-
 }
