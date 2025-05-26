@@ -41,7 +41,7 @@ class _DashboardMuridState extends State<DashboardMurid> {
           child: Column(
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Box(jumlah: 5, keterangan: 'Tugas Belum Dikerjakan',),
                   const SizedBox(width: 10),
@@ -50,7 +50,7 @@ class _DashboardMuridState extends State<DashboardMurid> {
               ),
               const SizedBox(height: 10),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Box(jumlah: 6, keterangan: 'Tugas Terlambat',),
                   const SizedBox(width: 10),

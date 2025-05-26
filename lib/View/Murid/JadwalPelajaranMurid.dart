@@ -7,6 +7,9 @@ import 'package:sina_mobile/View/Component/Murid/CustomMuridDrawer.dart';
 import 'package:sina_mobile/View/Component/Murid/ItemJadwalMurid.dart';
 import 'package:sina_mobile/View/Component/TitleBar.dart';
 import 'package:sina_mobile/View/Lib/Colors.dart';
+import 'package:provider/provider.dart';
+import 'package:sina_mobile/ViewModel/JadwalViewModel.dart';
+import 'package:sina_mobile/ViewModel/KelasDetailViewModel.dart';
 
 class JadwalPelajaranMurid extends StatefulWidget {
   JadwalPelajaranMurid({super.key});
@@ -22,7 +25,19 @@ class _JadwalPelajaranMuridState extends State<JadwalPelajaranMurid> {
   String currentMenu = 'jadwal';
 
   @override
+  void initState() {
+    super.initState();
+    // Ambil data kelas saat widget dibuka
+    Future.microtask(() {
+      final vm = Provider.of<JadwalViewModel>(context, listen: false);
+      vm.fetchJadwal();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final vm = Provider.of<JadwalViewModel>(context, listen: false);
+
     return Scaffold(
       key: _scaffoldKey, // ← INI YANG BELUM ADA
       drawer: CustomMuridDrawer(
@@ -44,19 +59,36 @@ class _JadwalPelajaranMuridState extends State<JadwalPelajaranMurid> {
                 decoration: BoxDecoration(
                   color: AppColors.primary
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Waktu", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
-                  Text("Mata Pelajaran", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
-                  Text("Guru Mengajar", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
-                ],
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Waktu", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
+                    Text("Mata Pelajaran", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
+                    Text("Guru Mengajar", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
+                  ],
+                  ),
                 ),
               ),
-              ItemJadwalMurid(waktu_mulai: "08.00", waktu_selesai: "09.45", mata_pelajaran: "Matematika", guru: "Oscar Piastri"),
-              ItemJadwalMurid(waktu_mulai: "08.00", waktu_selesai: "09.45", mata_pelajaran: "Matematika", guru: "Oscar Piastri"),
-              ItemJadwalMurid(waktu_mulai: "08.00", waktu_selesai: "09.45", mata_pelajaran: "Matematika", guru: "Oscar Piastri"),
-              ItemJadwalMurid(waktu_mulai: "08.00", waktu_selesai: "09.45", mata_pelajaran: "Matematika", guru: "Oscar Piastri"),
+        vm.isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : vm.error != null
+            ? Center(child: Text('Error: ${vm.error}'))
+            : ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(), // agar tidak konflik dengan SingleChildScrollView
+                itemCount: vm.jadwalList.length,
+                itemBuilder: (context, index) {
+                  final jadwal = vm.jadwalList[index];
+                  return ItemJadwalMurid(
+                    waktu_mulai: jadwal.start,
+                    waktu_selesai: jadwal.finish,
+                    mata_pelajaran: jadwal.namaMapel,
+                    guru: jadwal.namaGuru,
+                  );
+                },
+              ),
             ],
           ),
         ),

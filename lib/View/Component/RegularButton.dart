@@ -23,7 +23,7 @@ import 'package:sina_mobile/View/Lib/Colors.dart';
         ),
         width: MediaQuery.of(context).size.width,
         height: 50,
-        child: Text(judul, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+        child: Text(judul, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),),
       ),
     );
   }

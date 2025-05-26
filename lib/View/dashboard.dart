@@ -39,19 +39,17 @@ class _dashboardState extends State<dashboard> {
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Box(jumlah: 5, keterangan: 'Siswa tidak hadir',),
-                const SizedBox(width: 10),
                 Box(jumlah: 24, keterangan: 'Siswa Hadir',),
               ],
             ),
             const SizedBox(height: 10),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Box(jumlah: 6, keterangan: 'belum mengumpulkan',),
-                const SizedBox(width: 10),
                 Box(jumlah: 2, keterangan: 'Tugas tuntas',),
               ],
             ),

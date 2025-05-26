@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:sina_mobile/View/Lib/Colors.dart';
-import 'package:sina_mobile/View/Murid/DetailMateriMurid.dart';
-import 'package:sina_mobile/View/TugasDetail.dart';
 
-class ItemTugasMurid extends StatelessWidget{
+class ItemMateriMurid extends StatelessWidget{
   final judul;
   final upload_date;
-  final tenggat;
   final VoidCallback onTap;
 
-  const ItemTugasMurid({
+  const ItemMateriMurid({
     super.key,
     required this.judul,
     required this.upload_date,
-    required this.tenggat,
     required this.onTap
   });
 
@@ -40,44 +36,35 @@ class ItemTugasMurid extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(judul, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                  Text("20/28")
+                  Text("")
                 ],
               ),
               SizedBox(height: 14,),
-              Container(
-                child: Row(
-                  children: [
-                    Icon(Icons.arrow_upward_outlined),
-                    SizedBox(width: 5,),
-                    Text(upload_date.toString())
-                  ],
-                ),
-              ),
-              SizedBox(height: 5,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
                     child: Row(
                       children: [
-                        Icon(Icons.access_time),
+                        Icon(Icons.arrow_upward_outlined),
                         SizedBox(width: 5,),
-                        Text(tenggat.toString())
+                        Text(upload_date.toString())
                       ],
                     ),
                   ),
                   Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: AppColors.primary
+                        color: Colors.green
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(5.0),
-                      child: Text("Tugas", style: TextStyle(color: Colors.white),),
+                      child: Text("Materi", style: TextStyle(color: Colors.white),),
                     ),
                   )
                 ],
               ),
+              SizedBox(height: 5,),
 
             ],
           ),

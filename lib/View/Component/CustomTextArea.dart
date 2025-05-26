@@ -5,18 +5,21 @@ class CustomTextArea extends StatelessWidget {
   final String hintText;
   final int minLines;
   final int maxLines;
+  final bool disable;
 
   const CustomTextArea({
     Key? key,
     required this.controller,
     this.hintText = '',
-    this.minLines = 5, // default minimal 5 baris
-    this.maxLines = 10, // default maksimal 10 baris
+    this.minLines = 5,
+    this.maxLines = 10,
+    this.disable = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      readOnly: disable,
       controller: controller,
       minLines: minLines,
       maxLines: maxLines,
@@ -32,8 +35,12 @@ class CustomTextArea extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 2),
         ),
+        filled: true,
+        fillColor: disable ? Colors.grey.shade300 : Colors.white,
+      ),
+      style: TextStyle(
+        color: disable ? Colors.grey.shade800 : Colors.black,
       ),
     );
   }

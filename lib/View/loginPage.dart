@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sina_mobile/View/dashboard.dart';
-import '../ViewModel/AuthViewModel.dart';
 import 'package:provider/provider.dart';
+import 'package:sina_mobile/View/Murid/DashboardMurid.dart';
+import '../ViewModel/AuthViewModel.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,6 +13,64 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  bool _isPasswordVisible = false;
+
+  String? emailError;
+  String? passwordError;
+
+  final sqlKeywords = ['select', 'drop', 'insert', 'update', 'delete', '--', ';'];
+
+  bool containsSqlInjection(String input) {
+    final lower = input.toLowerCase();
+    return sqlKeywords.any((keyword) => lower.contains(keyword));
+  }
+
+  void validateAndLogin(AuthViewModel vm) async {
+    setState(() {
+      emailError = null;
+      passwordError = null;
+    });
+
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+
+    bool hasError = false;
+
+    if (email.isEmpty) {
+      emailError = 'Email tidak boleh kosong';
+      hasError = true;
+    } else if (containsSqlInjection(email)) {
+      emailError = 'Email mengandung karakter tidak valid';
+      hasError = true;
+    }
+
+    if (password.isEmpty) {
+      passwordError = 'Kata sandi tidak boleh kosong';
+      hasError = true;
+    } else if (containsSqlInjection(password)) {
+      passwordError = 'Kata sandi mengandung karakter tidak valid';
+      hasError = true;
+    }
+
+    if (hasError) {
+      setState(() {});
+      return;
+    }
+
+    final success = await vm.login(email, password);
+
+    if (success) {
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => DashboardMurid()),
+      );
+    } else {
+      setState(() {
+        passwordError = 'Login gagal. Periksa kembali email dan kata sandi Anda.';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,113 +85,109 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Logo and Title
-                Column(
-                  children: [
-                    Image.asset(
-                      'lib/asset/image/loginLogo.png',
-                      height: 200,
-                      width: 300,
-                    ),
-                  ],
+                const SizedBox(height: 20),
+                Image.asset(
+                  'lib/asset/image/loginLogo.png',
+                  height: 200,
+                  width: 300,
                 ),
                 const SizedBox(height: 20),
-
-                // Title Login
                 const Text(
                   'Masuk ke akun Anda',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 30),
 
-                // Username TextField
+                // Email
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Email',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
+                    const Text('Email', style: TextStyle(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 8),
                     TextField(
                       controller: emailController,
+                      maxLength: 50,
                       decoration: InputDecoration(
                         hintText: 'Masukan Email Anda',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
+                        counterText: '',
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
                       ),
                     ),
+                    if (emailError != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4.0),
+                        child: Text(
+                          emailError!,
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      ),
                   ],
                 ),
                 const SizedBox(height: 20),
 
-                // Password TextField
+                // Password
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Kata Sandi',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
+                    const Text('Kata Sandi', style: TextStyle(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 8),
                     TextField(
-                      obscureText: true,
                       controller: passwordController,
+                      obscureText: !_isPasswordVisible,
+                      maxLength: 50,
                       decoration: InputDecoration(
                         hintText: 'Kata Sandi',
-                        suffixIcon: Icon(Icons.visibility_off),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
+                        counterText: '',
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
                         ),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
                       ),
                     ),
+                    if (passwordError != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4.0),
+                        child: Text(
+                          passwordError!,
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      ),
                   ],
                 ),
                 const SizedBox(height: 30),
-                if (vm.isLoading)
-                  CircularProgressIndicator()
-                else
-                  //login button
-                  SizedBox(
-                    width: double.infinity,
-                    height: 48,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        final success = await vm.login(
-                          emailController.text,
-                          passwordController.text,
-                        );
 
-                        if (success) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (_) => dashboard()),
-                          );
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF2F66F8),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
+                vm.isLoading
+                    ? const CircularProgressIndicator()
+                    : SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: ElevatedButton(
+                    onPressed: () => validateAndLogin(vm),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF2F66F8),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Text(
-                        'Masuk',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                    ),
+                    child: const Text(
+                      'Masuk',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
                     ),
                   ),
-                if (vm.error != null) ...[
-                  const SizedBox(height: 10),
-                  Text(vm.error!, style: TextStyle(color: Colors.red)),
-                ],
+                ),
                 const SizedBox(height: 16),
 
-                // Register Link
+                // Link ke registrasi
                 TextButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/regisPage');

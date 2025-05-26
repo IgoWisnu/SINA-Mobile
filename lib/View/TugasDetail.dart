@@ -24,7 +24,10 @@ class _TugasDetailState extends State<TugasDetail> {
             children: [
               StatusTugas(),
               SizedBox(height: 20,),
-              DetailTugas(),
+              DetailTugas(
+                judul: 'tugasfsda',
+                keterangan: 'fesddsds',
+              ),
               SizedBox(height: 20,),
             ],
           ),
