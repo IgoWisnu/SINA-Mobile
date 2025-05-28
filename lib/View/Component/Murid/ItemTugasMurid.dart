@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sina_mobile/View/Lib/Colors.dart';
+import 'package:sina_mobile/View/Lib/DateFormatter.dart';
 import 'package:sina_mobile/View/Murid/DetailMateriMurid.dart';
 import 'package:sina_mobile/View/TugasDetail.dart';
 
@@ -49,7 +50,9 @@ class ItemTugasMurid extends StatelessWidget{
                   children: [
                     Icon(Icons.arrow_upward_outlined),
                     SizedBox(width: 5,),
-                    Text(upload_date.toString())
+                    Text(
+                        DateFormatter.format(upload_date)
+                    )
                   ],
                 ),
               ),
@@ -62,7 +65,9 @@ class ItemTugasMurid extends StatelessWidget{
                       children: [
                         Icon(Icons.access_time),
                         SizedBox(width: 5,),
-                        Text(tenggat.toString())
+                        Text(
+                            DateFormatter.format(tenggat)
+                        )
                       ],
                     ),
                   ),

@@ -21,6 +21,7 @@ class Tugas {
   final String deskripsi;
   final String? lampiran;
   final String? uraian;
+  final String? fileJawaban;
   final String? tenggatKumpul;
   final DateTime tanggalPengumpulan;
   final String? nilai;
@@ -31,6 +32,7 @@ class Tugas {
     required this.deskripsi,
     this.lampiran,
     this.uraian,
+    this.fileJawaban,
     this.tenggatKumpul,
     required this.tanggalPengumpulan,
     this.nilai,
@@ -43,6 +45,7 @@ class Tugas {
       deskripsi: json['deskripsi'],
       lampiran: json['lampiran'],
       uraian: json['uraian'],
+      fileJawaban: json['file_jawaban'],
       tenggatKumpul: json['tenggat_kumpul'],
       tanggalPengumpulan: DateTime.parse(json['tanggal_pengumpulan']),
       nilai: json['nilai']?.toString(), // jika nilainya bisa null atau angka

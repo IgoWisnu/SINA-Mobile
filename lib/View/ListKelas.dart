@@ -44,17 +44,7 @@ class _ListKelasState extends State<ListKelas> {
                 }
               ),
             ClassCard(
-                judul: "Javascript/XI.3",
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => KelasDetail()
-                    ),
-                  );
-                }
-            ),
-            ClassCard(
-                judul: "Javascript/XI.3",
+                judul: "Bahasa Bali/XI.3",
                 onTap: () {
                   Navigator.push(
                     context,

@@ -26,7 +26,7 @@ class ItemRapotMurid extends StatelessWidget{
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text("X.1"),
-              Text("fdsfssds dfssd"),
+              Text("I Gede Igo Wisnu W"),
               Icon(Icons.arrow_forward_ios)
             ],
           ),

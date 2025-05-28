@@ -64,6 +64,28 @@ class _RegisterPageState extends State<RegisterPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
+                      'Email',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    TextField(
+                      obscureText: false,
+                      decoration: InputDecoration(
+                        hintText: 'Masukan email anda',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 30),
+
+                // Password TextField
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
                       'Kata Sandi',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
@@ -111,7 +133,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   height: 48,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/dashboard');
+                      Navigator.pushNamed(context, '/loginPage');
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF2F66F8),

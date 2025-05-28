@@ -16,7 +16,7 @@ class _AbsensiState extends State<Absensi> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   String currentMenu = 'absensi';
-  String selectedValue = 'Option 1';
+  String selectedValue = 'X/Javascript';
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class _AbsensiState extends State<Absensi> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   CustomDropdown(
-                    items: ['Option 1', 'Option 2', 'Option 3', 'Option 4'],
+                    items: ['X/Javascript', 'X/Bahasa Indonesia', 'XI/Javascript', 'XII/Javascript'],
                     selectedItem: selectedValue,
                     onChanged: (newValue) {
                       setState(() {

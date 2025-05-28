@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:sina_mobile/View/Lib/Colors.dart';
 import 'package:sina_mobile/View/Lib/DateFormatter.dart';
 
-class ItemMateriMurid extends StatelessWidget{
+class ItemMateriGuru extends StatelessWidget{
   final judul;
   final upload_date;
   final VoidCallback onTap;
 
-  const ItemMateriMurid({
+  const ItemMateriGuru({
     super.key,
     required this.judul,
     required this.upload_date,
@@ -50,7 +49,7 @@ class ItemMateriMurid extends StatelessWidget{
                         Icon(Icons.arrow_upward_outlined),
                         SizedBox(width: 5,),
                         Text(
-                            DateFormatter.format(upload_date)
+                          DateFormatter.format(upload_date)
                         )
                       ],
                     ),

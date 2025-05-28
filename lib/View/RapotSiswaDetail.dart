@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sina_mobile/View/Component/CustomAppBarNoDrawer.dart';
+import 'package:sina_mobile/View/Component/CustomTextField.dart';
 import 'package:sina_mobile/View/Component/ItemNilaiRapot.dart';
 import 'package:sina_mobile/View/Component/RegularButton.dart';
 import 'package:sina_mobile/View/Component/TitleBarLine.dart';
@@ -14,6 +15,20 @@ class RapotSiswaDetail extends StatefulWidget{
 }
 
 class _RapotSiswaDetailState extends State<RapotSiswaDetail> {
+
+  final namaController = TextEditingController();
+  final mataPelajaranController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Data demo (dummy)
+    namaController.text = "I Gede Igo Wisnu Wardana";
+    mataPelajaranController.text = "Matematika";
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,41 +36,30 @@ class _RapotSiswaDetailState extends State<RapotSiswaDetail> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TitleBarLine(judul: "Detail Rapot"),
+            TitleBarLine(judul: "Input Nilai Rapot"),
             SizedBox(height: 20,),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: 50,
-              decoration: BoxDecoration(
-                color: AppColors.primary,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("No", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                    Text("Mata Pelajaran", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                    Text("Nilai", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                  ],
-                ),
-              ),
-            ),
-            ItemNilaiRapot(controller: TextEditingController(), mata_pelajaran: "Matematika", no: "1"),
-            ItemNilaiRapot(controller: TextEditingController(), mata_pelajaran: "Matematika", no: "2"),
-            ItemNilaiRapot(controller: TextEditingController(), mata_pelajaran: "Javascript", no: "3"),
-            ItemNilaiRapot(controller: TextEditingController(), mata_pelajaran: "CSS", no: "4"),
+            Text('Nama Siswa', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+            SizedBox(height: 5,),
+            CustomTextField(controller: namaController),
+            SizedBox(height: 20,),
+            Text('Mata Pelajaran', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+            SizedBox(height: 5,),
+            CustomTextField(controller: mataPelajaranController),
+            SizedBox(height: 20,),
+            Text('Nilai', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+            SizedBox(height: 5,),
+            CustomTextField(controller: TextEditingController()),
+            SizedBox(height: 30,),
+            RegularButton(onTap: (){}, judul: "Draf"),
+            SizedBox(height: 10,),
+            RegularButton(onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ListRapotSiswa()));
+            }, judul: "Simpan")
+
           ],
         ),
-      ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        child: RegularButton(
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ListRapotSiswa()));
-            }
-            , judul: "Simpan"),
       ),
     );
   }

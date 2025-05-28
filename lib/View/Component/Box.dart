@@ -28,7 +28,7 @@ class Box extends StatelessWidget{
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(jumlah.toString(), style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.white),),
-              Text(keterangan, style: TextStyle(fontSize:16,fontWeight: FontWeight.bold ,color: Colors.white),)
+              Text(keterangan, style: TextStyle(fontSize:14,fontWeight: FontWeight.bold ,color: Colors.white),)
             ],
           ),
         ),

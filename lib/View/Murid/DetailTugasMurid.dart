@@ -68,7 +68,7 @@ class _DetailTugasMuridState extends State<DetailTugasMurid> {
   }
 
   bool get _tugasSudahDikumpulkan =>
-      widget.tugas.uraian != null || widget.tugas.lampiran != null;
+      widget.tugas.uraian != null || widget.tugas.fileJawaban != null;
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +118,7 @@ class _DetailTugasMuridState extends State<DetailTugasMurid> {
                 if (_tugasSudahDikumpulkan) ...[
                   // File Picker dan Deskripsi
                   CustomFilePicker(
-                    label: widget.tugas.lampiran.toString(),
+                    label: widget.tugas.fileJawaban.toString(),
                     onFilePicked: (filePath) {
                       setState(() {
                         _selectedFilePath = filePath;

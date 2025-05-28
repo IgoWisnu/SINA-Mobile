@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:sina_mobile/View/Component/Box.dart';
 import 'package:sina_mobile/View/Component/ClassCard.dart';
@@ -25,6 +27,9 @@ class _RekapAbsensiMuridState extends State<RekapAbsensiMurid> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String currentMenu = 'rekap';
 
+  double dummyHadir = 5;
+  double dummyIzin = 2;
+
   @override
   void initState() {
     super.initState();
@@ -36,7 +41,6 @@ class _RekapAbsensiMuridState extends State<RekapAbsensiMurid> {
   @override
   Widget build(BuildContext context) {
     final vm = Provider.of<RekapAbsensiViewModel>(context);
-
 
     return Scaffold(
       key: _scaffoldKey, // ← INI YANG BELUM ADA
@@ -65,28 +69,32 @@ class _RekapAbsensiMuridState extends State<RekapAbsensiMurid> {
                   PieChartData(
                     sections: [
                       PieChartSectionData(
-                        value: vm.rekapabsendata!.hadir.toDouble(),
-                        title: '${vm.rekapabsendata!.hadir} Hadir',
+                        value: vm.rekapabsendata!.hadir.toDouble()+dummyHadir,
+                        title: '${vm.rekapabsendata!.hadir+dummyHadir} Hadir',
                         color: Colors.blue,
                         radius: 50,
+                          titleStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)
                       ),
                       PieChartSectionData(
-                        value: vm.rekapabsendata!.izin.toDouble(),
-                        title: '${vm.rekapabsendata!.izin} Izin',
-                        color: Colors.red,
+                        value: vm.rekapabsendata!.izin.toDouble()+dummyIzin,
+                        title: '${vm.rekapabsendata!.izin+dummyIzin} Izin',
+                        color: Colors.green,
                         radius: 50,
+                        titleStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)
                       ),
                       PieChartSectionData(
                         value: vm.rekapabsendata!.sakit.toDouble(),
                         title: '${vm.rekapabsendata!.sakit} Sakit',
-                        color: Colors.green,
+                        color: Colors.yellow,
                         radius: 50,
+                          titleStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)
                       ),
                       PieChartSectionData(
                         value: vm.rekapabsendata!.alpha.toDouble(),
                         title: '${vm.rekapabsendata!.alpha} Alpha',
-                        color: Colors.orange,
+                        color: Colors.red,
                         radius: 50,
+                          titleStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)
                       ),
                     ],
                   ),
@@ -107,7 +115,7 @@ class _RekapAbsensiMuridState extends State<RekapAbsensiMurid> {
                         ),
                       ),
                       SizedBox(width: 3,),
-                      Text("Hadir: ${vm.rekapabsendata!.hadir}")
+                      Text("Hadir: ${vm.rekapabsendata!.hadir+dummyHadir}")
                     ],
                   ),
                   Row(
@@ -141,7 +149,7 @@ class _RekapAbsensiMuridState extends State<RekapAbsensiMurid> {
                         ),
                       ),
                       SizedBox(width: 3,),
-                      Text("Izin: ${vm.rekapabsendata!.izin}")
+                      Text("Izin: ${vm.rekapabsendata!.izin+dummyIzin}")
                     ],
                   ),
                   Row(

@@ -19,7 +19,7 @@ class StatusTugas extends StatelessWidget{
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("data", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                  Text("Tugas javascript 1", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
                   Icon(Icons.more_vert)
                 ],
               ),
@@ -36,8 +36,8 @@ class StatusTugas extends StatelessWidget{
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Data"),
-                  Text("12/3/2025")
+                  Text("Diunggah"),
+                  Text("20/5/2025")
                 ],
               ),
             ),
@@ -46,8 +46,8 @@ class StatusTugas extends StatelessWidget{
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Data"),
-                  Text("12/3/2025")
+                  Text("Tenggat"),
+                  Text("23/5/2025")
                 ],
               ),
             ),
@@ -56,10 +56,10 @@ class StatusTugas extends StatelessWidget{
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Data"),
+                  Text("Sudah dikumpulkan"),
                   Row(
                     children: [
-                      Text('0'),
+                      Text('3'),
                       SizedBox(width: 5,),
                       Icon(Icons.people)
                     ],
@@ -72,10 +72,10 @@ class StatusTugas extends StatelessWidget{
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Data"),
+                  Text("Belum dikumpulkan"),
                   Row(
                     children: [
-                      Text('0'),
+                      Text('25'),
                       SizedBox(width: 5,),
                       Icon(Icons.people)
                     ],
@@ -88,7 +88,7 @@ class StatusTugas extends StatelessWidget{
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Data"),
+                  Text("Terlambat"),
                   Row(
                     children: [
                       Text('0'),

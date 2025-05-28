@@ -109,7 +109,7 @@ class KelasRepository {
 
     final request = http.MultipartRequest('PUT', uri)
       ..headers['Authorization'] = 'Bearer $token'
-      ..fields['deskripsi'] = deskripsi
+      ..fields['uraian'] = deskripsi
       ..files.add(file);
 
     final streamedResponse = await request.send();

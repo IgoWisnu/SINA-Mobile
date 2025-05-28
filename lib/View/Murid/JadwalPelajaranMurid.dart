@@ -36,10 +36,10 @@ class _JadwalPelajaranMuridState extends State<JadwalPelajaranMurid> {
 
   @override
   Widget build(BuildContext context) {
-    final vm = Provider.of<JadwalViewModel>(context, listen: false);
+    final vm = Provider.of<JadwalViewModel>(context);
 
     return Scaffold(
-      key: _scaffoldKey, // ← INI YANG BELUM ADA
+      key: _scaffoldKey,
       drawer: CustomMuridDrawer(
         selectedMenu: currentMenu,
       ),
@@ -60,7 +60,7 @@ class _JadwalPelajaranMuridState extends State<JadwalPelajaranMurid> {
                   color: AppColors.primary
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

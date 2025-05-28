@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sina_mobile/View/Murid/DashboardMurid.dart';
+import 'package:sina_mobile/View/dashboard.dart';
 import '../ViewModel/AuthViewModel.dart';
 
 class LoginPage extends StatefulWidget {
@@ -61,16 +62,30 @@ class _LoginPageState extends State<LoginPage> {
 
     if (success) {
       if (!mounted) return;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => DashboardMurid()),
-      );
+
+      final role = vm.user?.data.role.toLowerCase(); // Pastikan vm.user sudah diset setelah login
+
+      if (role == 'siswa') {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => DashboardMurid()),
+        );
+      } else if (role == 'guru') {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => dashboard()),
+        );
+      } else {
+        setState(() {
+          passwordError = 'Peran tidak dikenali: $role';
+        });
+      }
     } else {
       setState(() {
         passwordError = 'Login gagal. Periksa kembali email dan kata sandi Anda.';
       });
     }
-  }
+}
 
   @override
   Widget build(BuildContext context) {

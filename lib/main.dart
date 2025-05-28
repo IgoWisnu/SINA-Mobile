@@ -5,15 +5,19 @@ import 'package:sina_mobile/View/regisPage.dart';
 import 'package:sina_mobile/View/registerPage.dart';
 import 'package:sina_mobile/View/dashboard.dart';
 import 'package:sina_mobile/ViewModel/BeritaViewModel.dart';
+import 'package:sina_mobile/ViewModel/DashboardViewModel.dart';
 import 'package:sina_mobile/ViewModel/JadwalViewModel.dart';
 import 'package:sina_mobile/ViewModel/KelasDetailViewModel.dart';
 import 'package:sina_mobile/ViewModel/KelasViewModel.dart';
+import 'package:sina_mobile/ViewModel/ProfilViewModel.dart';
 import 'package:sina_mobile/ViewModel/RekapAbsensiViewModel.dart';
 import 'package:sina_mobile/service/api/ApiService.dart';
 import 'package:sina_mobile/service/api/ApiServiceAuth.dart';
 import 'package:sina_mobile/service/repository/AbsensiRepository.dart';
 import 'package:sina_mobile/service/repository/AuthRepository.dart';
 import 'package:sina_mobile/service/repository/BeritaRepository.dart';
+import 'package:sina_mobile/service/repository/BiodataRepository.dart';
+import 'package:sina_mobile/service/repository/DashboardRepository.dart';
 import 'package:sina_mobile/service/repository/JadwalRepository.dart';
 import 'package:sina_mobile/service/repository/KelasRepository.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -63,6 +67,16 @@ class MyApp extends StatelessWidget {
               repository: BeritaRepository(ApiService())
           ),
         ),
+        ChangeNotifierProvider(
+          create: (_) => ProfilViewModel(
+              repository: BiodataRepository(ApiService())
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => DashboardViewModel(
+              repository: DashboardRepository(ApiService())
+          ),
+        ),
       ],
       child: MaterialApp(
         title: 'SINA_Mobile',
@@ -98,7 +112,12 @@ class MyApp extends StatelessWidget {
             titleSmall: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ),
-        home: const LoginPage(), // default ke LoginPage
+        home: const LoginPage(),
+        routes: {
+          '/loginPage': (context) => LoginPage(),
+          '/regisPage': (context) => RegisPage(),
+          '/registerPage': (context) => RegisterPage(),
+        },// default ke LoginPage
       ),
     );
   }
