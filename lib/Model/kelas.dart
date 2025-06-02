@@ -35,7 +35,7 @@ class Datum {
 
   factory Datum.fromJson(Map<String, dynamic> json) {
     return Datum(
-      mapelId: json['mapel_id'],
+      mapelId: int.parse(json['mapel_id'].toString()),
       namaKelas: json['nama_kelas'],
       namaMapel: json['nama_mapel'],
     );

@@ -22,8 +22,9 @@ class Tugas {
   final String? lampiran;
   final String? uraian;
   final String? fileJawaban;
-  final String? tenggatKumpul;
-  final DateTime tanggalPengumpulan;
+  final DateTime? createAt;
+  final DateTime? tenggatKumpul;
+  final DateTime? tanggalPengumpulan;
   final String? nilai;
 
   Tugas({
@@ -33,6 +34,7 @@ class Tugas {
     this.lampiran,
     this.uraian,
     this.fileJawaban,
+    this.createAt,
     this.tenggatKumpul,
     required this.tanggalPengumpulan,
     this.nilai,
@@ -40,13 +42,14 @@ class Tugas {
 
   factory Tugas.fromJson(Map<String, dynamic> json) {
     return Tugas(
-      tugasId: json['tugas_id'],
-      namaTugas: json['judul'],
+      tugasId: int.parse(json['tugas_id'].toString()),
+      namaTugas: json['nama_tugas'],
       deskripsi: json['deskripsi'],
       lampiran: json['lampiran'],
       uraian: json['uraian'],
       fileJawaban: json['file_jawaban'],
-      tenggatKumpul: json['tenggat_kumpul'],
+      createAt: DateTime.parse(json['created_at']),
+      tenggatKumpul: DateTime.parse(json['tenggat_kumpul']),
       tanggalPengumpulan: DateTime.parse(json['tanggal_pengumpulan']),
       nilai: json['nilai']?.toString(), // jika nilainya bisa null atau angka
     );
