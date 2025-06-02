@@ -32,7 +32,7 @@ class Materi {
 
   factory Materi.fromJson(Map<String, dynamic> json) {
     return Materi(
-      materiId: json['materi_id'],
+      materiId: int.parse(json['materi_id'].toString()),
       namaMateri: json['nama_materi'],
       deskripsi: json['uraian'],
       lampiran: json['lampiran'],

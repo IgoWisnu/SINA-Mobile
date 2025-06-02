@@ -1,5 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sina_mobile/View/OrangTua/DetailPengumumanPage.dart';
+import 'package:sina_mobile/View/OrangTua/DetailRaportPage.dart';
+import 'package:sina_mobile/View/OrangTua/FormPengajuanPage.dart';
+import 'package:sina_mobile/View/OrangTua/JadwalPelajaranPage.dart';
+import 'package:sina_mobile/View/OrangTua/ListRaportPage.dart';
+import 'package:sina_mobile/View/OrangTua/PengumumanOrangTuaPage.dart';
+import 'package:sina_mobile/View/OrangTua/ProfilOrangTuaPage.dart';
+import 'package:sina_mobile/View/OrangTua/RekapAbsensiPage.dart';
+import 'package:sina_mobile/View/OrangTua/RingkasanPengajuanPage.dart';
+import 'package:sina_mobile/View/OrangTua/RiwayatAbsensiPage.dart';
+import 'package:sina_mobile/View/OrangTua/StatistikPage.dart';
 import 'package:sina_mobile/View/loginPage.dart';
 import 'package:sina_mobile/View/regisPage.dart';
 import 'package:sina_mobile/View/registerPage.dart';
@@ -117,7 +128,25 @@ class MyApp extends StatelessWidget {
           '/loginPage': (context) => LoginPage(),
           '/regisPage': (context) => RegisPage(),
           '/registerPage': (context) => RegisterPage(),
-        },// default ke LoginPage
+          '/detail-pengumuman': (context) => DetailPengumumanPage(),
+          '/statistik': (context) => StatistikPage(),
+          '/jadwal': (context) => JadwalPelajaranPage(),
+          '/list-rapot': (context) => ListRapotPage(),
+          '/detail-rapot': (context) => DetailRaportPage(),
+          '/rekap': (context) => RekapAbsensiPage(),
+          '/riwayat-absensi': (context) => RiwayatAbsensiPage(),
+          '/pengumuman': (context) => PengumumanOrangTuaPage(),
+          '/pengajuan': (context) => FormPengajuanPage(),
+          '/ringkasan-pengajuan':
+              (context) => RingkasanPengajuanPage(
+            namaSiswa: '',
+            tanggalIzin: '',
+            jenisIzin: '',
+            keterangan: '',
+          ),
+          '/profil': (context) => ProfilOrangTuaPage(),
+          // '/dashboard': (context) => dashboard(),
+        },
       ),
     );
   }

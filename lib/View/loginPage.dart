@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sina_mobile/View/Murid/DashboardMurid.dart';
+import 'package:sina_mobile/View/OrangTua/DashboardOrangTua.dart';
 import 'package:sina_mobile/View/dashboard.dart';
 import '../ViewModel/AuthViewModel.dart';
 
@@ -75,6 +76,11 @@ class _LoginPageState extends State<LoginPage> {
           context,
           MaterialPageRoute(builder: (_) => dashboard()),
         );
+      } else if (role == 'orangtua') {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => Dashboardorangtua()),
+        );
       } else {
         setState(() {
           passwordError = 'Peran tidak dikenali: $role';
@@ -82,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     } else {
       setState(() {
-        passwordError = 'Login gagal. Periksa kembali email dan kata sandi Anda.';
+        passwordError = 'Login gagal. Periksa kembali email dan password anda';
       });
     }
 }

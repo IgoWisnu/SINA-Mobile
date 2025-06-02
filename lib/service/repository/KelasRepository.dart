@@ -45,7 +45,7 @@ class KelasRepository {
     }
 
     final response = await apiService.client.get(
-      apiService.buildUrl('dashboard/tugas/1'),
+      apiService.buildUrl('dashboard/tugas/$mapelId'),
       headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
     );
 

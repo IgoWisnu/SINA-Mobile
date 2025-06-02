@@ -29,7 +29,7 @@ class KelasDetailViewModel with ChangeNotifier {
         ...tugasList.map((tugas) => KelasItem(
           jenis: JenisItem.tugas,
           judul: tugas.namaTugas,
-          uploadDate: tugas.tanggalPengumpulan, // pastikan ini DateTime
+          uploadDate: tugas.createAt ?? DateTime.now(),
           data: tugas,
         )),
         ...materiList.map((materi) => KelasItem(
