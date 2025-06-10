@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sina_mobile/Model/Berita.dart';
-import 'package:sina_mobile/Model/RekapAbsen.dart';
 import '../../service/api/ApiService.dart';
 
 class BeritaRepository {

@@ -29,7 +29,7 @@ class BeritaResponse {
 }
 
 class Berita {
-  final int beritaId;
+  final String beritaId;
   final String judul;
   final String foto;
   final String isi;

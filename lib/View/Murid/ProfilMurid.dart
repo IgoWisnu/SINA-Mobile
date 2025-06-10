@@ -163,19 +163,19 @@ class _ProfilMuridState extends State<ProfilMurid> {
                       fontWeight: FontWeight.bold, fontSize: 16),),
                   SizedBox(height: 5,),
                   CustomTextField(
-                    controller: nikController, hintText: 'ssaas',),
+                    controller: nikController, enabled: false, ),
                   SizedBox(height: 10,),
                   Text("NISM", style: TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 16),),
                   SizedBox(height: 5,),
                   CustomTextField(
-                    controller: nismController, hintText: 'ssaas',),
+                    controller: nismController, enabled: false,),
                   SizedBox(height: 10,),
                   Text("Nama Lengkap", style: TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 16),),
                   SizedBox(height: 5,),
                   CustomTextField(
-                    controller: namaController, hintText: 'ssaas',),
+                    controller: namaController, enabled: false,),
                   SizedBox(height: 10,),
                   Text("Tempat Lahir", style: TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 16),),

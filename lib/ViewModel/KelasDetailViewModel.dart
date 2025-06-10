@@ -17,7 +17,7 @@ class KelasDetailViewModel with ChangeNotifier {
   String? _error;
   String? get error => _error;
 
-  Future<void> fetchTugasMateri(int mapelId) async {
+  Future<void> fetchTugasMateri(String mapelId) async {
     _isLoading = true;
     notifyListeners();
 
@@ -35,7 +35,7 @@ class KelasDetailViewModel with ChangeNotifier {
         ...materiList.map((materi) => KelasItem(
           jenis: JenisItem.materi,
           judul: materi.namaMateri,
-          uploadDate: materi.tanggalPengumpulan, // pastikan ini DateTime
+          uploadDate: materi.tanggalPengumpulan ?? DateTime.now(), // pastikan ini DateTime
           data: materi,
         )),
       ];

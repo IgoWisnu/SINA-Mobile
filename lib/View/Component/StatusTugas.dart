@@ -1,7 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:sina_mobile/View/Lib/Colors.dart';
+import 'package:sina_mobile/View/Lib/DateFormatter.dart';
 
 class StatusTugas extends StatelessWidget{
+  final String judul;
+  final DateTime uploadDate;
+  final DateTime tenggat;
+  final String sudahDikumpul;
+  final String belumDikumpul;
+  final String terlambat;
+
+  const StatusTugas({
+    super.key,
+    required this.judul,
+    required this.uploadDate,
+    required this.tenggat,
+    required this.sudahDikumpul,
+    required this.belumDikumpul,
+    required this.terlambat
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +36,7 @@ class StatusTugas extends StatelessWidget{
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Tugas javascript 1", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                  Text(judul, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
                   Icon(Icons.more_vert)
                 ],
               ),
@@ -37,7 +54,7 @@ class StatusTugas extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("Diunggah"),
-                  Text("20/5/2025")
+                  Text(DateFormatter.format(uploadDate))
                 ],
               ),
             ),
@@ -47,7 +64,7 @@ class StatusTugas extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("Tenggat"),
-                  Text("23/5/2025")
+                  Text(DateFormatter.format(tenggat))
                 ],
               ),
             ),
@@ -59,7 +76,7 @@ class StatusTugas extends StatelessWidget{
                   Text("Sudah dikumpulkan"),
                   Row(
                     children: [
-                      Text('3'),
+                      Text(sudahDikumpul),
                       SizedBox(width: 5,),
                       Icon(Icons.people)
                     ],
@@ -75,7 +92,7 @@ class StatusTugas extends StatelessWidget{
                   Text("Belum dikumpulkan"),
                   Row(
                     children: [
-                      Text('25'),
+                      Text(belumDikumpul),
                       SizedBox(width: 5,),
                       Icon(Icons.people)
                     ],
@@ -91,7 +108,7 @@ class StatusTugas extends StatelessWidget{
                   Text("Terlambat"),
                   Row(
                     children: [
-                      Text('0'),
+                      Text(terlambat),
                       SizedBox(width: 5,),
                       Icon(Icons.people)
                     ],

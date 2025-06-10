@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
           context,
           MaterialPageRoute(builder: (_) => dashboard()),
         );
-      } else if (role == 'orangtua') {
+      } else if (role == 'ortu') {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => Dashboardorangtua()),

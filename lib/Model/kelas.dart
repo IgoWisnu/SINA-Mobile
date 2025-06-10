@@ -23,7 +23,7 @@ class Kelas {
 }
 
 class Datum {
-  int mapelId;
+  String mapelId;
   String namaKelas;
   String namaMapel;
 
@@ -35,7 +35,7 @@ class Datum {
 
   factory Datum.fromJson(Map<String, dynamic> json) {
     return Datum(
-      mapelId: int.parse(json['mapel_id'].toString()),
+      mapelId: json['mapel_id'],
       namaKelas: json['nama_kelas'],
       namaMapel: json['nama_mapel'],
     );

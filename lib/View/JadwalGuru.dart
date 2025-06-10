@@ -5,6 +5,8 @@ import 'package:sina_mobile/View/Component/Custom_drawer.dart';
 import 'package:sina_mobile/View/Component/ItemJadwal.dart';
 import 'package:sina_mobile/View/Component/TitleBar.dart';
 import 'package:sina_mobile/View/Lib/Colors.dart';
+import 'package:sina_mobile/ViewModel/Guru/JadwalGuruViewModel.dart';
+import 'package:provider/provider.dart';
 
 class JadwalGuru extends StatefulWidget{
 
@@ -16,10 +18,35 @@ class _JadwalGuruState extends State<JadwalGuru> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   String currentMenu = 'jadwal';
-  String selecteditem = 'Senin';
+  String selectedItem = 'senin';
+
+  final List<String> hariList = ['senin', 'selasa', 'rabu', 'kamis', 'jumat'];
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Set selectedItem sesuai hari ini
+    int today = DateTime.now().weekday; // Senin = 1, Minggu = 7
+    if (today >= 1 && today <= 5) {
+      selectedItem = hariList[today - 1]; // Senin = 0
+    } else {
+      selectedItem = 'senin'; // default jika hari Sabtu/Minggu
+    }
+
+    // Ambil data kelas saat widget dibuka
+    Future.microtask(() {
+      final vm = Provider.of<JadwalGuruViewModel>(context, listen: false);
+      vm.fetchJadwal();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final vm = Provider.of<JadwalGuruViewModel>(context);
+    final kodeHariDipilih = selectedItem;
+    final jadwalHariIni = vm.jadwalList.where((j) => j.hari == kodeHariDipilih).toList();
+
     return Scaffold(
       key: _scaffoldKey, // ← INI YANG BELUM ADA
       drawer: CustomDrawer(
@@ -36,12 +63,13 @@ class _JadwalGuruState extends State<JadwalGuru> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(height: 10,),
               CustomDropdown(
-                  items: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'],
-                  selectedItem: selecteditem,
+                  items: ['senin', 'selasa', 'rabu', 'kamis', 'jumat'],
+                  selectedItem: selectedItem,
                   onChanged: (newValue) {
                     setState(() {
-                      selecteditem = newValue!;
+                      selectedItem = newValue!;
                     });
                   },
               ),
@@ -64,9 +92,24 @@ class _JadwalGuruState extends State<JadwalGuru> {
                   ),
                 ),
               ),
-              ItemJadwal(waktu_mulai: "08.00", waktu_selesai: "09.45", mata_pelajaran: "Javascript", kelas: "XI.1"),
-              ItemJadwal(waktu_mulai: "09.45", waktu_selesai: "10.30", mata_pelajaran: "Javascript", kelas: "XI.2"),
-              ItemJadwal(waktu_mulai: "12.00", waktu_selesai: "12.45", mata_pelajaran: "Javascript", kelas: "XII.1")
+              vm.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : vm.error != null
+                  ? Center(child: Text('Error: ${vm.error}'))
+                  : ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: jadwalHariIni.length,
+                itemBuilder: (context, index) {
+                  final jadwal = jadwalHariIni[index];
+                  return ItemJadwal(
+                    waktu_mulai: jadwal.start,
+                    waktu_selesai: jadwal.finish,
+                    mata_pelajaran: jadwal.namaMapel,
+                    kelas: jadwal.jamKe.toString(),
+                  );
+                },
+              )
             ],
           ),
         ),

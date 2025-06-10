@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:sina_mobile/Model/Berita.dart';
+import 'package:sina_mobile/View/Component/AddButton.dart';
 import 'package:sina_mobile/View/Component/CardPengumuman.dart';
 import 'package:sina_mobile/View/Murid/PengumumanDetail.dart';
 import 'package:sina_mobile/View/Murid/PengumumanDetailMurid.dart';
-
+import 'package:sina_mobile/View/PengumumanDetailGuru.dart';
+import 'package:sina_mobile/View/TambahPengumuman.dart';
+import 'package:sina_mobile/ViewModel/Guru/PengumumanGuruViewModel.dart';
+import 'package:provider/provider.dart';
 import 'Component/CustomAppBar.dart';
 import 'Component/Custom_drawer.dart';
 
@@ -18,33 +22,19 @@ class _PengumumanState extends State<Pengumuman> {
 
   String currentMenu = 'pengumuman';
 
-  final List<Berita> dummyBerita = [
-    Berita(
-      beritaId: 3,
-      judul: 'Peringatan Hari Pendidikan Nasional',
-      foto: 'samurai.jpg',
-      isi: 'Sekolah mengadakan upacara bendera dan lomba antar kelas dalam rangka memperingati Hari Pendidikan Nasional.',
-      tipe: 'Informasi',
-      createdAt: DateTime.parse('2025-05-02 08:00:00'),
-      namaGuru: 'Ibu Sari',
-      namaAdmin: null,
-    ),
-    Berita(
-      beritaId: 4,
-      judul: 'Pengumuman Libur Semester',
-      foto: 'samurai.jpg',
-      isi: 'Diumumkan kepada seluruh siswa bahwa libur semester akan dimulai tanggal 10 Juni 2025 hingga 20 Juli 2025.',
-      tipe: 'Pengumuman',
-      createdAt: DateTime.parse('2025-05-25 10:30:00'),
-      namaGuru: null,
-      namaAdmin: 'Admin Sekolah',
-    ),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    // Ambil data kelas saat widget dibuka
+    Future.microtask(() =>
+        Provider.of<PengumumanGuruViewModel>(context, listen: false).fetchBerita());
+  }
 
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    final vm = Provider.of<PengumumanGuruViewModel>(context);
+
     return Scaffold(
         key: _scaffoldKey, // ← INI YANG BELUM ADA
         drawer: CustomDrawer(
@@ -55,26 +45,44 @@ class _PengumumanState extends State<Pengumuman> {
           _scaffoldKey.currentState?.openDrawer();
           },
         ),
-      body: ListView.builder(
+      body: vm.isLoading
+          ? Center(child: CircularProgressIndicator())
+          : vm.error != null
+          ? Center(child: Text('Error: ${vm.error}'))
+          : Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: dummyBerita.length,
-        itemBuilder: (context, index) {
-          final beritaItem = dummyBerita[index];
-          return CardPengumuman(
-            berita: beritaItem,
-            Action: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PengumumanDetailMurid(
-                    berita: beritaItem,
+        child: ListView.builder(
+          itemCount: vm.beritaList.length,
+          itemBuilder: (context, index) {
+            final beritaItem = vm.beritaList[index];
+            return CardPengumuman(
+              berita: beritaItem,
+              Action: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PengumumanDetailGuru(
+                      berita: beritaItem,
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            );
+          },
+        ),
+      ),
+      floatingActionButton: AddButton(
+        onPressed: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TambahPengumuman(),
+            ),
           );
+          vm.fetchBerita();
         },
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }

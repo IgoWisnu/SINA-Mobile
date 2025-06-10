@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:sina_mobile/Model/Guru/PengumpulanTugasResponse.dart';
 import 'package:sina_mobile/View/Component/CustomAppBarNoDrawer.dart';
 import 'package:sina_mobile/View/Component/CustomTextField.dart';
 import 'package:sina_mobile/View/Component/RegularButton.dart';
 import 'package:sina_mobile/View/Component/TitleBarLine.dart';
+import 'package:sina_mobile/View/Lib/DateFormatter.dart';
 
 class DetailTugasSiswa extends StatelessWidget{
+  final SudahMengumpulkan tugasSiswa;
+
+  const DetailTugasSiswa({super.key, required this.tugasSiswa});
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,15 +35,15 @@ class DetailTugasSiswa extends StatelessWidget{
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("I Gede Igo Wisnu Wardana"),
+                        Text(tugasSiswa.namaSiswa),
                         SizedBox(height: 5,),
-                        Text("1293019321"),
+                        Text(tugasSiswa.nis),
                         SizedBox(height: 5,),
                         Text("XI.1"),
                         SizedBox(height: 5,),
-                        Text("Dikmupulkan pada : 11.00 05/09/2025"),
+                        Text("Dikmupulkan pada : ${DateFormatter.format(tugasSiswa.tanggalPengumpulan)}"),
                         SizedBox(height: 5,),
-                        Text("Status : Terlambat"),
+                        Text("Status : ${tugasSiswa.statusPengumpulan}"),
                         SizedBox(height: 5,),
                       ],
                     ),
@@ -46,7 +53,7 @@ class DetailTugasSiswa extends StatelessWidget{
               SizedBox(height: 20,),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: Text("Teks", ),
+                child: Text("Uraian", ),
               ),
               Card(
                 child: Container(
@@ -56,7 +63,7 @@ class DetailTugasSiswa extends StatelessWidget{
                     padding: const EdgeInsets.all(10.0),
                     child: Column(
                       children: [
-                        Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laboru.")
+                        Text(tugasSiswa.uraian)
                       ],
                     ),
                   ),
@@ -75,7 +82,7 @@ class DetailTugasSiswa extends StatelessWidget{
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text("Tugas_igo1.pdf"),
+                        Text(tugasSiswa.fileJawaban),
                         SizedBox(height: 5,),
                         Image.asset("lib/asset/image/SINA.png")
                       ],

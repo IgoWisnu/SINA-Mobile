@@ -29,7 +29,7 @@ class User {
 }
 
 class UserData {
-  final int userId;
+  final String userId;
   final String email;
   final String role;
 
@@ -41,7 +41,7 @@ class UserData {
 
   factory UserData.fromJson(Map<String, dynamic> json) {
     return UserData(
-      userId: int.parse(json['userId'].toString()),
+      userId: json['userId'],
       email: json['email'],
       role: json['role'],
     );

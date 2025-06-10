@@ -21,7 +21,7 @@ class JadwalResponse {
 }
 
 class Jadwal {
-  final int hari;
+  final String hari;
   final String start;
   final String finish;
   final String namaMapel;
