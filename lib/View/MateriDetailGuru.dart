@@ -6,13 +6,23 @@ import 'package:sina_mobile/View/Component/ItemTugasSiswa.dart';
 import 'package:sina_mobile/View/Component/StatusTugas.dart';
 import 'package:sina_mobile/View/Component/TitleBarLine.dart';
 
-class MateriDetail extends StatefulWidget{
+class MateriDetailGuru extends StatefulWidget{
+  final String judul;
+  final String deskripsi;
+  final String lampiran;
+
+  const MateriDetailGuru({
+    super.key,
+    required this.judul,
+    required this.deskripsi,
+    required this.lampiran
+  });
 
   @override
-  State<MateriDetail> createState() => _MateriDetailState();
+  State<MateriDetailGuru> createState() => _MateriDetailGuruState();
 }
 
-class _MateriDetailState extends State<MateriDetail> {
+class _MateriDetailGuruState extends State<MateriDetailGuru> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,11 +32,11 @@ class _MateriDetailState extends State<MateriDetail> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              TitleBarLine(judul: "Apa itu javascript?"),
+              TitleBarLine(judul: widget.judul),
               SizedBox(height: 20,),
               DetailTugas(
-                judul: 'Javascript',
-                keterangan: 'JavaScript adalah bahasa pemrograman yang digunakan untuk membuat halaman web menjadi interaktif dan dinamis. Bahasa ini berjalan di sisi klien (client-side) pada browser, meskipun juga dapat digunakan di sisi server (server-side) dengan platform seperti Node.js.',
+                judul: widget.judul,
+                keterangan: widget.deskripsi
               ),
               SizedBox(height: 20,),
             ],

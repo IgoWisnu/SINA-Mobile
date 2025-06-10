@@ -82,10 +82,10 @@ class _DashboardMuridState extends State<DashboardMurid> {
                     upload_date: DateTime(2024, 5, 20),
                     tenggat: DateTime(2024, 5, 23),
                     onTap: (){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => TugasDetail()),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => TugasDetail()),
+                      // );
                     }
                 ),
                 ItemTugasMurid(
@@ -93,10 +93,10 @@ class _DashboardMuridState extends State<DashboardMurid> {
                     upload_date: DateTime(2025, 5, 2),
                     tenggat: DateTime(2025, 5, 15),
                     onTap: (){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => TugasDetail()),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => TugasDetail()),
+                      // );
                     }
                 ),
                 ItemTugasMurid(
@@ -104,10 +104,10 @@ class _DashboardMuridState extends State<DashboardMurid> {
                     upload_date: DateTime(2025, 4, 29),
                     tenggat: DateTime(2025, 5, 2),
                     onTap: (){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => TugasDetail()),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => TugasDetail()),
+                      // );
                     }
                 ),
                 SizedBox(height: 20,),

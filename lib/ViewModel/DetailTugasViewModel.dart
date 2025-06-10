@@ -7,14 +7,14 @@ import 'package:sina_mobile/service/repository/KelasRepository.dart';
 class Detailtugasviewmodel with ChangeNotifier {
   final KelasRepository repository = KelasRepository(ApiService());
 
-  Future<void> kumpulkanTugas({
-    required int idTugas,
+  Future<void> kumpulkanTugass({
+    required String tugasId,
     required String filePath,
     required String deskripsi,
   }) async {
     try {
       await repository.kumpulkanTugas(
-        idTugas: idTugas,
+        idTugas: tugasId,
         filePath: filePath,
         deskripsi: deskripsi,
       );

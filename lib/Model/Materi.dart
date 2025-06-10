@@ -16,11 +16,11 @@ class MateriDetail {
 }
 
 class Materi {
-  final int materiId;
+  final String materiId;
   final String namaMateri;
   final String deskripsi;
   final String? lampiran;
-  final DateTime tanggalPengumpulan;
+  final DateTime? tanggalPengumpulan;
 
   Materi({
     required this.materiId,
@@ -32,11 +32,11 @@ class Materi {
 
   factory Materi.fromJson(Map<String, dynamic> json) {
     return Materi(
-      materiId: int.parse(json['materi_id'].toString()),
+      materiId: json['materi_id'],
       namaMateri: json['nama_materi'],
       deskripsi: json['uraian'],
       lampiran: json['lampiran'],
-      tanggalPengumpulan: DateTime.parse(json['created_at']),
+      tanggalPengumpulan: json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
     );
   }
 }

@@ -36,7 +36,7 @@ class KelasRepository {
     }
   }
 
-  Future<List<Tugas>> fetchTugasByMapelId(int mapelId) async {
+  Future<List<Tugas>> fetchTugasByMapelId(String mapelId) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('auth_token');
 
@@ -58,7 +58,7 @@ class KelasRepository {
     }
   }
 
-  Future<List<Materi>> fetchMateriByMapelId(int mapelId) async {
+  Future<List<Materi>> fetchMateriByMapelId(String mapelId) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('auth_token');
 
@@ -88,7 +88,7 @@ class KelasRepository {
   }
 
   Future<void> kumpulkanTugas({
-    required int idTugas,
+    required String idTugas,
     required String filePath,
     required String deskripsi,
   }) async {

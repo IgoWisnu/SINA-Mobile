@@ -6,7 +6,8 @@ import 'package:sina_mobile/View/Component/CustomTextArea.dart';
 import 'package:sina_mobile/View/Component/DetailTugas.dart';
 import 'package:sina_mobile/View/Component/RegularButton.dart';
 import 'package:sina_mobile/View/Murid/EditTugasMurid.dart';
-import 'package:sina_mobile/ViewModel/Detailtugasviewmodel.dart';
+import 'package:sina_mobile/ViewModel/DetailTugasViewModel.dart';
+
 
 class DetailTugasMurid extends StatefulWidget {
   final Tugas tugas;
@@ -45,8 +46,8 @@ class _DetailTugasMuridState extends State<DetailTugasMurid> {
     });
 
     try {
-      await _viewModel.kumpulkanTugas(
-        idTugas: widget.tugas.tugasId,
+      await _viewModel.kumpulkanTugass(
+        tugasId: widget.tugas.tugasId,
         filePath: _selectedFilePath!,
         deskripsi: _deskripsiController.text,
       );
@@ -55,7 +56,7 @@ class _DetailTugasMuridState extends State<DetailTugasMurid> {
         SnackBar(content: Text("Tugas berhasil dikumpulkan")),
       );
 
-      Navigator.pop(context); // Kembali ke halaman sebelumnya
+      Navigator.pop(context, true); // mengirim flag "data berubah"
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Gagal mengumpulkan tugas: $e")),

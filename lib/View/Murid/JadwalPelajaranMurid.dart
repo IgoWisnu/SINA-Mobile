@@ -24,20 +24,20 @@ class JadwalPelajaranMurid extends StatefulWidget {
 class _JadwalPelajaranMuridState extends State<JadwalPelajaranMurid> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String currentMenu = 'jadwal';
-  String selectedItem = 'Senin';
-  final List<String> hariList = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
+  String selectedItem = 'senin';
+  final List<String> hariList = ['senin', 'selasa', 'rabu', 'kamis', 'jumat'];
 
   int getKodeHari(String hari) {
     switch (hari) {
-      case 'Senin':
+      case 'senin':
         return 1;
-      case 'Selasa':
+      case 'selasa':
         return 2;
-      case 'Rabu':
+      case 'rabu':
         return 3;
-      case 'Kamis':
+      case 'kamis':
         return 4;
-      case 'Jumat':
+      case 'jumat':
         return 5;
       default:
         return 0;
@@ -54,7 +54,7 @@ class _JadwalPelajaranMuridState extends State<JadwalPelajaranMurid> {
     if (today >= 1 && today <= 5) {
       selectedItem = hariList[today - 1]; // Senin = 0
     } else {
-      selectedItem = 'Senin'; // default jika hari Sabtu/Minggu
+      selectedItem = 'senin'; // default jika hari Sabtu/Minggu
     }
 
     // Ambil data kelas saat widget dibuka
@@ -67,7 +67,7 @@ class _JadwalPelajaranMuridState extends State<JadwalPelajaranMurid> {
   @override
   Widget build(BuildContext context) {
     final vm = Provider.of<JadwalViewModel>(context);
-    final kodeHariDipilih = getKodeHari(selectedItem);
+    final kodeHariDipilih = selectedItem;
     final jadwalHariIni = vm.jadwalList.where((j) => j.hari == kodeHariDipilih).toList();
 
 
@@ -92,7 +92,7 @@ class _JadwalPelajaranMuridState extends State<JadwalPelajaranMurid> {
                 children: [
                   Text("Jadwal Pelajaran", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
                   CustomDropdown(
-                      items: ['Senin', 'Selasa','Rabu','Kamis','Jumat'],
+                      items: ['senin', 'selasa','rabu','kamis','jumat'],
                       selectedItem: selectedItem,
                       onChanged: (newValue) {
                         setState(() {
@@ -121,24 +121,24 @@ class _JadwalPelajaranMuridState extends State<JadwalPelajaranMurid> {
                   ),
                 ),
               ),
-        vm.isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : vm.error != null
-            ? Center(child: Text('Error: ${vm.error}'))
-            : ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: jadwalHariIni.length,
-                itemBuilder: (context, index) {
-                  final jadwal = jadwalHariIni[index];
-                  return ItemJadwalMurid(
-                    waktu_mulai: jadwal.start,
-                    waktu_selesai: jadwal.finish,
-                    mata_pelajaran: jadwal.namaMapel,
-                    guru: jadwal.namaGuru,
-                  );
-                },
-              )
+              vm.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : vm.error != null
+                  ? Center(child: Text('Error: ${vm.error}'))
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: jadwalHariIni.length,
+                      itemBuilder: (context, index) {
+                        final jadwal = jadwalHariIni[index];
+                        return ItemJadwalMurid(
+                          waktu_mulai: jadwal.start,
+                          waktu_selesai: jadwal.finish,
+                          mata_pelajaran: jadwal.namaMapel,
+                          guru: jadwal.namaGuru,
+                        );
+                      },
+                    )
             ],
           ),
         ),

@@ -4,11 +4,13 @@ import 'package:sina_mobile/View/Lib/Colors.dart';
  class RegularButton extends StatelessWidget{
    final VoidCallback onTap;
    final String judul;
+   final Color color;
 
    const RegularButton({
     super.key,
     required this.onTap,
-    required this.judul
+    required this.judul,
+     this.color = AppColors.primary
  });
 
   @override
@@ -18,7 +20,7 @@ import 'package:sina_mobile/View/Lib/Colors.dart';
       child: Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: AppColors.primary,
+          color: color,
             borderRadius: BorderRadius.circular(12)
         ),
         width: MediaQuery.of(context).size.width,

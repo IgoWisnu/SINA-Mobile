@@ -18,7 +18,7 @@ import 'package:sina_mobile/ViewModel/KelasViewModel.dart';
 import 'package:sina_mobile/Model/JenisItem.dart';
 
 class DetailKelasMurid extends StatefulWidget {
-  final int mapelId;
+  final String mapelId;
   final String mapelJudul;
 
   const DetailKelasMurid({super.key, required this.mapelId, required this.mapelJudul});
@@ -65,17 +65,22 @@ class _DetailKelasMuridState extends State<DetailKelasMurid> {
                     case JenisItem.tugas:
                       final tugas = item.data as Tugas;
                       return ItemTugasMurid(
-                        onTap: () {
-                          Navigator.push(
+                        onTap: () async {
+                          final result = await Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => DetailTugasMurid(tugas: tugas),
                             ),
                           );
+                          if (result == true) {
+                            // Data di halaman DetailTugasMurid diubah, maka refresh ulang
+                            final vm = Provider.of<KelasDetailViewModel>(context, listen: false);
+                            vm.fetchTugasMateri(widget.mapelId);
+                          }
                         },
                         judul: tugas.namaTugas,
-                        upload_date: tugas.tanggalPengumpulan,
-                        tenggat: tugas.tanggalPengumpulan,
+                        upload_date: tugas.createAt,
+                        tenggat: tugas.tenggatKumpul,
                       );
 
                     case JenisItem.materi:

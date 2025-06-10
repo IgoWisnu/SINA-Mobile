@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:sina_mobile/View/DetailTugasSiswa.dart';
 
 class ItemTugasSiswa extends StatelessWidget{
+  final String nama;
+  final VoidCallback ontap;
+
+  const ItemTugasSiswa({super.key, required this.nama, required this.ontap});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => DetailTugasSiswa()
-        ));
-      },
+      onTap: ontap,
       child: Container(
         height: 50,
         alignment: Alignment.center,
@@ -23,7 +24,7 @@ class ItemTugasSiswa extends StatelessWidget{
                 children: [
                   Icon(Icons.file_copy),
                   SizedBox(width: 10,),
-                  Text("data")
+                  Text(nama)
                 ],
               ),
               Icon(Icons.arrow_forward_ios)

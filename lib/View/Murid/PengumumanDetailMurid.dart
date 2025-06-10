@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sina_mobile/Model/Berita.dart';
 import 'package:sina_mobile/View/Component/CustomAppBarNoDrawer.dart';
+import 'package:html/parser.dart';
+import 'package:sina_mobile/View/Lib/DateFormatter.dart'; // Untuk parse HTML
 
 class PengumumanDetailMurid extends StatefulWidget{
   final Berita berita;
@@ -14,6 +16,17 @@ class PengumumanDetailMurid extends StatefulWidget{
 class _PengumumanDetailMuridState extends State<PengumumanDetailMurid> {
   String baseImageUrl = 'http://sina.pnb.ac.id:3000/Upload/berita/';
 
+  /// Membersihkan HTML dan memotong isi hingga `limit` karakter
+  String stripHtmlAndLimit(String htmlText, int limit) {
+    final document = parse(htmlText);
+    final String parsedString = parse(document.body?.text).documentElement?.text ?? '';
+    if (parsedString.length <= limit) {
+      return parsedString;
+    } else {
+      return parsedString.substring(0, limit) + '...';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -23,6 +36,7 @@ class _PengumumanDetailMuridState extends State<PengumumanDetailMurid> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                   height: 250,
@@ -34,14 +48,14 @@ class _PengumumanDetailMuridState extends State<PengumumanDetailMurid> {
                     height: 250,
                     fit: BoxFit.fill,)
               ),
+              SizedBox(height: 30,),
+              Text(widget.berita.judul, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
               SizedBox(height: 10,),
-              Text(widget.berita.judul, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-              SizedBox(height: 5,),
-              Text(widget.berita.isi),
+              Text(stripHtmlAndLimit(widget.berita.isi, 1000)),
               SizedBox(height: 10,),
               Container(
                 alignment: Alignment.topRight,
-                child: Text(widget.berita.createdAt.toString(), style: TextStyle(color: Colors.grey),),
+                child: Text(DateFormatter.format(widget.berita.createdAt), style: TextStyle(color: Colors.grey),),
               )
             ],
           ),
