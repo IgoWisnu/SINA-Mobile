@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sina_mobile/View/Component/ClassCard.dart';
 import 'package:sina_mobile/View/Component/CustomAppBar.dart';
+import 'package:sina_mobile/View/Component/Murid/ClassCardMurid.dart';
 import 'package:sina_mobile/View/Component/Murid/CustomMuridDrawer.dart';
 import 'package:sina_mobile/View/Murid/DetailKelasMurid.dart';
 import 'package:sina_mobile/ViewModel/KelasViewModel.dart';
@@ -43,8 +44,10 @@ class _ListKelasMuridState extends State<ListKelasMurid> {
           itemCount: vm.kelasList.length,
           itemBuilder: (context, index) {
             final kelas = vm.kelasList[index];
-            return ClassCard(
+            return ClassCardMurid(
               judul: '${kelas.namaMapel} / ${kelas.namaKelas}',
+              namaGuru: kelas.namaGuru,
+              image: kelas.fotoProfil ?? '',
               onTap: () {
                 Navigator.push(
                   context,

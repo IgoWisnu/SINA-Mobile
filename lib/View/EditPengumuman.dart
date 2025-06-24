@@ -60,17 +60,18 @@ class _EditPengumumanState extends State<EditPengumuman> {
 
     try {
       // Misalnya kamu pakai format dd/MM/yyyy di CustomDatePicker
-      await _viewModel.tambahBerita(
+      await _viewModel.editBerita(
+        idBerita : widget.berita.beritaId,
         judul: judul,
         deskripsi: deskripsi,
         filePath: file ?? '',
       );
 
 
-      CustomSnackbar.showSuccess(context, "Tugas berhasil Berita");
+      CustomSnackbar.showSuccess(context, "Berhasil Memperbaharui Berita");
       Navigator.pop(context);
     } catch (e) {
-      CustomSnackbar.showError(context, "Gagal menambahkan berita $e");
+      CustomSnackbar.showError(context, "Gagal Memperbaharui berita $e");
     }
   }
 
@@ -81,8 +82,9 @@ class _EditPengumumanState extends State<EditPengumuman> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TitleBarLine(judul: "Tambah Pengumuman"),
+            TitleBarLine(judul: "Edit Pengumuman"),
             SizedBox(height: 20,),
             Text("Judul", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
             SizedBox(height: 5,),

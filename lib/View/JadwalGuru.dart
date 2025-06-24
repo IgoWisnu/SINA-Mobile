@@ -106,7 +106,7 @@ class _JadwalGuruState extends State<JadwalGuru> {
                     waktu_mulai: jadwal.start,
                     waktu_selesai: jadwal.finish,
                     mata_pelajaran: jadwal.namaMapel,
-                    kelas: jadwal.jamKe.toString(),
+                    kelas: jadwal.namaKelas,
                   );
                 },
               )

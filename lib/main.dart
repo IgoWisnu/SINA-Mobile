@@ -11,23 +11,28 @@ import 'package:sina_mobile/View/OrangTua/RekapAbsensiPage.dart';
 import 'package:sina_mobile/View/OrangTua/RingkasanPengajuanPage.dart';
 import 'package:sina_mobile/View/OrangTua/RiwayatAbsensiPage.dart';
 import 'package:sina_mobile/View/OrangTua/StatistikPage.dart';
+import 'package:sina_mobile/View/Splash/SplashScreen.dart';
 import 'package:sina_mobile/View/loginPage.dart';
 import 'package:sina_mobile/View/regisPage.dart';
 import 'package:sina_mobile/View/registerPage.dart';
 import 'package:sina_mobile/View/dashboard.dart';
 import 'package:sina_mobile/ViewModel/BeritaViewModel.dart';
 import 'package:sina_mobile/ViewModel/DashboardViewModel.dart';
+import 'package:sina_mobile/ViewModel/Guru/AbsensiGuruViewModel.dart';
 import 'package:sina_mobile/ViewModel/Guru/DashboardGuruViewModel.dart';
 import 'package:sina_mobile/ViewModel/Guru/JadwalGuruViewModel.dart';
 import 'package:sina_mobile/ViewModel/Guru/KelasDetailGuruViewModel.dart';
 import 'package:sina_mobile/ViewModel/Guru/KelasGuruViewModel.dart';
 import 'package:sina_mobile/ViewModel/Guru/PengumumanGuruViewModel.dart';
+import 'package:sina_mobile/ViewModel/Guru/ProfilGuruViewModel.dart';
 import 'package:sina_mobile/ViewModel/Guru/TugasDetailGuruViewModel.dart';
 import 'package:sina_mobile/ViewModel/JadwalViewModel.dart';
 import 'package:sina_mobile/ViewModel/KelasDetailViewModel.dart';
 import 'package:sina_mobile/ViewModel/KelasViewModel.dart';
 import 'package:sina_mobile/ViewModel/ProfilViewModel.dart';
+import 'package:sina_mobile/ViewModel/RaporSiswaViewModel.dart';
 import 'package:sina_mobile/ViewModel/RekapAbsensiViewModel.dart';
+import 'package:sina_mobile/ViewModel/StatistikViewModel.dart';
 import 'package:sina_mobile/service/api/ApiService.dart';
 import 'package:sina_mobile/service/api/ApiServiceAuth.dart';
 import 'package:sina_mobile/service/api/ApiServiceGuru.dart';
@@ -36,13 +41,17 @@ import 'package:sina_mobile/service/repository/AuthRepository.dart';
 import 'package:sina_mobile/service/repository/BeritaRepository.dart';
 import 'package:sina_mobile/service/repository/BiodataRepository.dart';
 import 'package:sina_mobile/service/repository/DashboardRepository.dart';
+import 'package:sina_mobile/service/repository/Guru/AbsensiGuruRepository.dart';
 import 'package:sina_mobile/service/repository/Guru/BeritaGuruRepository.dart';
+import 'package:sina_mobile/service/repository/Guru/BiodataGuruRepository.dart';
 import 'package:sina_mobile/service/repository/Guru/DashboardGuruRepository.dart';
 import 'package:sina_mobile/service/repository/Guru/JadwalGuruRepository.dart';
 import 'package:sina_mobile/service/repository/Guru/KelasGuruRepository.dart';
 import 'package:sina_mobile/service/repository/JadwalRepository.dart';
 import 'package:sina_mobile/service/repository/KelasRepository.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:sina_mobile/service/repository/RaporRepository.dart';
+import 'package:sina_mobile/service/repository/StatistikRepository.dart';
 
 import 'ViewModel/AuthViewModel.dart';
 
@@ -132,6 +141,26 @@ class MyApp extends StatelessWidget {
               repository: BeritaGuruRepository(ApiServiceGuru())
           ),
         ),
+        ChangeNotifierProvider(
+          create: (_) => ProfilGuruViewModel(
+              repository: BiodataGuruRepository(ApiServiceGuru())
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => StatistikViewModel(
+              repository: StatistikRepository(ApiService())
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => RaporSiswaViewModel(
+              repository: RaporRepository(ApiService())
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => AbsensiGuruViewModel(
+              repository: AbsensiGuruRepository(ApiServiceGuru())
+          ),
+        ),
       ],
       child: MaterialApp(
         title: 'SINA_Mobile',
@@ -167,7 +196,7 @@ class MyApp extends StatelessWidget {
             titleSmall: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ),
-        home: const LoginPage(),
+        home: SplashScreen(),
         routes: {
           '/loginPage': (context) => LoginPage(),
           '/regisPage': (context) => RegisPage(),

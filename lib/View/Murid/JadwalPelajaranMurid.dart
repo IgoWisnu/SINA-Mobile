@@ -27,23 +27,6 @@ class _JadwalPelajaranMuridState extends State<JadwalPelajaranMurid> {
   String selectedItem = 'senin';
   final List<String> hariList = ['senin', 'selasa', 'rabu', 'kamis', 'jumat'];
 
-  int getKodeHari(String hari) {
-    switch (hari) {
-      case 'senin':
-        return 1;
-      case 'selasa':
-        return 2;
-      case 'rabu':
-        return 3;
-      case 'kamis':
-        return 4;
-      case 'jumat':
-        return 5;
-      default:
-        return 0;
-    }
-  }
-
 
   @override
   void initState() {
@@ -135,7 +118,7 @@ class _JadwalPelajaranMuridState extends State<JadwalPelajaranMurid> {
                           waktu_mulai: jadwal.start,
                           waktu_selesai: jadwal.finish,
                           mata_pelajaran: jadwal.namaMapel,
-                          guru: jadwal.namaGuru,
+                          guru: jadwal.namaGuru ?? "",
                         );
                       },
                     )

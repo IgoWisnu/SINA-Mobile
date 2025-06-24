@@ -57,8 +57,8 @@ class _PengumumanState extends State<Pengumuman> {
             final beritaItem = vm.beritaList[index];
             return CardPengumuman(
               berita: beritaItem,
-              Action: () {
-                Navigator.push(
+              Action: () async {
+                await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => PengumumanDetailGuru(
@@ -66,6 +66,7 @@ class _PengumumanState extends State<Pengumuman> {
                     ),
                   ),
                 );
+                vm.fetchBerita();
               },
             );
           },

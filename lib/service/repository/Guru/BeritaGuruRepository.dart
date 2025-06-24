@@ -67,5 +67,62 @@ class BeritaGuruRepository {
     }
   }
 
+  Future<void> editBerita({
+    required String id,
+    required String filePath,
+    required String deskripsi,
+    required String judul
+  }) async {
+    //ambil token
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('auth_token');
+
+    final uri = apiService.buildUrl('dashboard/berita/$id');
+
+    // Cari MIME type dari file
+    final mimeType = lookupMimeType(filePath);
+
+    final file = await http.MultipartFile.fromPath(
+      'foto',
+      filePath,
+      contentType: mimeType != null ? MediaType.parse(mimeType) : null,
+      filename: basename(filePath),
+    );
+
+    final request = http.MultipartRequest('PUT', uri)
+      ..headers['Authorization'] = 'Bearer $token'
+      ..fields['judul'] = judul
+      ..fields['isi'] = deskripsi
+      ..fields['tipe'] = 'pengumuman'
+      ..files.add(file);
+
+    final streamedResponse = await request.send();
+    final response = await http.Response.fromStream(streamedResponse);
+
+    if (response.statusCode != 200) {
+      throw Exception('Gagal mengumpulkan tugas: ${response.body}');
+    }
+  }
+
+  Future<void> deleteBerita(String id) async {
+    // Ambil token
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('auth_token');
+
+    final uri = apiService.buildUrl('dashboard/berita/$id');
+
+    final response = await apiService.client.delete(
+      uri,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Gagal menghapus berita: ${response.body}');
+    }
+  }
+
 
 }

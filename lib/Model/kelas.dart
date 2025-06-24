@@ -26,11 +26,15 @@ class Datum {
   String mapelId;
   String namaKelas;
   String namaMapel;
+  String namaGuru;
+  String fotoProfil;
 
   Datum({
     required this.mapelId,
     required this.namaKelas,
     required this.namaMapel,
+    required this.namaGuru,
+    required this.fotoProfil
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) {
@@ -38,6 +42,8 @@ class Datum {
       mapelId: json['mapel_id'],
       namaKelas: json['nama_kelas'],
       namaMapel: json['nama_mapel'],
+      namaGuru: json['nama_guru'],
+      fotoProfil: json['foto_profil'] ?? '',
     );
   }
 

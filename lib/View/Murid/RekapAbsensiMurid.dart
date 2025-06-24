@@ -69,29 +69,29 @@ class _RekapAbsensiMuridState extends State<RekapAbsensiMurid> {
                   PieChartData(
                     sections: [
                       PieChartSectionData(
-                        value: vm.rekapabsendata!.hadir.toDouble()+dummyHadir,
-                        title: '${vm.rekapabsendata!.hadir+dummyHadir} Hadir',
+                          value: vm.rekapabsendata!.hadir.toDouble(),
+                          title: '${vm.rekapabsendata!.hadir} Hadir',
                         color: Colors.blue,
                         radius: 50,
                           titleStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)
                       ),
                       PieChartSectionData(
-                        value: vm.rekapabsendata!.izin.toDouble()+dummyIzin,
-                        title: '${vm.rekapabsendata!.izin+dummyIzin} Izin',
+                          value: vm.rekapabsendata!.izin.toDouble(),
+                          title: '${vm.rekapabsendata!.izin} Izin',
                         color: Colors.green,
                         radius: 50,
                         titleStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)
                       ),
                       PieChartSectionData(
-                        value: vm.rekapabsendata!.sakit.toDouble(),
-                        title: '${vm.rekapabsendata!.sakit} Sakit',
-                        color: Colors.yellow,
+                          value: vm.rekapabsendata!.sakit.toDouble(),
+                          title: '${vm.rekapabsendata!.sakit} Sakit',
+                        color: Colors.orange,
                         radius: 50,
                           titleStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)
                       ),
                       PieChartSectionData(
-                        value: vm.rekapabsendata!.alpha.toDouble(),
-                        title: '${vm.rekapabsendata!.alpha} Alpha',
+                          value: vm.rekapabsendata!.alpha.toDouble(),
+                          title: '${vm.rekapabsendata!.alpha} Alpha',
                         color: Colors.red,
                         radius: 50,
                           titleStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)
@@ -115,7 +115,7 @@ class _RekapAbsensiMuridState extends State<RekapAbsensiMurid> {
                         ),
                       ),
                       SizedBox(width: 3,),
-                      Text("Hadir: ${vm.rekapabsendata!.hadir+dummyHadir}")
+                      Text("Hadir: ${vm.rekapabsendata!.hadir}")
                     ],
                   ),
                   Row(
@@ -149,7 +149,7 @@ class _RekapAbsensiMuridState extends State<RekapAbsensiMurid> {
                         ),
                       ),
                       SizedBox(width: 3,),
-                      Text("Izin: ${vm.rekapabsendata!.izin+dummyIzin}")
+                      Text("Izin: ${vm.rekapabsendata!.izin}")
                     ],
                   ),
                   Row(

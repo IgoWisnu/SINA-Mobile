@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sina_mobile/Model/DashboardSiswa.dart';
+import 'package:sina_mobile/Model/RingkasanDashboardSiswaResponse.dart';
 import 'package:sina_mobile/Model/SiswaResponse.dart';
 import 'package:sina_mobile/View/dashboard.dart';
 import 'package:sina_mobile/service/repository/BiodataRepository.dart';
@@ -11,8 +12,8 @@ class DashboardViewModel extends ChangeNotifier {
 
   DashboardViewModel({required this.repository});
 
-  DashboardStatus? _dashboardStatus;
-  DashboardStatus? get dashboard => _dashboardStatus;
+  RingkasanDashboardData? _dashboardStatus;
+  RingkasanDashboardData? get dashboard => _dashboardStatus;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;

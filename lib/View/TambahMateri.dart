@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sina_mobile/View/Component/CustomAppBarNoDrawer.dart';
 import 'package:sina_mobile/View/Component/CustomFilePicker.dart';
+import 'package:sina_mobile/View/Component/CustomSnackbar.dart';
 import 'package:sina_mobile/View/Component/CustomTextArea.dart';
 import 'package:sina_mobile/View/Component/CustomTextField.dart';
 import 'package:sina_mobile/View/Component/RegularButton.dart';
@@ -51,15 +52,11 @@ class _TambahMateriState extends State<TambahMateri> {
         filePath: file ?? '',
       );
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Tugas berhasil ditambahkan")),
-      );
+      CustomSnackbar.showSuccess(context, "Materi Berhasil Ditambahkan");
 
       Navigator.pop(context);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Gagal menambahkan tugas: $e")),
-      );
+      CustomSnackbar.showError(context, "Materi Gagal Ditambahkan");
     }
   }
 

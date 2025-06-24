@@ -28,7 +28,20 @@ class JadwalViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      _jadwalList = await repository.getJadwal();
+      List<Jadwal> allJadwal = await repository.getJadwal();
+
+      // Hilangkan duplikat berdasarkan start, finish, namaMapel, dan hari
+      final seen = <String>{};
+      _jadwalList = allJadwal.where((jadwal) {
+        final key = '${jadwal.start}-${jadwal.finish}-${jadwal.namaMapel}-${jadwal.hari}';
+        if (seen.contains(key)) {
+          return false;
+        } else {
+          seen.add(key);
+          return true;
+        }
+      }).toList();
+
     } catch (e) {
       _error = e.toString();
     }
@@ -36,6 +49,7 @@ class JadwalViewModel extends ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
+
 
 
 }

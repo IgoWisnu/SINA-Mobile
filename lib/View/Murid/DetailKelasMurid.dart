@@ -79,8 +79,9 @@ class _DetailKelasMuridState extends State<DetailKelasMurid> {
                           }
                         },
                         judul: tugas.namaTugas,
-                        upload_date: tugas.createAt,
-                        tenggat: tugas.tenggatKumpul,
+                        upload_date: tugas.createAt ?? DateTime.now(),
+                        tenggat: tugas.tenggatKumpul ?? DateTime.now(),
+                        status: tugas.status,
                       );
 
                     case JenisItem.materi:

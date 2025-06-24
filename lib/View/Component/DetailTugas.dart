@@ -24,15 +24,6 @@ class DetailTugas extends StatelessWidget{
             Text(keterangan),
             SizedBox(height: 20),
             Text("File Preiview"),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                child: Image.asset('lib/asset/image/SINA.png'),
-              ),
-            ),
           ],
         ),
       ),

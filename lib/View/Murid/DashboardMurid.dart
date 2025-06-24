@@ -8,9 +8,8 @@ import 'package:sina_mobile/View/Component/ItemAbsensi.dart';
 import 'package:sina_mobile/View/Component/ItemTugas.dart';
 import 'package:sina_mobile/View/Component/Murid/CustomMuridDrawer.dart';
 import 'package:sina_mobile/View/Component/Murid/ItemTugasMurid.dart';
-import 'package:sina_mobile/View/Component/TitleAbsensi.dart';
 import 'package:sina_mobile/View/Component/TitleBar.dart';
-import 'package:sina_mobile/View/TugasDetail.dart';
+import 'package:sina_mobile/View/Murid/DetailTugasMurid.dart';
 import 'package:sina_mobile/ViewModel/DashboardViewModel.dart';
 import 'package:provider/provider.dart';
 
@@ -42,7 +41,7 @@ class _DashboardMuridState extends State<DashboardMurid> {
     final status = vm.dashboard;
 
     return Scaffold(
-      key: _scaffoldKey, // ← INI YANG BELUM ADA
+      key: _scaffoldKey,
       drawer: CustomMuridDrawer(
         selectedMenu: currentMenu,
       ),
@@ -52,76 +51,82 @@ class _DashboardMuridState extends State<DashboardMurid> {
         },
       ),
       body: status == null
-          ? Center(child: CircularProgressIndicator())
-          :SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Ringkasan Box
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Box(jumlah: status.tugasBelumDikerjakan, keterangan: 'Tugas Belum Dikerjakan',),
-                    const SizedBox(width: 10),
-                    Box(jumlah: status.absensiTidakHadir, keterangan: 'Absensi Tidak Hadir',),
-                  ],
+                Box(
+                  jumlah: status.ringkasan.tugasBelumDikerjakan,
+                  keterangan: 'Tugas Belum Dikerjakan',
                 ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Box(jumlah: status.tugasTerlambat, keterangan: 'Tugas Terlambat',),
-                    const SizedBox(width: 10),
-                    Box(jumlah: 2, keterangan: 'Materi Hari Ini',),
-                  ],
+                const SizedBox(width: 10),
+                Box(
+                  jumlah: status.ringkasan.absensiTidakHadir,
+                  keterangan: 'Absensi Tidak Hadir',
                 ),
-                SizedBox(height: 20,),
-                TitleBar(judul: "Tugas Terbaru"),
-                ItemTugasMurid(
-                    judul: "Tugas Javascript 3",
-                    upload_date: DateTime(2024, 5, 20),
-                    tenggat: DateTime(2024, 5, 23),
-                    onTap: (){
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => TugasDetail()),
-                      // );
-                    }
-                ),
-                ItemTugasMurid(
-                    judul: "Tugas Javascript 2",
-                    upload_date: DateTime(2025, 5, 2),
-                    tenggat: DateTime(2025, 5, 15),
-                    onTap: (){
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => TugasDetail()),
-                      // );
-                    }
-                ),
-                ItemTugasMurid(
-                    judul: "Tugas Javascript 1",
-                    upload_date: DateTime(2025, 4, 29),
-                    tenggat: DateTime(2025, 5, 2),
-                    onTap: (){
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => TugasDetail()),
-                      // );
-                    }
-                ),
-                SizedBox(height: 20,),
-                Text("Kelas Hari Ini", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
-                SizedBox(height: 10,),
-                ClassCard(judul: "Matematika/X.1", onTap: (){}),
-                SizedBox(height: 5,),
-                ClassCard(judul: "Matematika/X.1", onTap: (){}),
-                SizedBox(height: 5,),
-                ClassCard(judul: "Matematika/X.1", onTap: (){}),
-                SizedBox(height: 5,),
               ],
             ),
-          ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Box(
+                  jumlah: status.ringkasan.tugasTerlambat,
+                  keterangan: 'Tugas Terlambat',
+                ),
+                const SizedBox(width: 10),
+                Box(
+                  jumlah: status.ringkasan.materiHariIni,
+                  keterangan: 'Materi Hari Ini',
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+
+            // Tugas Terbaru
+            TitleBar(judul: "Tugas Terbaru"),
+            const SizedBox(height: 10),
+            ...status.tugasTerbaru.map((tugas) {
+              return ItemTugasMurid(
+                judul: tugas.judul+'/'+tugas.mapel,
+                upload_date: tugas.dibuatPada,
+                tenggat: tugas.tenggatKumpul,
+                status: tugas.status,
+                onTap: () {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => DetailTugasMurid(tugas: tugas),
+                  //   ),
+                  // );
+                },
+              );
+            }).toList(),
+
+            const SizedBox(height: 20),
+
+            // Kelas Hari Ini
+            TitleBar(judul: "Kelas Hari Ini"),
+            const SizedBox(height: 10),
+            ...status.kelasHariIni.map((kelas) {
+              return Column(
+                children: [
+                  ClassCard(
+                    judul: kelas['nama_kelas'] ?? 'Tanpa Nama',
+                    onTap: () {},
+                  ),
+                  const SizedBox(height: 5),
+                ],
+              );
+            }).toList(),
+          ],
+        ),
       ),
     );
   }

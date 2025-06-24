@@ -60,6 +60,10 @@ dev_dependencies:
   permission_handler: ^11.0.0
   pie_chart: ^5.3.2
   lottie: ^3.3.1
+  barcode_widget: ^2.0.1
+  pdfx: ^2.4.0
+  open_file: ^3.3.2
+  flutter_native_splash: ^2.3.10
 
   #preview
   flutter_pdfview: ^1.2.5 # For PDF
@@ -67,10 +71,20 @@ dev_dependencies:
   video_player: ^2.7.0 # For video preview
 
 
+
 flutter_icons:
   android: true
   ios: true
   image_path: "lib/asset/image/icon_sina.png"
+
+flutter_native_splash:
+    color: "#131047"
+    image: lib/asset/image/icon_sina.png
+    android_gravity: center
+    ios_content_mode: scaleAspectFill
+    android: true
+    ios: true
+
 
 flutter:
   # The following line ensures that the Material Icons font is
@@ -86,6 +100,10 @@ flutter:
     - lib/asset/image/loginLogo.png
     - lib/asset/animation/success.lottie
     - lib/asset/Animation/success.json
+    - lib/asset/Animation/failed.json
+    - lib/asset/Animation/loading.json
+    - assets/animations/success.json
+    - assets/animations/failed.json
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

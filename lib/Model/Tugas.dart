@@ -26,6 +26,7 @@ class Tugas {
   final DateTime? tenggatKumpul;
   final DateTime? tanggalPengumpulan;
   final String? nilai;
+  final String status;
 
   Tugas({
     required this.tugasId,
@@ -38,6 +39,7 @@ class Tugas {
     this.tenggatKumpul,
     this.tanggalPengumpulan, // <-- HAPUS `required`
     this.nilai,
+    required this.status
   });
 
   factory Tugas.fromJson(Map<String, dynamic> json) {
@@ -54,6 +56,7 @@ class Tugas {
           ? DateTime.parse(json['tanggal_pengumpulan'])
           : null,
       nilai: json['nilai']?.toString(), // jika nilainya bisa null atau angka
+      status: json['status']
     );
   }
 }
