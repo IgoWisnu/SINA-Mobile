@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:sina_mobile/View/Component/CustomAppBarNoDrawer.dart';
+import 'package:sina_mobile/View/Component/OrangTua/CustomAppBarOrangTua.dart';
+import 'package:sina_mobile/View/Component/OrangTua/CustomOrangTuaDrawer.dart';
 
-class ListRapotPage extends StatelessWidget {
+final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+class ListRapotPage extends StatefulWidget {
   const ListRapotPage({super.key});
 
+  @override
+  State<ListRapotPage> createState() => _ListRapotPageState();
+}
+
+class _ListRapotPageState extends State<ListRapotPage> {
   @override
   Widget build(BuildContext context) {
     final rapotData = [
@@ -13,8 +22,16 @@ class ListRapotPage extends StatelessWidget {
       {'kelas': 'XI/2', 'nama': 'Stefanus Gantenk '},
     ];
 
+    String currentMenu = 'list_rapot';
+
     return Scaffold(
-      appBar: CustomAppBarNoDrawer(),
+      drawer: CustomOrangTuaDrawer(selectedMenu: currentMenu),
+      key: _scaffoldKey,
+      appBar: CustomAppBarOrangTua(
+        onMenuPressed: () {
+          _scaffoldKey.currentState?.openDrawer();
+        },
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),

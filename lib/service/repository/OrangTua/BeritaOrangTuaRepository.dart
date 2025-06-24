@@ -1,15 +1,15 @@
 import 'dart:convert';
+import 'package:sina_mobile/Model/OrangTua/BeritaOrangTua.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sina_mobile/Model/Berita.dart';
-import '../../service/api/ApiService.dart';
+import 'package:sina_mobile/service/api/ApiServisOrangTua.dart';
 
-class BeritaRepository {
-  final ApiService apiService;
+class BeritaOrangTuaRepository {
+  final ApiServiceOrangTua apiService;
 
-  BeritaRepository(this.apiService);
+  BeritaOrangTuaRepository(this.apiService);
 
-  Future<List<Berita>> getBerita() async {
-    //ambil token
+  Future<List<Berita>> getBeritaOrangTua() async {
+    // Ambil token
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('auth_token');
 
@@ -23,11 +23,13 @@ class BeritaRepository {
 
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);
-      final berita = BeritaResponse.fromJson(json);
-      return berita.data;
+      final Berita = BeritaOrangTuaResponse.fromJson(json);
+      return Berita.data;
     } else {
       throw Exception(
-        'Gagal mengambil data kelas: ${response.body}' + ' $token',
+        'Kesalahan dalam mengambil berita: ${response.body}' +
+            '$token'
+                ' (Status Code: ${response.statusCode})',
       );
     }
   }

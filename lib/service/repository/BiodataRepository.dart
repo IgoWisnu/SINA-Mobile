@@ -24,7 +24,10 @@ class BiodataRepository {
 
     final response = await apiService.client.get(
       apiService.buildUrl('dashboard/biodata'),
-      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
     );
 
     if (response.statusCode == 200) {
@@ -35,5 +38,4 @@ class BiodataRepository {
       throw Exception('Gagal mengambil data tugas : ${response.body}');
     }
   }
-
 }

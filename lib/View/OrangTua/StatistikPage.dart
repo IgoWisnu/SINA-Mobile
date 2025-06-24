@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:sina_mobile/View/Component/CustomAppBarNoDrawer.dart';
+import 'package:sina_mobile/View/Component/OrangTua/CustomAppBarOrangTua.dart';
 import 'package:sina_mobile/View/Component/OrangTua/CustomOrangTuaDrawer.dart';
 import 'package:sina_mobile/View/OrangTua/DetailPengumumanPage.dart';
 
@@ -12,6 +13,7 @@ class StatistikPage extends StatefulWidget {
 }
 
 class _StatistikPageState extends State<StatistikPage> {
+  String currentMenu = 'statistik';
   String selectedKelas = 'XI/1';
   final List<String> kelasList = ['XI/1', 'XI/2', 'XI/3'];
 
@@ -37,7 +39,11 @@ class _StatistikPageState extends State<StatistikPage> {
     return Scaffold(
       drawer: CustomOrangTuaDrawer(selectedMenu: currentMenu),
       key: _scaffoldKey,
-      appBar: CustomAppBarNoDrawer(),
+      appBar: CustomAppBarOrangTua(
+        onMenuPressed: () {
+          _scaffoldKey.currentState?.openDrawer();
+        },
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Column(

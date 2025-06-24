@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sina_mobile/View/OrangTua/DashboardOrangTua.dart';
 import 'package:sina_mobile/View/OrangTua/DetailPengumumanPage.dart';
 import 'package:sina_mobile/View/OrangTua/DetailRaportPage.dart';
 import 'package:sina_mobile/View/OrangTua/FormPengajuanPage.dart';
 import 'package:sina_mobile/View/OrangTua/JadwalPelajaranPage.dart';
 import 'package:sina_mobile/View/OrangTua/ListRaportPage.dart';
-import 'package:sina_mobile/View/OrangTua/PengumumanOrangTuaPage.dart';
+import 'package:sina_mobile/View/OrangTua/PengumumanOrtu.dart';
 import 'package:sina_mobile/View/OrangTua/ProfilOrangTuaPage.dart';
 import 'package:sina_mobile/View/OrangTua/RekapAbsensiPage.dart';
 import 'package:sina_mobile/View/OrangTua/RingkasanPengajuanPage.dart';
@@ -26,11 +27,14 @@ import 'package:sina_mobile/ViewModel/Guru/TugasDetailGuruViewModel.dart';
 import 'package:sina_mobile/ViewModel/JadwalViewModel.dart';
 import 'package:sina_mobile/ViewModel/KelasDetailViewModel.dart';
 import 'package:sina_mobile/ViewModel/KelasViewModel.dart';
+import 'package:sina_mobile/ViewModel/OrangTua/BeritaOrangTuaViewModel.dart';
+import 'package:sina_mobile/ViewModel/OrangTua/ProfilOrtuViewModel.dart';
 import 'package:sina_mobile/ViewModel/ProfilViewModel.dart';
 import 'package:sina_mobile/ViewModel/RekapAbsensiViewModel.dart';
 import 'package:sina_mobile/service/api/ApiService.dart';
 import 'package:sina_mobile/service/api/ApiServiceAuth.dart';
 import 'package:sina_mobile/service/api/ApiServiceGuru.dart';
+import 'package:sina_mobile/service/api/ApiServisOrangTua.dart';
 import 'package:sina_mobile/service/repository/AbsensiRepository.dart';
 import 'package:sina_mobile/service/repository/AuthRepository.dart';
 import 'package:sina_mobile/service/repository/BeritaRepository.dart';
@@ -43,12 +47,17 @@ import 'package:sina_mobile/service/repository/Guru/KelasGuruRepository.dart';
 import 'package:sina_mobile/service/repository/JadwalRepository.dart';
 import 'package:sina_mobile/service/repository/KelasRepository.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:sina_mobile/service/repository/OrangTua/BeritaOrangTuaRepository.dart';
+import 'package:sina_mobile/service/repository/OrangTua/BiodataOrtuRepository.dart';
 
 import 'ViewModel/AuthViewModel.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeDateFormatting('id_ID', null); // Inisialisasi locale Indonesia
+  await initializeDateFormatting(
+    'id_ID',
+    null,
+  ); // Inisialisasi locale Indonesia
   runApp(const MyApp());
 }
 
@@ -60,77 +69,95 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => AuthViewModel(
-            repository: AuthRepository(ApiServiceAuth()),
-          ),
+          create:
+              (_) =>
+                  AuthViewModel(repository: AuthRepository(ApiServiceAuth())),
         ),
         ChangeNotifierProvider(
-          create: (_) => KelasViewModel(
-            repository: KelasRepository(ApiService()),
-          ),
+          create:
+              (_) => KelasViewModel(repository: KelasRepository(ApiService())),
         ),
         ChangeNotifierProvider(
-          create: (_) => KelasDetailViewModel(
-            repository: KelasRepository(ApiService()),
-          ),
+          create:
+              (_) => KelasDetailViewModel(
+                repository: KelasRepository(ApiService()),
+              ),
         ),
         ChangeNotifierProvider(
-          create: (_) => JadwalViewModel(
-            repository: JadwalRepository(ApiService())
-          ),
+          create:
+              (_) =>
+                  JadwalViewModel(repository: JadwalRepository(ApiService())),
         ),
         ChangeNotifierProvider(
-          create: (_) => RekapAbsensiViewModel(
-              repository: AbsensiRepository(ApiService())
-          ),
+          create:
+              (_) => RekapAbsensiViewModel(
+                repository: AbsensiRepository(ApiService()),
+              ),
         ),
         ChangeNotifierProvider(
-          create: (_) => BeritaViewModel(
-              repository: BeritaRepository(ApiService())
-          ),
+          create:
+              (_) =>
+                  BeritaViewModel(repository: BeritaRepository(ApiService())),
         ),
         ChangeNotifierProvider(
-          create: (_) => ProfilViewModel(
-              repository: BiodataRepository(ApiService())
-          ),
+          create:
+              (_) =>
+                  ProfilViewModel(repository: BiodataRepository(ApiService())),
         ),
         ChangeNotifierProvider(
-          create: (_) => DashboardViewModel(
-              repository: DashboardRepository(ApiService())
-          ),
+          create:
+              (_) => DashboardViewModel(
+                repository: DashboardRepository(ApiService()),
+              ),
         ),
         ChangeNotifierProvider(
-          create: (_) => DashboardGuruViewModel(
-              repository: DashboardGuruRepository(ApiServiceGuru())
-          ),
+          create:
+              (_) => DashboardGuruViewModel(
+                repository: DashboardGuruRepository(ApiServiceGuru()),
+              ),
         ),
         ChangeNotifierProvider(
-          create: (_) => JadwalGuruViewModel(
-              repository: JadwalGuruRepository(ApiServiceGuru())
-          ),
+          create:
+              (_) => JadwalGuruViewModel(
+                repository: JadwalGuruRepository(ApiServiceGuru()),
+              ),
         ),
         ChangeNotifierProvider(
-          create: (_) => KelasGuruViewModel(
-              repository: KelasGuruRepository(ApiServiceGuru())
-          ),
+          create:
+              (_) => KelasGuruViewModel(
+                repository: KelasGuruRepository(ApiServiceGuru()),
+              ),
         ),
         ChangeNotifierProvider(
-          create: (_) => KelasDetailGuruViewModel(
-              repository: KelasGuruRepository(ApiServiceGuru())
-          ),
+          create:
+              (_) => KelasDetailGuruViewModel(
+                repository: KelasGuruRepository(ApiServiceGuru()),
+              ),
         ),
         ChangeNotifierProvider(
-          create: (_) => KelasDetailGuruViewModel(
-              repository: KelasGuruRepository(ApiServiceGuru())
-          ),
+          create:
+              (_) => KelasDetailGuruViewModel(
+                repository: KelasGuruRepository(ApiServiceGuru()),
+              ),
+        ),
+        ChangeNotifierProvider(create: (_) => TugasDetailGuruViewModel()),
+        ChangeNotifierProvider(
+          create:
+              (_) => PengumumanGuruViewModel(
+                repository: BeritaGuruRepository(ApiServiceGuru()),
+              ),
         ),
         ChangeNotifierProvider(
-          create: (_) => TugasDetailGuruViewModel(),
+          create:
+              (_) => ProfilOrtuViewModel(
+                repository: BiodataOrtuRepository(ApiServiceOrangTua()),
+              ),
         ),
         ChangeNotifierProvider(
-          create: (_) => PengumumanGuruViewModel(
-              repository: BeritaGuruRepository(ApiServiceGuru())
-          ),
+          create:
+              (_) => BeritaOrangTuaViewModel(
+                repository: BeritaOrangTuaRepository(ApiServiceOrangTua()),
+              ),
         ),
       ],
       child: MaterialApp(
@@ -172,24 +199,6 @@ class MyApp extends StatelessWidget {
           '/loginPage': (context) => LoginPage(),
           '/regisPage': (context) => RegisPage(),
           '/registerPage': (context) => RegisterPage(),
-          '/detail-pengumuman': (context) => DetailPengumumanPage(),
-          '/statistik': (context) => StatistikPage(),
-          '/jadwal': (context) => JadwalPelajaranPage(),
-          '/list-rapot': (context) => ListRapotPage(),
-          '/detail-rapot': (context) => DetailRaportPage(),
-          '/rekap': (context) => RekapAbsensiPage(),
-          '/riwayat-absensi': (context) => RiwayatAbsensiPage(),
-          '/pengumuman': (context) => PengumumanOrangTuaPage(),
-          '/pengajuan': (context) => FormPengajuanPage(),
-          '/ringkasan-pengajuan':
-              (context) => RingkasanPengajuanPage(
-            namaSiswa: '',
-            tanggalIzin: '',
-            jenisIzin: '',
-            keterangan: '',
-          ),
-          '/profil': (context) => ProfilOrangTuaPage(),
-          // '/dashboard': (context) => dashboard(),
         },
       ),
     );

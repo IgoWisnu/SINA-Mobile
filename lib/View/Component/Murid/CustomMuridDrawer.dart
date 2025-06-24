@@ -19,10 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class CustomMuridDrawer extends StatelessWidget {
   final String selectedMenu; // nama menu yang sedang aktif
 
-  const CustomMuridDrawer({
-    super.key,
-    required this.selectedMenu,
-  });
+  const CustomMuridDrawer({super.key, required this.selectedMenu});
 
   @override
   Widget build(BuildContext context) {
@@ -104,10 +101,7 @@ class CustomMuridDrawer extends StatelessWidget {
           const Divider(),
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.red),
-            title: const Text(
-              'Logout',
-              style: TextStyle(color: Colors.red),
-            ),
+            title: const Text('Logout', style: TextStyle(color: Colors.red)),
             onTap: () {
               showDialog(
                 context: context,
@@ -121,7 +115,10 @@ class CustomMuridDrawer extends StatelessWidget {
                         onPressed: () => Navigator.of(context).pop(),
                       ),
                       TextButton(
-                        child: const Text('Logout', style: TextStyle(color: Colors.red)),
+                        child: const Text(
+                          'Logout',
+                          style: TextStyle(color: Colors.red),
+                        ),
                         onPressed: () async {
                           final prefs = await SharedPreferences.getInstance();
                           await prefs.clear();
@@ -129,7 +126,7 @@ class CustomMuridDrawer extends StatelessWidget {
                           Navigator.of(context).pop(); // Tutup dialog
                           Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(builder: (_) => LoginPage()),
-                                (route) => false,
+                            (route) => false,
                           );
                         },
                       ),
@@ -145,12 +142,12 @@ class CustomMuridDrawer extends StatelessWidget {
   }
 
   Widget _buildMenuItem(
-      BuildContext context, {
-        required IconData icon,
-        required String title,
-        required String menuKey,
-        VoidCallback? onClicked
-      }) {
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required String menuKey,
+    VoidCallback? onClicked,
+  }) {
     final isSelected = selectedMenu == menuKey;
 
     return ListTile(
@@ -158,13 +155,12 @@ class CustomMuridDrawer extends StatelessWidget {
       selectedTileColor: Colors.blue, // latar biru saat aktif
       leading: Icon(
         icon,
-        color: isSelected ? Colors.white : Colors.black, // icon putih saat aktif
+        color:
+            isSelected ? Colors.white : Colors.black, // icon putih saat aktif
       ),
       title: Text(
         title,
-        style: TextStyle(
-          color: isSelected ? Colors.white : Colors.black,
-        ),
+        style: TextStyle(color: isSelected ? Colors.white : Colors.black),
       ),
       onTap: onClicked,
     );
@@ -175,44 +171,44 @@ class CustomMuridDrawer extends StatelessWidget {
 
     switch (index) {
       case 0:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => DashboardMurid(),
-        ));
+        Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (context) => DashboardMurid()));
         break;
       case 1:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ListKelasMurid(),
-        ));
+        Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (context) => ListKelasMurid()));
         break;
       case 2:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => JadwalPelajaranMurid(),
-        ));
+        Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (context) => JadwalPelajaranMurid()));
         break;
       case 3:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => RapotMurid(),
-        ));
+        Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (context) => RapotMurid()));
         break;
       case 4:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => RekapAbsensiMurid(),
-        ));
+        Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (context) => RekapAbsensiMurid()));
         break;
       case 5:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => StatistikSiswa(),
-        ));
+        Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (context) => StatistikSiswa()));
         break;
       case 6:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => PengumumanMurid(),
-        ));
+        Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (context) => PengumumanMurid()));
         break;
       case 7:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ProfilMurid(),
-        ));
+        Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (context) => ProfilMurid()));
         break;
     }
   }

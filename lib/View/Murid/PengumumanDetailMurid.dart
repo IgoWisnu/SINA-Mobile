@@ -4,7 +4,7 @@ import 'package:sina_mobile/View/Component/CustomAppBarNoDrawer.dart';
 import 'package:html/parser.dart';
 import 'package:sina_mobile/View/Lib/DateFormatter.dart'; // Untuk parse HTML
 
-class PengumumanDetailMurid extends StatefulWidget{
+class PengumumanDetailMurid extends StatefulWidget {
   final Berita berita;
 
   const PengumumanDetailMurid({super.key, required this.berita});
@@ -19,7 +19,8 @@ class _PengumumanDetailMuridState extends State<PengumumanDetailMurid> {
   /// Membersihkan HTML dan memotong isi hingga `limit` karakter
   String stripHtmlAndLimit(String htmlText, int limit) {
     final document = parse(htmlText);
-    final String parsedString = parse(document.body?.text).documentElement?.text ?? '';
+    final String parsedString =
+        parse(document.body?.text).documentElement?.text ?? '';
     if (parsedString.length <= limit) {
       return parsedString;
     } else {
@@ -39,24 +40,31 @@ class _PengumumanDetailMuridState extends State<PengumumanDetailMurid> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
+                height: 250,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Ink.image(
+                  image: NetworkImage('$baseImageUrl${widget.berita.foto}'),
                   height: 250,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12)
-                  ),
-                  child: Ink.image(
-                    image: NetworkImage('$baseImageUrl${widget.berita.foto}'),
-                    height: 250,
-                    fit: BoxFit.fill,)
+                  fit: BoxFit.fill,
+                ),
               ),
-              SizedBox(height: 30,),
-              Text(widget.berita.judul, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-              SizedBox(height: 10,),
+              SizedBox(height: 30),
+              Text(
+                widget.berita.judul,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
               Text(stripHtmlAndLimit(widget.berita.isi, 1000)),
-              SizedBox(height: 10,),
+              SizedBox(height: 10),
               Container(
                 alignment: Alignment.topRight,
-                child: Text(DateFormatter.format(widget.berita.createdAt), style: TextStyle(color: Colors.grey),),
-              )
+                child: Text(
+                  DateFormatter.format(widget.berita.createdAt),
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ),
             ],
           ),
         ),

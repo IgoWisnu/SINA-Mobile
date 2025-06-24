@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:sina_mobile/View/Component/CustomAppBarNoDrawer.dart';
+import 'package:sina_mobile/View/Component/OrangTua/CustomAppBarOrangTua.dart';
 import 'package:sina_mobile/View/Component/OrangTua/CustomOrangTuaDrawer.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
 class RekapAbsensiPage extends StatelessWidget {
+  String currentMenu = 'rekap_absensi';
   final Map<String, double> dataMap = {
     "Hadir": 320,
     "Izin": 20,
@@ -31,7 +33,11 @@ class RekapAbsensiPage extends StatelessWidget {
     return Scaffold(
       drawer: const CustomOrangTuaDrawer(selectedMenu: 'rekap_absensi'),
       key: _scaffoldKey,
-      appBar: CustomAppBarNoDrawer(),
+      appBar: CustomAppBarOrangTua(
+        onMenuPressed: () {
+          _scaffoldKey.currentState?.openDrawer();
+        },
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(

@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:sina_mobile/Model/Berita.dart';
+import 'package:sina_mobile/Model/OrangTua/BeritaOrangTua.dart';
 import 'package:sina_mobile/View/Component/CustomAppBarNoDrawer.dart';
 import 'package:html/parser.dart';
-import 'package:sina_mobile/View/Component/RegularButton.dart';
-import 'package:sina_mobile/View/EditPengumuman.dart';
 import 'package:sina_mobile/View/Lib/DateFormatter.dart'; // Untuk parse HTML
 
-class PengumumanDetailGuru extends StatefulWidget {
+class PengumumanDetailOrangTua extends StatefulWidget {
   final Berita berita;
 
-  const PengumumanDetailGuru({super.key, required this.berita});
+  const PengumumanDetailOrangTua({super.key, required this.berita});
 
   @override
-  State<PengumumanDetailGuru> createState() => _PengumumanDetailGuruState();
+  State<PengumumanDetailOrangTua> createState() =>
+      _PengumumanDetailOrangTuaState();
 }
 
-class _PengumumanDetailGuruState extends State<PengumumanDetailGuru> {
-  String baseImageUrl = 'http://sina.pnb.ac.id:3000/Upload/berita/';
+class _PengumumanDetailOrangTuaState extends State<PengumumanDetailOrangTua> {
+  String baseImageUrl = 'http://sina.pnb.ac.id:3006/Upload/berita/';
 
   /// Membersihkan HTML dan memotong isi hingga `limit` karakter
   String stripHtmlAndLimit(String htmlText, int limit) {
@@ -54,11 +53,11 @@ class _PengumumanDetailGuruState extends State<PengumumanDetailGuru> {
               ),
               SizedBox(height: 30),
               Text(
-                widget.berita.judul,
+                widget.berita.judul ?? '',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10),
-              Text(stripHtmlAndLimit(widget.berita.isi, 1000)),
+              Text(stripHtmlAndLimit(widget.berita.isi ?? '', 1000)),
               SizedBox(height: 10),
               Container(
                 alignment: Alignment.topRight,
@@ -66,30 +65,6 @@ class _PengumumanDetailGuruState extends State<PengumumanDetailGuru> {
                   DateFormatter.format(widget.berita.createdAt),
                   style: TextStyle(color: Colors.grey),
                 ),
-              ),
-              SizedBox(height: 20),
-              Column(
-                children: [
-                  RegularButton(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder:
-                              (context) =>
-                                  EditPengumuman(berita: this.widget.berita),
-                        ),
-                      );
-                    },
-                    judul: 'Edit Berita',
-                  ),
-                  SizedBox(height: 10),
-                  RegularButton(
-                    onTap: () {},
-                    judul: 'Hapus Berta',
-                    color: Colors.red,
-                  ),
-                ],
               ),
             ],
           ),

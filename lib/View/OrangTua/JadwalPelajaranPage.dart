@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sina_mobile/View/Component/CustomAppBarNoDrawer.dart';
+import 'package:sina_mobile/View/Component/OrangTua/CustomAppBarOrangTua.dart';
 import 'package:sina_mobile/View/Component/OrangTua/CustomOrangTuaDrawer.dart';
 import 'package:sina_mobile/View/OrangTua/DetailPengumumanPage.dart';
 
@@ -40,13 +41,18 @@ class JadwalPelajaranPage extends StatelessWidget {
   };
 
   String selectedDay = 'Senin';
+  String currentMenu = 'jadwal_pelajaran';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: CustomOrangTuaDrawer(selectedMenu: currentMenu),
       key: _scaffoldKey,
-      appBar: CustomAppBarNoDrawer(),
+      appBar: CustomAppBarOrangTua(
+        onMenuPressed: () {
+          _scaffoldKey.currentState?.openDrawer();
+        },
+      ),
       body: Column(
         children: [
           const SizedBox(height: 10),

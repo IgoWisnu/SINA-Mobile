@@ -1,40 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:sina_mobile/View/Component/CardPengumuman.dart';
-import 'package:sina_mobile/View/Component/Murid/CustomMuridDrawer.dart';
-import 'package:sina_mobile/View/Murid/PengumumanDetailMurid.dart';
+import 'package:sina_mobile/View/Component/OrangTua/CardPengumumanOrtu.dart';
+import 'package:sina_mobile/View/Component/OrangTua/CustomOrangTuaDrawer.dart';
 import 'package:provider/provider.dart';
-import 'package:sina_mobile/ViewModel/BeritaViewModel.dart';
+import 'package:sina_mobile/View/OrangTua/PengumumanDetailOrangTua.dart';
+import 'package:sina_mobile/ViewModel/OrangTua/BeritaOrangTuaViewModel.dart';
 
 import '../Component/CustomAppBar.dart';
-import '../Component/Custom_drawer.dart';
 
-class PengumumanMurid extends StatefulWidget {
+class PengumumanOrtu extends StatefulWidget {
   @override
-  State<PengumumanMurid> createState() => _PengumumanMuridState();
+  State<PengumumanOrtu> createState() => _PengumumanOrtuState();
 }
 
-class _PengumumanMuridState extends State<PengumumanMurid> {
+class _PengumumanOrtuState extends State<PengumumanOrtu> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  String currentMenu = 'pengumuman';
+  String currentMenu = 'pengumumanOrtu';
 
   @override
   void initState() {
     super.initState();
     // Ambil data kelas saat widget dibuka
     Future.microtask(
-      () => Provider.of<BeritaViewModel>(context, listen: false).fetchBerita(),
+      () =>
+          Provider.of<BeritaOrangTuaViewModel>(
+            context,
+            listen: false,
+          ).fetchBeritaOrangTua(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final vm = Provider.of<BeritaViewModel>(context);
+    final vm = Provider.of<BeritaOrangTuaViewModel>(context);
 
     // TODO: implement build
     return Scaffold(
       key: _scaffoldKey, // ← INI YANG BELUM ADA
-      drawer: CustomMuridDrawer(selectedMenu: currentMenu),
+      drawer: CustomOrangTuaDrawer(selectedMenu: currentMenu),
       appBar: CustomAppBar(
         onMenuPressed: () {
           _scaffoldKey.currentState?.openDrawer();
@@ -48,18 +52,19 @@ class _PengumumanMuridState extends State<PengumumanMurid> {
               : Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: ListView.builder(
-                  itemCount: vm.beritaList.length,
+                  itemCount: vm.beritaListOrangTua.length,
                   itemBuilder: (context, index) {
-                    final beritaItem = vm.beritaList[index];
-                    return CardPengumuman(
+                    final beritaItem = vm.beritaListOrangTua[index];
+                    return CardPengumumanOrtu(
                       berita: beritaItem,
                       Action: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder:
-                                (context) =>
-                                    PengumumanDetailMurid(berita: beritaItem),
+                                (context) => PengumumanDetailOrangTua(
+                                  berita: beritaItem,
+                                ),
                           ),
                         );
                       },

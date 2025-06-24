@@ -18,11 +18,7 @@ class SiswaResponse {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'message': message,
-      'status': status,
-      'biodata': siswa.toJson(),
-    };
+    return {'message': message, 'status': status, 'biodata': siswa.toJson()};
   }
 }
 

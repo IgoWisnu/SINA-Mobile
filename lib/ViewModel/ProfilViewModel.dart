@@ -7,8 +7,6 @@ import 'package:sina_mobile/service/repository/KelasRepository.dart';
 import '../Model/user.dart';
 import '../Model/kelas.dart';
 
-
-
 class ProfilViewModel extends ChangeNotifier {
   final BiodataRepository repository;
 
@@ -37,5 +35,4 @@ class ProfilViewModel extends ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
-
 }

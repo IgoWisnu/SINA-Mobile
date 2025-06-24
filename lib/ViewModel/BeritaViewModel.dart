@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sina_mobile/service/repository/AuthRepository.dart';
 import 'package:sina_mobile/service/repository/BeritaRepository.dart';
 import 'package:sina_mobile/service/repository/KelasRepository.dart';
-
 import '../Model/kelas.dart';
 import 'package:sina_mobile/Model/Berita.dart';
-
 
 class BeritaViewModel extends ChangeNotifier {
   final BeritaRepository repository;
@@ -35,6 +33,4 @@ class BeritaViewModel extends ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
-
-
 }

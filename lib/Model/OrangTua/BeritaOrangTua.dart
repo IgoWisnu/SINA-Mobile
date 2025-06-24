@@ -1,16 +1,18 @@
-class BeritaResponse {
+import 'package:sina_mobile/Model/Berita.dart';
+
+class BeritaOrangTuaResponse {
   final String message;
-  final int status;
+  final int status; // ✅ hkarena dari JSON: "status": 200
   final List<Berita> data;
 
-  BeritaResponse({
+  BeritaOrangTuaResponse({
     required this.message,
     required this.status,
     required this.data,
   });
 
-  factory BeritaResponse.fromJson(Map<String, dynamic> json) {
-    return BeritaResponse(
+  factory BeritaOrangTuaResponse.fromJson(Map<String, dynamic> json) {
+    return BeritaOrangTuaResponse(
       message: json['message'],
       status: json['status'],
       data:
@@ -50,12 +52,12 @@ class Berita {
 
   factory Berita.fromJson(Map<String, dynamic> json) {
     return Berita(
-      beritaId: json['berita_id'],
+      beritaId: json['berita_id'] ?? '',
       judul: json['judul'],
       foto: json['foto'],
       isi: json['isi'],
       tipe: json['tipe'],
-      createdAt: DateTime.parse(json['created_at']),
+      createdAt: DateTime.tryParse(json['created_at'] ?? '') ?? DateTime.now(),
       namaGuru: json['nama_guru'],
       namaAdmin: json['nama_admin'],
     );

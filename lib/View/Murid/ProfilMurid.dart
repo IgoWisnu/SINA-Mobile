@@ -12,9 +12,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sina_mobile/ViewModel/ProfilViewModel.dart';
 import 'package:provider/provider.dart';
 
-
-class ProfilMurid extends StatefulWidget{
-
+class ProfilMurid extends StatefulWidget {
   @override
   State<ProfilMurid> createState() => _ProfilMuridState();
 }
@@ -53,7 +51,7 @@ class _ProfilMuridState extends State<ProfilMurid> {
           namaController.text = siswa.nama;
           tempatLahirController.text = siswa.tempatLahir;
           tanggalLahirController.text =
-          siswa.tanggalLahir.toIso8601String().split('T')[0];
+              siswa.tanggalLahir.toIso8601String().split('T')[0];
           nomorTeleponController.text = '085729322983';
           alamatController.text = siswa.alamat;
           selectedAgama = 'Hindu';
@@ -61,7 +59,6 @@ class _ProfilMuridState extends State<ProfilMurid> {
       }
     });
   }
-
 
   final List<String> agamaList = [
     'Islam',
@@ -86,12 +83,11 @@ class _ProfilMuridState extends State<ProfilMurid> {
       }
     } else {
       // Opsional: tampilkan snackbar atau dialog
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Akses galeri ditolak')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Akses galeri ditolak')));
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +102,7 @@ class _ProfilMuridState extends State<ProfilMurid> {
           namaController.text = siswa.nama;
           tempatLahirController.text = siswa.tempatLahir;
           tanggalLahirController.text =
-          siswa.tanggalLahir.toIso8601String().split('T')[0];
+              siswa.tanggalLahir.toIso8601String().split('T')[0];
           nomorTeleponController.text = '23132132312';
           alamatController.text = siswa.alamat;
           selectedAgama = 'Hindu';
@@ -115,9 +111,7 @@ class _ProfilMuridState extends State<ProfilMurid> {
         // TODO: implement build
         return Scaffold(
           key: _scaffoldKey, // ← INI YANG BELUM ADA
-          drawer: CustomMuridDrawer(
-            selectedMenu: currentMenu,
-          ),
+          drawer: CustomMuridDrawer(selectedMenu: currentMenu),
           appBar: CustomAppBar(
             onMenuPressed: () {
               _scaffoldKey.currentState?.openDrawer();
@@ -129,7 +123,7 @@ class _ProfilMuridState extends State<ProfilMurid> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 20,),
+                  SizedBox(height: 20),
                   Container(
                     width: double.infinity,
                     alignment: Alignment.center,
@@ -139,13 +133,18 @@ class _ProfilMuridState extends State<ProfilMurid> {
                         CircleAvatar(
                           radius: 50,
                           backgroundColor: Colors.grey[300],
-                          backgroundImage: _profileImage != null
-                              ? FileImage(_profileImage!)
-                              : null,
-                          child: _profileImage == null
-                              ? const Icon(
-                              Icons.person, size: 50, color: Colors.grey)
-                              : null,
+                          backgroundImage:
+                              _profileImage != null
+                                  ? FileImage(_profileImage!)
+                                  : null,
+                          child:
+                              _profileImage == null
+                                  ? const Icon(
+                                    Icons.person,
+                                    size: 50,
+                                    color: Colors.grey,
+                                  )
+                                  : null,
                         ),
                         IconButton(
                           onPressed: () {
@@ -153,83 +152,106 @@ class _ProfilMuridState extends State<ProfilMurid> {
                             _pickImage();
                           },
                           icon: const Icon(
-                              Icons.camera_alt, color: Colors.blue),
+                            Icons.camera_alt,
+                            color: Colors.blue,
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(height: 10,),
-                  Text("NIK", style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 16),),
-                  SizedBox(height: 5,),
+                  SizedBox(height: 10),
+                  Text(
+                    "NIK",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  SizedBox(height: 5),
+                  CustomTextField(controller: nikController, enabled: false),
+                  SizedBox(height: 10),
+                  Text(
+                    "NISM",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  SizedBox(height: 5),
+                  CustomTextField(controller: nismController, enabled: false),
+                  SizedBox(height: 10),
+                  Text(
+                    "Nama Lengkap",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  SizedBox(height: 5),
+                  CustomTextField(controller: namaController, enabled: false),
+                  SizedBox(height: 10),
+                  Text(
+                    "Tempat Lahir",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  SizedBox(height: 5),
                   CustomTextField(
-                    controller: nikController, enabled: false, ),
-                  SizedBox(height: 10,),
-                  Text("NISM", style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 16),),
-                  SizedBox(height: 5,),
-                  CustomTextField(
-                    controller: nismController, enabled: false,),
-                  SizedBox(height: 10,),
-                  Text("Nama Lengkap", style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 16),),
-                  SizedBox(height: 5,),
-                  CustomTextField(
-                    controller: namaController, enabled: false,),
-                  SizedBox(height: 10,),
-                  Text("Tempat Lahir", style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 16),),
-                  SizedBox(height: 5,),
-                  CustomTextField(
-                    controller: tempatLahirController, hintText: 'ssaas',),
-                  SizedBox(height: 10,),
-                  Text("Tanggal Lahir", style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 16),),
-                  SizedBox(height: 5,),
-                  CustomDatePicker(controller: tanggalLahirController,),
-                  SizedBox(height: 10,),
-                  Text("Nomor Telepon", style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 16),),
-                  SizedBox(height: 5,),
-                  CustomTextField(controller: nomorTeleponController,),
-                  SizedBox(height: 10,),
-                  Text("Alamat", style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 16),),
-                  SizedBox(height: 5,),
+                    controller: tempatLahirController,
+                    hintText: 'ssaas',
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "Tanggal Lahir",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  SizedBox(height: 5),
+                  CustomDatePicker(controller: tanggalLahirController),
+                  SizedBox(height: 10),
+                  Text(
+                    "Nomor Telepon",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  SizedBox(height: 5),
+                  CustomTextField(controller: nomorTeleponController),
+                  SizedBox(height: 10),
+                  Text(
+                    "Alamat",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  SizedBox(height: 5),
                   CustomTextArea(
-                    controller: alamatController, hintText: 'ssaas',),
-                  SizedBox(height: 10,),
-                  Text("Agama", style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 16),),
-                  SizedBox(height: 5,),
+                    controller: alamatController,
+                    hintText: 'ssaas',
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "Agama",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  SizedBox(height: 5),
                   DropdownButtonFormField<String>(
                     value: selectedAgama,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       contentPadding: EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 16),
+                        horizontal: 12,
+                        vertical: 16,
+                      ),
                     ),
-                    items: agamaList.map((agama) {
-                      return DropdownMenuItem<String>(
-                        value: agama,
-                        child: Text(agama),
-                      );
-                    }).toList(),
+                    items:
+                        agamaList.map((agama) {
+                          return DropdownMenuItem<String>(
+                            value: agama,
+                            child: Text(agama),
+                          );
+                        }).toList(),
                     onChanged: (value) {
                       setState(() {
                         selectedAgama = value!;
                       });
                     },
-                    validator: (value) =>
-                    value == null || value.isEmpty
-                        ? 'Agama tidak boleh kosong'
-                        : null,
+                    validator:
+                        (value) =>
+                            value == null || value.isEmpty
+                                ? 'Agama tidak boleh kosong'
+                                : null,
                   ),
-                  SizedBox(height: 20,),
+                  SizedBox(height: 20),
                   RegularButton(onTap: () {}, judul: "Ubah Password"),
-                  SizedBox(height: 10,),
+                  SizedBox(height: 10),
                   RegularButton(onTap: () {}, judul: "Perbarui Profil"),
-                  SizedBox(height: 20,)
+                  SizedBox(height: 20),
                 ],
               ),
             ),

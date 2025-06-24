@@ -2,10 +2,7 @@ class DashboardGuru {
   final bool success;
   final DashboardData data;
 
-  DashboardGuru({
-    required this.success,
-    required this.data,
-  });
+  DashboardGuru({required this.success, required this.data});
 
   factory DashboardGuru.fromJson(Map<String, dynamic> json) {
     return DashboardGuru(
@@ -15,10 +12,7 @@ class DashboardGuru {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'success': success,
-      'data': data.toJson(),
-    };
+    return {'success': success, 'data': data.toJson()};
   }
 }
 
