@@ -25,7 +25,7 @@ class Jadwal {
   final String start;
   final String finish;
   final String namaMapel;
-  final String namaGuru;
+  final String? namaGuru;
 
   Jadwal({
     required this.hari,

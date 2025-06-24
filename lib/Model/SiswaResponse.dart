@@ -34,6 +34,7 @@ class Siswa {
   final String alamat;
   final String kelas;
   final String tahunAkademik;
+  final String? fotoProfil;
 
   Siswa({
     required this.nis,
@@ -43,6 +44,7 @@ class Siswa {
     required this.alamat,
     required this.kelas,
     required this.tahunAkademik,
+    this.fotoProfil
   });
 
   factory Siswa.fromJson(Map<String, dynamic> json) {
@@ -54,6 +56,7 @@ class Siswa {
       alamat: json['alamat'],
       kelas: json['kelas'],
       tahunAkademik: json['tahun_akademik'],
+      fotoProfil: json['foto_profil']
     );
   }
 
@@ -66,6 +69,7 @@ class Siswa {
       'alamat': alamat,
       'kelas': kelas,
       'tahun_akademik': tahunAkademik,
+      'foto_profil': fotoProfil
     };
   }
 }

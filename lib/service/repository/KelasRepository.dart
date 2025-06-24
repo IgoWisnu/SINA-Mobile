@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sina_mobile/Model/DetailRaporResponse.dart';
 import 'package:sina_mobile/Model/Materi.dart';
 import 'package:sina_mobile/Model/Tugas.dart';
 import 'package:sina_mobile/Model/kelas.dart';
@@ -120,5 +121,32 @@ class KelasRepository {
     }
   }
 
+  Future<RaporData> fetchFileUpload(String idAkademik) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('auth_token');
+
+    // Ganti dengan URL dasar yang sesuai
+    const baseUrl = 'http://sina.pnb.ac.id:3000'; // contoh base URL
+    final url = Uri.parse('$baseUrl/dashboard/rapor/$idAkademik');
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    print("Response status: ${response.statusCode}");
+    print("Response body: ${response.body}");
+
+    if (response.statusCode == 200) {
+      final jsonBody = jsonDecode(response.body);
+      final dataRapor = DetailRaporResponse.fromJson(jsonBody);
+      return dataRapor.data;
+    } else {
+      throw Exception('Gagal mengambil data rapor : ${response.body}');
+    }
+  }
 
 }

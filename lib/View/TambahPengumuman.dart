@@ -72,6 +72,7 @@ class _TambahPengumumanState extends State<TambahPengumuman> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TitleBarLine(judul: "Tambah Pengumuman"),
             SizedBox(height: 20,),

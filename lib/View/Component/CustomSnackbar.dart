@@ -6,8 +6,7 @@ class CustomSnackbar {
     _show(
       context,
       message,
-      icon: Icons.check_circle,
-      iconColor: Colors.green,
+      lottieAsset: 'assets/animations/success.json',
     );
   }
 
@@ -15,16 +14,14 @@ class CustomSnackbar {
     _show(
       context,
       message,
-      icon: Icons.error,
-      iconColor: Colors.red,
+      lottieAsset: 'assets/animations/failed.json',
     );
   }
 
   static void _show(
       BuildContext context,
       String message, {
-        required IconData icon,
-        required Color iconColor,
+        required String lottieAsset,
       }) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -42,9 +39,9 @@ class CustomSnackbar {
           child: Row(
             children: [
               Lottie.asset(
-                'lib/asset/Animation/success.json',
-                width: 100,
-                height: 100,
+                lottieAsset,
+                width: 60,
+                height: 60,
                 repeat: false,
               ),
               const SizedBox(width: 12),

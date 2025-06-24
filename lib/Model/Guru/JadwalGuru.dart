@@ -25,7 +25,9 @@ class JadwalGuru {
 }
 
 class JadwalItem {
+  final String jadwalId;
   final int jamKe;
+  final String mapelId;
   final String start;
   final String finish;
   final String hari;
@@ -33,7 +35,9 @@ class JadwalItem {
   final String namaKelas;
 
   JadwalItem({
+    required this.jadwalId,
     required this.jamKe,
+    required this.mapelId,
     required this.start,
     required this.finish,
     required this.hari,
@@ -43,7 +47,9 @@ class JadwalItem {
 
   factory JadwalItem.fromJson(Map<String, dynamic> json) {
     return JadwalItem(
+      jadwalId: json['jadwal_id'],
       jamKe: json['jam_ke'],
+      mapelId: json['mapel_id'],
       start: json['start'],
       finish: json['finish'],
       hari: json['hari'],
@@ -54,7 +60,9 @@ class JadwalItem {
 
   Map<String, dynamic> toJson() {
     return {
+      'jadwal_id': jadwalId,
       'jam_ke': jamKe,
+      'mapel_id': mapelId,
       'start': start,
       'finish': finish,
       'hari': hari,

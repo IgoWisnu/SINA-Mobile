@@ -9,8 +9,10 @@ import 'package:sina_mobile/View/Component/Murid/CustomMuridDrawer.dart';
 import 'package:sina_mobile/View/Component/RegularButton.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sina_mobile/View/Lib/Colors.dart';
 import 'package:sina_mobile/ViewModel/ProfilViewModel.dart';
 import 'package:provider/provider.dart';
+import 'package:barcode_widget/barcode_widget.dart';
 
 
 class ProfilMurid extends StatefulWidget{
@@ -95,9 +97,14 @@ class _ProfilMuridState extends State<ProfilMurid> {
 
   @override
   Widget build(BuildContext context) {
+    String baseImageUrl = 'http://sina.pnb.ac.id:3001/Upload/profile_image/';
+
     return Consumer<ProfilViewModel>(
       builder: (context, vm, _) {
         final siswa = vm.siswa;
+        String? fotoProfil = siswa?.fotoProfil; // Misalnya: "12345.jpg"
+
+        String? _networkImageUrl = fotoProfil != null ? '$baseImageUrl$fotoProfil' : null;
 
         if (siswa != null && nikController.text.isEmpty) {
           // Pastikan hanya set saat controller kosong agar tidak overwrite manual user input
@@ -129,43 +136,81 @@ class _ProfilMuridState extends State<ProfilMurid> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 20,),
+                  SizedBox(height: 10),
                   Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: AppColors.primary,
+                    ),
                     width: double.infinity,
-                    alignment: Alignment.center,
-                    child: Stack(
-                      alignment: Alignment.bottomRight,
-                      children: [
-                        CircleAvatar(
-                          radius: 50,
-                          backgroundColor: Colors.grey[300],
-                          backgroundImage: _profileImage != null
-                              ? FileImage(_profileImage!)
-                              : null,
-                          child: _profileImage == null
-                              ? const Icon(
-                              Icons.person, size: 50, color: Colors.grey)
-                              : null,
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            print("Tombol edit ditekan");
-                            _pickImage();
-                          },
-                          icon: const Icon(
-                              Icons.camera_alt, color: Colors.blue),
-                        ),
-                      ],
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Card(
+                            color: AppColors.blueDisable,
+                            elevation: 4,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                children: [
+                                  const SizedBox(height: 10),
+                                  if (siswa?.nis != null && siswa!.nis.isNotEmpty)
+                                    BarcodeWidget(
+                                      barcode: Barcode.qrCode(), // ✅ QR Code seperti QRIS
+                                      data: siswa.nis,
+                                      width: 150,
+                                      height: 150,
+                                      drawText: false, // QRIS biasanya tidak menampilkan teks
+                                    )
+                                  else
+                                    Text("NIS tidak tersedia"),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            child: Stack(
+                              alignment: Alignment.bottomRight,
+                              children: [
+                                CircleAvatar(
+                                  radius: 50,
+                                  backgroundColor: Colors.grey[300],
+                                  backgroundImage: _profileImage != null
+                                      ? FileImage(_profileImage!)
+                                      : (_networkImageUrl != null
+                                      ? NetworkImage(_networkImageUrl)
+                                      : null),
+                                  child: _profileImage == null && _networkImageUrl == null
+                                      ? const Icon(Icons.person, size: 50, color: Colors.grey)
+                                      : null,
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    print("Tombol edit ditekan");
+                                    _pickImage();
+                                  },
+                                  icon: const Icon(
+                                      Icons.camera_alt, color: Colors.blue),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(height: 10,),
-                  Text("NIK", style: TextStyle(
+                  Text("NIS", style: TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 16),),
                   SizedBox(height: 5,),
                   CustomTextField(
                     controller: nikController, enabled: false, ),
                   SizedBox(height: 10,),
-                  Text("NISM", style: TextStyle(
+                  Text("NISN", style: TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 16),),
                   SizedBox(height: 5,),
                   CustomTextField(

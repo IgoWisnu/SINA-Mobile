@@ -30,10 +30,11 @@ class RekapAbsenData {
 
   factory RekapAbsenData.fromJson(Map<String, dynamic> json) {
     return RekapAbsenData(
-      sakit: json['sakit'],
-      izin: json['izin'],
-      alpha: json['alpha'],
-      hadir: json['hadir'],
+      sakit: int.tryParse(json['sakit'].toString()) ?? 0,
+      izin: int.tryParse(json['izin'].toString()) ?? 0,
+      alpha: int.tryParse(json['alpha'].toString()) ?? 0,
+      hadir: int.tryParse(json['hadir'].toString()) ?? 0,
     );
   }
 }
+

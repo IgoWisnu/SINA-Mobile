@@ -6,12 +6,7 @@ import 'package:sina_mobile/Model/SiswaResponse.dart';
 import 'package:sina_mobile/Model/Tugas.dart';
 import 'package:sina_mobile/Model/kelas.dart';
 import '../../service/api/ApiService.dart';
-import 'package:dio/dio.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io';
-import 'package:mime/mime.dart';
-import 'package:path/path.dart';
-import 'package:http_parser/http_parser.dart';
+
 
 class BiodataRepository {
   final ApiService apiService;
@@ -21,7 +16,6 @@ class BiodataRepository {
   Future<Siswa> fetchBiodataSiswa() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('auth_token');
-
     final response = await apiService.client.get(
       apiService.buildUrl('dashboard/biodata'),
       headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},

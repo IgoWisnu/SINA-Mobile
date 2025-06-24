@@ -71,39 +71,6 @@ class _dashboardState extends State<dashboard> {
                 ),
                 SizedBox(height: 20,),
                 TitleBar(judul: "Tugas Terbaru"),
-                ItemTugasMurid(
-                    judul: "Tugas Javascript 3",
-                    upload_date: DateTime(2024, 5, 20),
-                    tenggat: DateTime(2024, 5, 23),
-                    onTap: (){
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => TugasDetail()),
-                      // );
-                    }
-                ),
-                ItemTugasMurid(
-                    judul: "Tugas Javascript 2",
-                    upload_date: DateTime(2025, 5, 2),
-                    tenggat: DateTime(2025, 5, 15),
-                    onTap: (){
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => TugasDetail()),
-                      // );
-                    }
-                ),
-                ItemTugasMurid(
-                    judul: "Tugas Javascript 1",
-                    upload_date: DateTime(2025, 4, 29),
-                    tenggat: DateTime(2025, 5, 2),
-                    onTap: (){
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => TugasDetail()),
-                      // );
-                    }
-                ),
                 SizedBox(height: 20,),
               ],
             ),

@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:sina_mobile/Model/Berita.dart';
 import 'package:sina_mobile/View/Component/CustomAppBarNoDrawer.dart';
 import 'package:html/parser.dart';
+import 'package:sina_mobile/View/Component/CustomSnackbar.dart';
 import 'package:sina_mobile/View/Component/RegularButton.dart';
 import 'package:sina_mobile/View/EditPengumuman.dart';
 import 'package:sina_mobile/View/Lib/DateFormatter.dart'; // Untuk parse HTML
+import 'package:provider/provider.dart';
+import 'package:sina_mobile/ViewModel/Guru/PengumumanGuruViewModel.dart';
+import 'package:sina_mobile/service/api/ApiServiceGuru.dart';
+import 'package:sina_mobile/service/repository/Guru/BeritaGuruRepository.dart';
 
 class PengumumanDetailGuru extends StatefulWidget{
   final Berita berita;
@@ -17,6 +22,7 @@ class PengumumanDetailGuru extends StatefulWidget{
 
 class _PengumumanDetailGuruState extends State<PengumumanDetailGuru> {
   String baseImageUrl = 'http://sina.pnb.ac.id:3000/Upload/berita/';
+  final PengumumanGuruViewModel _viewModel = PengumumanGuruViewModel(repository: BeritaGuruRepository(ApiServiceGuru()));
 
   /// Membersihkan HTML dan memotong isi hingga `limit` karakter
   String stripHtmlAndLimit(String htmlText, int limit) {
@@ -29,8 +35,25 @@ class _PengumumanDetailGuruState extends State<PengumumanDetailGuru> {
     }
   }
 
+  void _deletePengumuman() async {
+    try {
+      await _viewModel.deleteBerita(
+        idBerita: widget.berita.beritaId
+      );
+
+      CustomSnackbar.showSuccess(context, "Berhasil Menghapus Berita");
+      Navigator.pop(context, true); // mengirim flag "data berubah"
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Gagal Menghapus Berita: $e")),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final vm = Provider.of<PengumumanGuruViewModel>(context, listen: false);
+
     // TODO: implement build
     return Scaffold(
       appBar: CustomAppBarNoDrawer(),
@@ -62,17 +85,17 @@ class _PengumumanDetailGuruState extends State<PengumumanDetailGuru> {
               SizedBox(height: 20,),
               Column(
                 children: [
-                  RegularButton(onTap: (){
-                    Navigator.push(
+                  RegularButton(onTap: () async {
+                    await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => EditPengumuman(berita: this.berita),
+                          builder: (context) => EditPengumuman(berita: widget.berita),
                         ),
                     );
                   }, judul: 'Edit Berita'),
                   SizedBox(height: 10,),
                   RegularButton(onTap: (){
-
+                    _deletePengumuman();
                   }, judul: 'Hapus Berta', color: Colors.red,)
                 ],
               )

@@ -49,6 +49,36 @@ class PengumumanGuruViewModel extends ChangeNotifier {
     }
   }
 
+  Future<void> editBerita({
+    required String idBerita,
+    required String judul,
+    required String deskripsi,
+    String? filePath,
+  }) async {
+    try {
+      await repository.editBerita(
+          id : idBerita,
+          judul: judul,
+          deskripsi: deskripsi,
+          filePath: filePath ?? ""
+      );
+    } catch (e) {
+      rethrow; // dibiarkan naik ke UI untuk ditampilkan ke user
+    }
+  }
+
+  Future<void> deleteBerita({
+    required String idBerita
+  }) async {
+    try{
+      await repository.deleteBerita(
+          idBerita
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
 
 
 
