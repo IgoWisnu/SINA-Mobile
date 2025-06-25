@@ -54,10 +54,17 @@ import 'package:sina_mobile/service/repository/RaporRepository.dart';
 import 'package:sina_mobile/service/repository/StatistikRepository.dart';
 
 import 'ViewModel/AuthViewModel.dart';
+import 'ViewModel/Guru/NilaiRaporViewModel.dart';
+import 'ViewModel/Guru/SuratIzinViewModel.dart';
+import 'service/repository/Guru/NilaiRepository.dart';
+import 'service/repository/Guru/SuratIzinRepository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeDateFormatting('id_ID', null); // Inisialisasi locale Indonesia
+  await initializeDateFormatting(
+    'id_ID',
+    null,
+  ); // Inisialisasi locale Indonesia
   runApp(const MyApp());
 }
 
@@ -69,97 +76,121 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => AuthViewModel(
-            repository: AuthRepository(ApiServiceAuth()),
-          ),
+          create:
+              (_) =>
+                  AuthViewModel(repository: AuthRepository(ApiServiceAuth())),
         ),
         ChangeNotifierProvider(
-          create: (_) => KelasViewModel(
-            repository: KelasRepository(ApiService()),
-          ),
+          create:
+              (_) => KelasViewModel(repository: KelasRepository(ApiService())),
         ),
         ChangeNotifierProvider(
-          create: (_) => KelasDetailViewModel(
-            repository: KelasRepository(ApiService()),
-          ),
+          create:
+              (_) => KelasDetailViewModel(
+                repository: KelasRepository(ApiService()),
+              ),
         ),
         ChangeNotifierProvider(
-          create: (_) => JadwalViewModel(
-            repository: JadwalRepository(ApiService())
-          ),
+          create:
+              (_) =>
+                  JadwalViewModel(repository: JadwalRepository(ApiService())),
         ),
         ChangeNotifierProvider(
-          create: (_) => RekapAbsensiViewModel(
-              repository: AbsensiRepository(ApiService())
-          ),
+          create:
+              (_) => RekapAbsensiViewModel(
+                repository: AbsensiRepository(ApiService()),
+              ),
         ),
         ChangeNotifierProvider(
-          create: (_) => BeritaViewModel(
-              repository: BeritaRepository(ApiService())
-          ),
+          create:
+              (_) =>
+                  BeritaViewModel(repository: BeritaRepository(ApiService())),
         ),
         ChangeNotifierProvider(
-          create: (_) => ProfilViewModel(
-              repository: BiodataRepository(ApiService())
-          ),
+          create:
+              (_) =>
+                  ProfilViewModel(repository: BiodataRepository(ApiService())),
         ),
         ChangeNotifierProvider(
-          create: (_) => DashboardViewModel(
-              repository: DashboardRepository(ApiService())
-          ),
+          create:
+              (_) => DashboardViewModel(
+                repository: DashboardRepository(ApiService()),
+              ),
         ),
         ChangeNotifierProvider(
-          create: (_) => DashboardGuruViewModel(
-              repository: DashboardGuruRepository(ApiServiceGuru())
-          ),
+          create:
+              (_) => DashboardGuruViewModel(
+                repository: DashboardGuruRepository(ApiServiceGuru()),
+              ),
         ),
         ChangeNotifierProvider(
-          create: (_) => JadwalGuruViewModel(
-              repository: JadwalGuruRepository(ApiServiceGuru())
-          ),
+          create:
+              (_) => JadwalGuruViewModel(
+                repository: JadwalGuruRepository(ApiServiceGuru()),
+              ),
         ),
         ChangeNotifierProvider(
-          create: (_) => KelasGuruViewModel(
-              repository: KelasGuruRepository(ApiServiceGuru())
-          ),
+          create:
+              (_) => KelasGuruViewModel(
+                repository: KelasGuruRepository(ApiServiceGuru()),
+              ),
         ),
         ChangeNotifierProvider(
-          create: (_) => KelasDetailGuruViewModel(
-              repository: KelasGuruRepository(ApiServiceGuru())
-          ),
+          create:
+              (_) => KelasDetailGuruViewModel(
+                repository: KelasGuruRepository(ApiServiceGuru()),
+              ),
         ),
         ChangeNotifierProvider(
-          create: (_) => KelasDetailGuruViewModel(
-              repository: KelasGuruRepository(ApiServiceGuru())
-          ),
+          create:
+              (_) => KelasDetailGuruViewModel(
+                repository: KelasGuruRepository(ApiServiceGuru()),
+              ),
+        ),
+        ChangeNotifierProvider(create: (_) => TugasDetailGuruViewModel()),
+        ChangeNotifierProvider(
+          create:
+              (_) => PengumumanGuruViewModel(
+                repository: BeritaGuruRepository(ApiServiceGuru()),
+              ),
         ),
         ChangeNotifierProvider(
-          create: (_) => TugasDetailGuruViewModel(),
+          create:
+              (_) => ProfilGuruViewModel(
+                repository: BiodataGuruRepository(ApiServiceGuru()),
+              ),
         ),
         ChangeNotifierProvider(
-          create: (_) => PengumumanGuruViewModel(
-              repository: BeritaGuruRepository(ApiServiceGuru())
-          ),
+          create:
+              (_) => StatistikViewModel(
+                repository: StatistikRepository(ApiService()),
+              ),
         ),
         ChangeNotifierProvider(
-          create: (_) => ProfilGuruViewModel(
-              repository: BiodataGuruRepository(ApiServiceGuru())
-          ),
+          create:
+              (_) => RaporSiswaViewModel(
+                repository: RaporRepository(ApiService()),
+              ),
         ),
         ChangeNotifierProvider(
-          create: (_) => StatistikViewModel(
-              repository: StatistikRepository(ApiService())
-          ),
+          create:
+              (_) => SuratIzinViewModel(
+                repository: SuratIzinRepository(apiService: ApiServiceGuru()),
+              ),
         ),
+        // In your main.dart's MultiProvider list
         ChangeNotifierProvider(
-          create: (_) => RaporSiswaViewModel(
-              repository: RaporRepository(ApiService())
-          ),
+          create:
+              (_) => NilaiRaporViewModel(
+                repository: NilaiRepository(ApiServiceGuru()),
+              ),
         ),
+        // Add to your MultiProvider list
         ChangeNotifierProvider(
-          create: (_) => AbsensiGuruViewModel(
-              repository: AbsensiGuruRepository(ApiServiceGuru())
-          ),
+          create:
+              (_) => AbsensiGuruViewModel(
+                repository: AbsensiGuruRepository(ApiServiceGuru()),
+              ),
         ),
       ],
       child: MaterialApp(
@@ -212,11 +243,11 @@ class MyApp extends StatelessWidget {
           '/pengajuan': (context) => FormPengajuanPage(),
           '/ringkasan-pengajuan':
               (context) => RingkasanPengajuanPage(
-            namaSiswa: '',
-            tanggalIzin: '',
-            jenisIzin: '',
-            keterangan: '',
-          ),
+                namaSiswa: '',
+                tanggalIzin: '',
+                jenisIzin: '',
+                keterangan: '',
+              ),
           '/profil': (context) => ProfilOrangTuaPage(),
           // '/dashboard': (context) => dashboard(),
         },

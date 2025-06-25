@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ItemDaftarIzin extends StatelessWidget{
+class ItemDaftarIzin extends StatelessWidget {
   final VoidCallback ontap;
   final String nama;
   final String kelas;
@@ -12,7 +12,7 @@ class ItemDaftarIzin extends StatelessWidget{
     required this.kelas,
     required this.tanggal,
     required this.ontap,
-
+    required String status,
   });
 
   @override
@@ -41,17 +41,16 @@ class ItemDaftarIzin extends StatelessWidget{
                       shape: BoxShape.circle,
                     ),
                   ),
-                  SizedBox(width: 3,),
+                  SizedBox(width: 3),
                   Text("Belum"),
-                  SizedBox(width: 2,),
-                  Icon(Icons.arrow_forward_ios)
+                  SizedBox(width: 2),
+                  Icon(Icons.arrow_forward_ios),
                 ],
-              )
+              ),
             ],
           ),
         ),
       ),
     );
   }
-
 }
