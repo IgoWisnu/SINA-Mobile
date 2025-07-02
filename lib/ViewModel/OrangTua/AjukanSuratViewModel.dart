@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:sina_mobile/Model/OrangTua/AjukanSuratRespon.dart';
+import 'package:sina_mobile/Model/OrangTua/AjukanSuratData.dart';
 import 'package:sina_mobile/service/repository/OrangTua/AjukanSuratRepository.dart';
 
 class AjukanSuratViewModel extends ChangeNotifier {
@@ -15,7 +15,6 @@ class AjukanSuratViewModel extends ChangeNotifier {
     required String keterangan,
     required String uraian,
     required String tanggalAbsensi,
-    // Pastikan ini sesuai dengan field yang diharapkan
     required String filePath,
   }) async {
     isLoading = true;

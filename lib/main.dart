@@ -1,21 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sina_mobile/View/OrangTua/DashboardOrangTua.dart';
-import 'package:sina_mobile/View/OrangTua/DetailPengumumanPage.dart';
-import 'package:sina_mobile/View/OrangTua/DetailRaportPage.dart';
-import 'package:sina_mobile/View/OrangTua/FormPengajuanPage.dart';
-import 'package:sina_mobile/View/OrangTua/JadwalPelajaranPage.dart';
-import 'package:sina_mobile/View/OrangTua/ListRaportPage.dart';
-import 'package:sina_mobile/View/OrangTua/PengumumanOrtu.dart';
-import 'package:sina_mobile/View/OrangTua/ProfilOrangTuaPage.dart';
-import 'package:sina_mobile/View/OrangTua/RekapAbsensiPage.dart';
-import 'package:sina_mobile/View/OrangTua/RingkasanPengajuanPage.dart';
-import 'package:sina_mobile/View/OrangTua/RiwayatAbsensiPage.dart';
-import 'package:sina_mobile/View/OrangTua/StatistikPage.dart';
 import 'package:sina_mobile/View/loginPage.dart';
 import 'package:sina_mobile/View/regisPage.dart';
 import 'package:sina_mobile/View/registerPage.dart';
-import 'package:sina_mobile/View/dashboard.dart';
 import 'package:sina_mobile/ViewModel/BeritaViewModel.dart';
 import 'package:sina_mobile/ViewModel/DashboardViewModel.dart';
 import 'package:sina_mobile/ViewModel/Guru/DashboardGuruViewModel.dart';
@@ -27,8 +14,19 @@ import 'package:sina_mobile/ViewModel/Guru/TugasDetailGuruViewModel.dart';
 import 'package:sina_mobile/ViewModel/JadwalViewModel.dart';
 import 'package:sina_mobile/ViewModel/KelasDetailViewModel.dart';
 import 'package:sina_mobile/ViewModel/KelasViewModel.dart';
+import 'package:sina_mobile/ViewModel/OrangTua/AjukanSuratViewModel.dart';
 import 'package:sina_mobile/ViewModel/OrangTua/BeritaOrangTuaViewModel.dart';
+import 'package:sina_mobile/ViewModel/OrangTua/DashboardOrtuViewModel.dart';
+import 'package:sina_mobile/ViewModel/OrangTua/JadwalHarianVIewModel.dart';
 import 'package:sina_mobile/ViewModel/OrangTua/ProfilOrtuViewModel.dart';
+import 'package:sina_mobile/ViewModel/OrangTua/RaporDetailViewModel.dart';
+import 'package:sina_mobile/ViewModel/OrangTua/RaporOrtuViewModel.dart';
+import 'package:sina_mobile/ViewModel/OrangTua/RekapAbsensiOrtuViewModel.dart';
+import 'package:sina_mobile/ViewModel/OrangTua/RingkasanPengajuanViewModel.dart';
+import 'package:sina_mobile/ViewModel/OrangTua/RiwayatAbsensiViewModel.dart';
+import 'package:sina_mobile/ViewModel/OrangTua/StatistikNilaiViewModel.dart';
+import 'package:sina_mobile/ViewModel/OrangTua/SuratIjinViewModel.dart';
+import 'package:sina_mobile/ViewModel/OrangTua/UbahPasswordViewModel.dart';
 import 'package:sina_mobile/ViewModel/ProfilViewModel.dart';
 import 'package:sina_mobile/ViewModel/RekapAbsensiViewModel.dart';
 import 'package:sina_mobile/service/api/ApiService.dart';
@@ -47,8 +45,19 @@ import 'package:sina_mobile/service/repository/Guru/KelasGuruRepository.dart';
 import 'package:sina_mobile/service/repository/JadwalRepository.dart';
 import 'package:sina_mobile/service/repository/KelasRepository.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:sina_mobile/service/repository/OrangTua/AbsensiOrtuRepository.dart';
+import 'package:sina_mobile/service/repository/OrangTua/AjukanSuratRepository.dart';
 import 'package:sina_mobile/service/repository/OrangTua/BeritaOrangTuaRepository.dart';
 import 'package:sina_mobile/service/repository/OrangTua/BiodataOrtuRepository.dart';
+import 'package:sina_mobile/service/repository/OrangTua/DashboardOrtuRepository.dart';
+import 'package:sina_mobile/service/repository/OrangTua/JadwalHarianRepository.dart';
+import 'package:sina_mobile/service/repository/OrangTua/RaporDetailRepository.dart';
+import 'package:sina_mobile/service/repository/OrangTua/RaporRepository.dart';
+import 'package:sina_mobile/service/repository/OrangTua/RiwayatAbsensiRepository.dart';
+import 'package:sina_mobile/service/repository/OrangTua/StatistikNilaiRepository.dart';
+import 'package:sina_mobile/service/repository/OrangTua/SuratIjinDetailRepository.dart';
+import 'package:sina_mobile/service/repository/OrangTua/SuratIjinRepository.dart';
+import 'package:sina_mobile/service/repository/OrangTua/UbahPasswordRepository.dart';
 
 import 'ViewModel/AuthViewModel.dart';
 
@@ -157,6 +166,75 @@ class MyApp extends StatelessWidget {
           create:
               (_) => BeritaOrangTuaViewModel(
                 repository: BeritaOrangTuaRepository(ApiServiceOrangTua()),
+              ),
+        ),
+        ChangeNotifierProvider(
+          create:
+              (_) => StatistikNilaiViewModel(
+                repository: StatistikNilaiRepository(ApiServiceOrangTua()),
+              ),
+        ),
+        ChangeNotifierProvider(
+          create:
+              (_) => RaporOrtuViewModel(
+                repository: RaporRepository(ApiServiceOrangTua()),
+              ),
+        ),
+        ChangeNotifierProvider(
+          create:
+              (_) => RaporDetailViewModel(
+                repository: RaporDetailRepository(ApiServiceOrangTua()),
+              ),
+        ),
+        ChangeNotifierProvider(
+          create:
+              (_) => JadwalHarianViewModel(
+                repository: JadwalHarianRepository(ApiServiceOrangTua()),
+              ),
+        ),
+        ChangeNotifierProvider(
+          create:
+              (_) => DashboardOrtuViewModel(
+                repository: DashboardOrtuRepository(ApiServiceOrangTua()),
+              ),
+        ),
+
+        ChangeNotifierProvider(
+          create:
+              (_) => SuratIzinViewModel(
+                repository: SuratIzinRepository(ApiServiceOrangTua()),
+              ),
+        ),
+        ChangeNotifierProvider(
+          create:
+              (_) => RekapAbsensiOrtuViewModel(
+                repository: AbsensiOrtuRepository(ApiServiceOrangTua()),
+              ),
+        ),
+        ChangeNotifierProvider(
+          create:
+              (_) => RingkasanPengajuanViewModel(
+                repository: SuratIjinDetailRepository(ApiServiceOrangTua()),
+              ),
+        ),
+        ChangeNotifierProvider(
+          create:
+              (_) => AjukanSuratViewModel(
+                repository: AjukanSuratRepository(
+                  apiService: ApiServiceOrangTua(),
+                ),
+              ),
+        ),
+        ChangeNotifierProvider(
+          create:
+              (_) => RiwayatAbsensiViewModel(
+                repository: RiwayatAbsensiRepository(ApiServiceOrangTua()),
+              ),
+        ),
+        ChangeNotifierProvider(
+          create:
+              (_) => UbahPasswordViewModel(
+                repository: UbahPasswordRepository(ApiServiceOrangTua()),
               ),
         ),
       ],

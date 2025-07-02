@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
-import 'package:sina_mobile/Model/OrangTua/AjukanSuratRespon.dart';
-import 'package:sina_mobile/service/api/ApiService.dart';
-import 'package:sina_mobile/service/api/ApiServisOrangTua.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sina_mobile/Model/OrangTua/AjukanSuratData.dart';
+import 'package:sina_mobile/service/api/ApiServisOrangTua.dart';
 
 class AjukanSuratRepository {
   final ApiServiceOrangTua apiService;
@@ -15,22 +14,17 @@ class AjukanSuratRepository {
     required String nis,
     required String keterangan,
     required String uraian,
-    required String
-    tanggalAbsensi, // Pastikan ini sesuai dengan field yang diharapkan
+    required String tanggalAbsensi,
     required String filePath,
   }) async {
-    // Ambil token
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('auth_token');
-    // Pastikan menggunakan instance apiService yang sudah diinisialisasi
+
     var request = http.MultipartRequest(
       'POST',
-      apiService.buildUrl(
-        'dashboard/ajukan-surat',
-      ), // ✔️ pakai instance di sini
+      apiService.buildUrl('dashboard/ajukan-surat'),
     );
 
-    // ✅ Tambahkan header Authorization
     request.headers['Authorization'] = 'Bearer $token';
     request.headers['Accept'] = 'application/json';
 
@@ -51,6 +45,7 @@ class AjukanSuratRepository {
     final response = await http.Response.fromStream(streamedResponse);
 
     if (response.statusCode == 201) {
+      print("RESPON API: ${response.body}");
       return AjukanSuratResponse.fromJson(json.decode(response.body));
     } else {
       throw Exception('Gagal mengajukan surat: ${response.body}');

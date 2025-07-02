@@ -1,139 +1,141 @@
 import 'package:flutter/material.dart';
-import 'package:sina_mobile/View/Component/CustomAppBarNoDrawer.dart';
+import 'package:provider/provider.dart';
+import 'package:sina_mobile/View/Component/OrangTua/ItemJadwalOrtu.dart';
+import 'package:sina_mobile/View/Component/OrangTua/CustomDropdownOrtu.dart';
 import 'package:sina_mobile/View/Component/OrangTua/CustomAppBarOrangTua.dart';
 import 'package:sina_mobile/View/Component/OrangTua/CustomOrangTuaDrawer.dart';
-import 'package:sina_mobile/View/OrangTua/DetailPengumumanPage.dart';
+import 'package:sina_mobile/View/Lib/Colors.dart';
+import 'package:sina_mobile/ViewModel/OrangTua/JadwalHarianVIewModel.dart';
 
-final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+class JadwalPelajaranPage extends StatefulWidget {
+  @override
+  State<JadwalPelajaranPage> createState() => _JadwalPelajaranPageState();
+}
 
-class JadwalPelajaranPage extends StatelessWidget {
-  final Map<String, List<Map<String, String>>> jadwalHarian = {
-    'Senin': [
-      {"waktu": "08.00\n09.40", "mapel": "Matematika", "guru": "Budi"},
-      {"waktu": "09.50\n11.30", "mapel": "Bahasa Indonesia", "guru": "Ani"},
-      {"waktu": "11.40\n13.20", "mapel": "Istirahat", "guru": ""},
-      {"waktu": "13.30\n15.10", "mapel": "IPA", "guru": "Cici"},
-    ],
-    'Selasa': [
-      {"waktu": "08.00\n09.40", "mapel": "Bahasa Inggris", "guru": "Dedi"},
-      {"waktu": "09.50\n11.30", "mapel": "Seni Budaya", "guru": "Eka"},
-      {"waktu": "11.40\n13.20", "mapel": "Istirahat", "guru": ""},
-      {"waktu": "13.30\n15.10", "mapel": "Pendidikan Jasmani", "guru": "Fani"},
-    ],
-    'Rabu': [
-      {"waktu": "08.00\n09.40", "mapel": "Sejarah", "guru": "Gani"},
-      {"waktu": "09.50\n11.30", "mapel": "Geografi", "guru": "Hani"},
-      {"waktu": "11.40\n13.20", "mapel": "Istirahat", "guru": ""},
-      {"waktu": "13.30\n15.10", "mapel": "Ekonomi", "guru": "Ika"},
-    ],
-    'Kamis': [
-      {"waktu": "08.00\n09.40", "mapel": "Kimia", "guru": "Joni"},
-      {"waktu": "09.50\n11.30", "mapel": "Fisika", "guru": "Kiki"},
-      {"waktu": "11.40\n13.20", "mapel": "Istirahat", "guru": ""},
-      {"waktu": "13.30\n15.10", "mapel": "Biologi", "guru": "Lina"},
-    ],
-    'Jumat': [
-      {"waktu": "08.00\n09.40", "mapel": "Agama", "guru": "Maman"},
-      {"waktu": "09.50\n11.30", "mapel": "Kewarganegaraan", "guru": "Nina"},
-      {"waktu": "11.40\n13.20", "mapel": "Istirahat", "guru": ""},
-      {"waktu": "13.30\n15.10", "mapel": "Teknologi Informasi", "guru": "Oki"},
-    ],
-  };
-
-  String selectedDay = 'Senin';
+class _JadwalPelajaranPageState extends State<JadwalPelajaranPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String currentMenu = 'jadwal_pelajaran';
+  String selectedItem = 'senin';
+  final List<String> hariList = ['senin', 'selasa', 'rabu', 'kamis', 'jumat'];
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Atur default hari sesuai hari ini (jika weekday 1-5)
+    final today = DateTime.now().weekday;
+    if (today >= 1 && today <= 5) {
+      selectedItem = hariList[today - 1];
+    }
+
+    // Ambil data jadwal
+    Future.microtask(() {
+      final vm = Provider.of<JadwalHarianViewModel>(context, listen: false);
+      vm.fetchJadwal(selectedItem);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final vm = Provider.of<JadwalHarianViewModel>(context);
+
     return Scaffold(
-      drawer: CustomOrangTuaDrawer(selectedMenu: currentMenu),
       key: _scaffoldKey,
+      drawer: CustomOrangTuaDrawer(selectedMenu: currentMenu),
       appBar: CustomAppBarOrangTua(
-        onMenuPressed: () {
-          _scaffoldKey.currentState?.openDrawer();
-        },
+        onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
       ),
-      body: Column(
-        children: [
-          const SizedBox(height: 10),
-          // Dropdown Hari
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: DropdownButtonFormField<String>(
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.grey[200],
-                border: InputBorder.none,
-              ),
-              value: selectedDay,
-              items:
-                  ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat']
-                      .map(
-                        (hari) =>
-                            DropdownMenuItem(value: hari, child: Text(hari)),
-                      )
-                      .toList(),
-              onChanged: (value) {
-                selectedDay = value!;
-                (context as Element).markNeedsBuild();
-              },
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            // Header
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CustomDropdownOrtu(
+                  items: hariList,
+                  selectedItem: selectedItem,
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() => selectedItem = value);
+                      vm.fetchJadwal(selectedItem);
+                    }
+                  },
+                ),
+              ],
             ),
-          ),
-          const SizedBox(height: 10),
-          // Header Table
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Container(
-              color: Colors.blue[700],
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: Row(
-                children: const [
-                  Expanded(
-                    flex: 2,
-                    child: Text('Waktu', style: TextStyle(color: Colors.white)),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: Text(
-                      'Mata Pelajaran',
-                      style: TextStyle(color: Colors.white),
+
+            const SizedBox(height: 12),
+
+            // Judul kolom
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              height: 50,
+              width: double.infinity,
+              color: AppColors.primary,
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Waktu',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Expanded(
-                    flex: 3,
-                    child: Text(
-                      'Guru Mengajar',
-                      style: TextStyle(color: Colors.white),
+                  Text(
+                    'Mata Pelajaran',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    'Guru',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-          // Daftar Jadwal
-          Expanded(
-            child: ListView.separated(
-              itemCount: jadwalHarian[selectedDay]!.length,
-              separatorBuilder: (context, index) => const Divider(height: 1),
-              itemBuilder: (context, index) {
-                final item = jadwalHarian[selectedDay]![index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 10,
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(flex: 2, child: Text(item['waktu'] ?? '')),
-                      Expanded(flex: 3, child: Text(item['mapel'] ?? '')),
-                      Expanded(flex: 3, child: Text(item['guru'] ?? '')),
-                    ],
-                  ),
-                );
-              },
+
+            const SizedBox(height: 10),
+
+            // Konten list
+            Expanded(
+              child: Builder(
+                builder: (_) {
+                  if (vm.isLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (vm.error != null) {
+                    return Center(child: Text('Error: ${vm.error}'));
+                  } else if (vm.jadwalList.isEmpty) {
+                    return const Center(child: Text('Tidak ada jadwal.'));
+                  } else {
+                    return ListView.builder(
+                      itemCount: vm.jadwalList.length,
+                      itemBuilder: (context, index) {
+                        final j = vm.jadwalList[index];
+                        return ItemJadwalOrtu(
+                          waktu_mulai: j.start,
+                          waktu_selesai: j.finish,
+                          mata_pelajaran: j.namaMapel,
+                          guru: j.namaGuru,
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

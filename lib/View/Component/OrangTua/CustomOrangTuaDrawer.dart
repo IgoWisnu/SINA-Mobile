@@ -5,8 +5,9 @@ import 'package:sina_mobile/View/OrangTua/JadwalPelajaranPage.dart';
 import 'package:sina_mobile/View/OrangTua/ListRaportPage.dart';
 import 'package:sina_mobile/View/OrangTua/PengumumanOrtu.dart';
 import 'package:sina_mobile/View/OrangTua/ProfilOrangTuaPage.dart';
-import 'package:sina_mobile/View/OrangTua/RekapAbsensiPage.dart';
-import 'package:sina_mobile/View/OrangTua/StatistikPage.dart';
+import 'package:sina_mobile/View/OrangTua/RekapAbsensiOrtuPage.dart';
+import 'package:sina_mobile/View/OrangTua/RiwayatPengajuanPage.dart';
+import 'package:sina_mobile/View/OrangTua/StatistikOrtuPage.dart';
 import 'package:sina_mobile/View/loginPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -176,7 +177,7 @@ class CustomOrangTuaDrawer extends StatelessWidget {
       case 1:
         Navigator.of(
           context,
-        ).push(MaterialPageRoute(builder: (context) => StatistikPage()));
+        ).push(MaterialPageRoute(builder: (context) => StatistikOrtuPage()));
         break;
       case 2:
         Navigator.of(
@@ -191,12 +192,12 @@ class CustomOrangTuaDrawer extends StatelessWidget {
       case 4:
         Navigator.of(
           context,
-        ).push(MaterialPageRoute(builder: (context) => RekapAbsensiPage()));
+        ).push(MaterialPageRoute(builder: (context) => RekapAbsensiOrtuPage()));
         break;
       case 5:
         Navigator.of(
           context,
-        ).push(MaterialPageRoute(builder: (context) => FormPengajuanPage()));
+        ).push(MaterialPageRoute(builder: (context) => RiwayatPengajuanPage()));
         break;
       case 6:
         Navigator.of(

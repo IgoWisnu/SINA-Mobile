@@ -6,8 +6,6 @@ import 'package:sina_mobile/service/repository/KelasRepository.dart';
 import '../Model/user.dart';
 import '../Model/kelas.dart';
 
-
-
 class JadwalViewModel extends ChangeNotifier {
   final JadwalRepository repository;
 
@@ -36,6 +34,4 @@ class JadwalViewModel extends ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
-
-
 }

@@ -1,3 +1,4 @@
+// --- MODEL ---
 class OrangTuaRespon {
   final String message;
   final String status;
@@ -13,7 +14,7 @@ class OrangTuaRespon {
     return OrangTuaRespon(
       message: json['message'] ?? '',
       status: json['status'] ?? '',
-      ortu: Ortu.fromJson(json['data']), // ✅ sesuai API
+      ortu: Ortu.fromJson(json['data']),
     );
   }
 
@@ -32,6 +33,8 @@ class Ortu {
   final String tempat_lahir_ortu;
   final DateTime tanggal_lahir_ortu;
   final String no_telepon;
+  final String fotoProfil;
+  final DateTime createdAt;
 
   Ortu({
     required this.nik,
@@ -43,6 +46,8 @@ class Ortu {
     required this.tempat_lahir_ortu,
     required this.tanggal_lahir_ortu,
     required this.no_telepon,
+    required this.fotoProfil,
+    required this.createdAt,
   });
 
   factory Ortu.fromJson(Map<String, dynamic> json) {
@@ -54,8 +59,16 @@ class Ortu {
       status_ortu: json['status_ortu'],
       pekerjaan: json['pekerjaan'],
       tempat_lahir_ortu: json['tempat_lahir_ortu'],
-      tanggal_lahir_ortu: DateTime.parse(json['tanggal_lahir_ortu']),
+      tanggal_lahir_ortu:
+          json['tanggal_lahir_ortu'] != null
+              ? DateTime.parse(json['tanggal_lahir_ortu'])
+              : DateTime(2000),
       no_telepon: json['no_telepon'],
+      fotoProfil: json['foto_profil'] ?? '',
+      createdAt:
+          json['created_at'] != null
+              ? DateTime.parse(json['created_at'])
+              : DateTime(2000),
     );
   }
 
@@ -70,6 +83,8 @@ class Ortu {
       'tempat_lahir_ortu': tempat_lahir_ortu,
       'tanggal_lahir_ortu': tanggal_lahir_ortu.toIso8601String(),
       'no_telepon': no_telepon,
+      'foto_profil': fotoProfil,
+      'created_at': createdAt.toIso8601String(),
     };
   }
 }

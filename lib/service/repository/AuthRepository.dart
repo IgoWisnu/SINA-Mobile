@@ -24,9 +24,12 @@ class AuthRepository {
       if (token != null) {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('auth_token', token);
+        await prefs.setString('user_id', json['data']['userId']); // ✅ benar
       }
 
-      return User.fromJson(json); // Asumsikan User sudah meng-handle json yang full
+      return User.fromJson(
+        json,
+      ); // Asumsikan User sudah meng-handle json yang full
     } else {
       throw Exception('Login gagal: ${response.body}');
     }
