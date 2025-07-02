@@ -47,12 +47,30 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   flutter_launcher_icons: ^0.13.1
   file_picker: ^9.2.1
-  intl: ^0.18.1
-  fl_chart: ^1.0.0
-  http: ^0.13.6
+  fl_chart: ^0.66.1
+  http: ^1.4.0
   provider: ^6.1.2
+  shared_preferences: ^2.2.2
+  dio: ^5.4.0
+  path_provider: ^2.1.2
+  mime: ^1.0.4
+  html: ^0.15.4
+  intl: ^0.19.0
+  image_picker: ^1.0.4
+  permission_handler: ^11.0.0
   pie_chart: ^5.3.2
-  image_picker: ^1.1.2
+  lottie: ^3.3.1
+  barcode_widget: ^2.0.1
+  pdfx: ^2.4.0
+  open_file: ^3.3.2
+  flutter_native_splash: ^2.3.10
+  url_launcher: ^6.1.11
+  awesome_snackbar_content: ^0.1.3
+
+  #preview
+  flutter_pdfview: ^1.2.5 # For PDF
+  photo_view: ^0.14.0 # For image preview
+  video_player: ^2.7.0 # For video preview
 
 flutter_icons:
   android: true
@@ -71,6 +89,8 @@ flutter:
     - lib/asset/image/SINA.png
     - lib/asset/image/SINA v2.png
     - lib/asset/image/loginLogo.png
+    - lib/asset/animation/success.lottie
+    - lib/asset/Animation/success.json
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

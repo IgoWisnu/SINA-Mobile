@@ -1,7 +1,17 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:sina_mobile/View/Component/CustomAppBarNoDrawer.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
+import 'package:barcode_widget/barcode_widget.dart';
+import 'package:sina_mobile/View/Component/CustomDatePicker.dart';
+import 'package:sina_mobile/View/Component/CustomTextArea.dart';
+import 'package:sina_mobile/View/Component/CustomTextField.dart';
+import 'package:sina_mobile/View/Component/OrangTua/CustomAppBarOrangTua.dart';
+import 'package:sina_mobile/View/Component/OrangTua/CustomOrangTuaDrawer.dart';
+import 'package:sina_mobile/View/Component/RegularButton.dart';
+import 'package:sina_mobile/View/OrangTua/UpdatePasswordPage.dart';
+import 'package:sina_mobile/ViewModel/OrangTua/ProfilOrtuViewModel.dart';
 
 class ProfilOrangTuaPage extends StatefulWidget {
   const ProfilOrangTuaPage({Key? key}) : super(key: key);
@@ -11,355 +21,297 @@ class ProfilOrangTuaPage extends StatefulWidget {
 }
 
 class _ProfilOrangTuaPageState extends State<ProfilOrangTuaPage> {
-  void _ubahPassword() {
-    TextEditingController _passwordController = TextEditingController();
-    TextEditingController _confirmPasswordController = TextEditingController();
-    bool _obscurePassword = true;
-    bool _obscureConfirmPassword = true;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  String currentMenu = 'profil_ortu';
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              contentPadding: const EdgeInsets.all(24),
-              title: const Text('Ubah Password'),
-              content: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Password baru *',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
-                      controller: _passwordController,
-                      obscureText: _obscurePassword,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscurePassword
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _obscurePassword = !_obscurePassword;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'Konfirmasi password baru *',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
-                      controller: _confirmPasswordController,
-                      obscureText: _obscureConfirmPassword,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscureConfirmPassword
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _obscureConfirmPassword =
-                                  !_obscureConfirmPassword;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              actions: [
-                Center(
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                      ),
-                      onPressed: () {
-                        // Validasi dan aksi simpan password baru di sini
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text(
-                        'Simpan',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-
-  final _formKey = GlobalKey<FormState>();
+  final picker = ImagePicker();
   File? _profileImage;
 
-  final TextEditingController nikController = TextEditingController();
-  final TextEditingController namaController = TextEditingController();
-  final TextEditingController tempatLahirController = TextEditingController();
-  final TextEditingController tanggalLahirController = TextEditingController();
-  final TextEditingController teleponController = TextEditingController();
-  final TextEditingController alamatController = TextEditingController();
+  final nikController = TextEditingController();
+  final namaController = TextEditingController();
+  final imeiController = TextEditingController();
+  final alamatController = TextEditingController();
+  final status_ortuController = TextEditingController();
+  final pekerjaanController = TextEditingController();
+  final tempat_lahir_ortuController = TextEditingController();
+  final tanggal_lahir_ortuController = TextEditingController();
+  final noTelpController = TextEditingController();
 
-  String pekerjaan = 'Pegawai swasta';
-  String statusOrangtua = 'Ayah';
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() async {
+      final vm = Provider.of<ProfilOrtuViewModel>(context, listen: false);
+      await vm.fetchBiodataOrtu();
+
+      final ortu = vm.ortu;
+      if (ortu != null) {
+        nikController.text = ortu.nik;
+        namaController.text = ortu.nama_ortu;
+        imeiController.text = ortu.imei;
+        alamatController.text = ortu.alamat;
+        status_ortuController.text = ortu.status_ortu;
+        pekerjaanController.text = ortu.pekerjaan;
+        tempat_lahir_ortuController.text = ortu.tempat_lahir_ortu;
+        tanggal_lahir_ortuController.text =
+            ortu.tanggal_lahir_ortu.toIso8601String().split('T')[0];
+        noTelpController.text = ortu.no_telepon;
+      }
+    });
+  }
 
   Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final picked = await picker.pickImage(source: ImageSource.gallery);
+    PermissionStatus permissionStatus;
 
-    if (picked != null) {
-      setState(() {
-        _profileImage = File(picked.path);
-      });
+    if (Platform.isAndroid) {
+      permissionStatus = await Permission.photos.request(); // Android 13+
+      if (permissionStatus.isDenied) {
+        permissionStatus = await Permission.storage.request(); // Android <13
+      }
+    } else {
+      permissionStatus = await Permission.photos.request();
+    }
+
+    if (permissionStatus.isGranted) {
+      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        setState(() {
+          _profileImage = File(pickedFile.path);
+        });
+
+        final vm = Provider.of<ProfilOrtuViewModel>(context, listen: false);
+        await vm.uploadFoto(File(pickedFile.path));
+        await vm.fetchBiodataOrtu(); // Refresh data setelah upload
+      }
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Akses galeri ditolak')));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBarNoDrawer(),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              Stack(
-                alignment: Alignment.bottomRight,
-                children: [
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundColor: Colors.grey[300],
-                    backgroundImage:
-                        _profileImage != null
-                            ? FileImage(_profileImage!)
-                            : null,
-                    child:
-                        _profileImage == null
-                            ? const Icon(Icons.person, size: 50)
-                            : null,
-                  ),
-                  IconButton(
-                    onPressed: _pickImage,
-                    icon: const Icon(Icons.camera_alt, color: Colors.blue),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
+    String baseImageUrl = 'http://sina.pnb.ac.id:3006/Upload/profile_image/';
 
-              TextFormField(
-                controller: nikController,
-                decoration: InputDecoration(
-                  labelText: 'NIK',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: namaController,
-                decoration: InputDecoration(
-                  labelText: 'Nama Lengkap',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: tempatLahirController,
-                decoration: InputDecoration(
-                  labelText: 'Tempat Lahir',
-                  suffixText: '*',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: tanggalLahirController,
-                decoration: InputDecoration(
-                  labelText: 'Tanggal Lahir',
-                  suffixText: '*',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                keyboardType: TextInputType.datetime,
-                onTap: () async {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                  DateTime? pickedDate = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime(1990),
-                    firstDate: DateTime(1950),
-                    lastDate: DateTime.now(),
-                  );
-                  if (pickedDate != null) {
-                    tanggalLahirController.text =
-                        "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
-                  }
-                },
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: teleponController,
-                decoration: InputDecoration(
-                  labelText: 'Nomor Telepon',
-                  suffixText: '*',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                keyboardType: TextInputType.phone,
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: alamatController,
-                decoration: InputDecoration(
-                  labelText: 'Alamat',
-                  suffixText: '*',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                maxLines: 2,
-              ),
-              const SizedBox(height: 12),
-              DropdownButtonFormField<String>(
-                value: pekerjaan,
-                decoration: InputDecoration(
-                  labelText: 'Pekerjaan',
-                  suffixText: '*',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                items: const [
-                  DropdownMenuItem(
-                    value: 'Pegawai swasta',
-                    child: Text('Pegawai swasta'),
-                  ),
-                  DropdownMenuItem(value: 'PNS', child: Text('PNS')),
-                  DropdownMenuItem(
-                    value: 'Wiraswasta',
-                    child: Text('Wiraswasta'),
-                  ),
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    pekerjaan = value!;
-                  });
-                },
-              ),
-              const SizedBox(height: 12),
-              DropdownButtonFormField<String>(
-                value: statusOrangtua,
-                decoration: InputDecoration(
-                  labelText: 'Status Orangtua',
-                  suffixText: '*',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                items: const [
-                  DropdownMenuItem(value: 'Ayah', child: Text('Ayah')),
-                  DropdownMenuItem(value: 'Ibu', child: Text('Ibu')),
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    statusOrangtua = value!;
-                  });
-                },
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _ubahPassword,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF2972FE),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Text(
-                        'Ubah Password',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Icon(Icons.arrow_forward_ios, size: 16),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  // Proses penyimpanan
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF2972FE),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.only(left: 155),
-                      child: Text(
-                        'Simpan',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+    return Consumer<ProfilOrtuViewModel>(
+      builder: (context, vm, _) {
+        final ortu = vm.ortu;
+        String? fotoProfil = ortu?.fotoProfil;
+        String? _networkImageUrl =
+            fotoProfil != null ? '$baseImageUrl$fotoProfil' : null;
+
+        return Scaffold(
+          key: _scaffoldKey,
+          drawer: CustomOrangTuaDrawer(selectedMenu: currentMenu),
+          appBar: CustomAppBarOrangTua(
+            onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
           ),
-        ),
-      ),
+          body:
+              vm.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 20),
+                        // --- Header QR dan Foto ---
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: const Color(0xFF347AF0),
+                          ),
+                          width: double.infinity,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 3,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Card(
+                                  color: Colors.blue[100],
+                                  elevation: 4,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16),
+                                    child: Column(
+                                      children: [
+                                        const SizedBox(height: 10),
+                                        nikController.text.isNotEmpty
+                                            ? BarcodeWidget(
+                                              barcode: Barcode.qrCode(),
+                                              data: nikController.text,
+                                              width: 150,
+                                              height: 150,
+                                              drawText: false,
+                                            )
+                                            : const Text("NIK tidak tersedia"),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  width: 100,
+                                  alignment: Alignment.center,
+                                  child: Stack(
+                                    alignment: Alignment.bottomRight,
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 50,
+                                        backgroundColor: Colors.grey[300],
+                                        backgroundImage:
+                                            _profileImage != null
+                                                ? FileImage(_profileImage!)
+                                                : (_networkImageUrl != null &&
+                                                        _networkImageUrl
+                                                            .isNotEmpty
+                                                    ? NetworkImage(
+                                                      _networkImageUrl,
+                                                    )
+                                                    : null),
+                                        child:
+                                            _profileImage == null &&
+                                                    (_networkImageUrl == null ||
+                                                        _networkImageUrl
+                                                            .isEmpty)
+                                                ? const Icon(
+                                                  Icons.person,
+                                                  size: 50,
+                                                  color: Colors.grey,
+                                                )
+                                                : null,
+                                      ),
+
+                                      IconButton(
+                                        onPressed: _pickImage,
+                                        icon: const Icon(
+                                          Icons.camera_alt,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 20),
+                        _buildLabel("NIK"),
+                        CustomTextField(
+                          controller: nikController,
+                          enabled: false,
+                        ),
+                        _buildSpacer(),
+
+                        _buildLabel("Nama Lengkap"),
+                        CustomTextField(
+                          controller: namaController,
+                          enabled: false,
+                        ),
+                        _buildSpacer(),
+
+                        _buildLabel("Tempat Lahir"),
+                        CustomTextField(
+                          controller: tempat_lahir_ortuController,
+                          hintText: 'Masukkan tempat lahir',
+                        ),
+                        _buildSpacer(),
+
+                        _buildLabel("Tanggal Lahir"),
+                        CustomDatePicker(
+                          controller: tanggal_lahir_ortuController,
+                        ),
+                        _buildSpacer(),
+
+                        _buildLabel("Nomor Telepon"),
+                        CustomTextField(controller: noTelpController),
+                        _buildSpacer(),
+
+                        _buildLabel("Alamat"),
+                        CustomTextArea(
+                          controller: alamatController,
+                          hintText: 'Masukkan alamat lengkap',
+                        ),
+                        _buildSpacer(),
+
+                        _buildLabel("Pekerjaan"),
+                        CustomTextField(
+                          controller: pekerjaanController,
+                          enabled: false,
+                        ),
+                        _buildSpacer(),
+
+                        _buildLabel("Status Orang Tua"),
+                        CustomTextField(
+                          controller: status_ortuController,
+                          enabled: false,
+                        ),
+
+                        const SizedBox(height: 20),
+                        RegularButton(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => UpdatePasswordPage(),
+                              ),
+                            );
+                          },
+                          judul: "Ubah Password",
+                        ),
+                        const SizedBox(height: 10),
+                        RegularButton(
+                          onTap: () async {
+                            final vm = Provider.of<ProfilOrtuViewModel>(
+                              context,
+                              listen: false,
+                            );
+                            try {
+                              await vm.updateProfilOrtu(
+                                tempatLahir: tempat_lahir_ortuController.text,
+                                tanggalLahir: tanggal_lahir_ortuController.text,
+                                alamat: alamatController.text,
+                                noTelepon: noTelpController.text,
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Profil berhasil diperbarui"),
+                                ),
+                              );
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("Gagal memperbarui: $e"),
+                                ),
+                              );
+                            }
+                          },
+                          judul: "Simpan Perubahan Profil",
+                        ),
+
+                        const SizedBox(height: 20),
+                      ],
+                    ),
+                  ),
+        );
+      },
     );
   }
+
+  Widget _buildLabel(String text) => Padding(
+    padding: const EdgeInsets.only(bottom: 5),
+    child: Text(
+      text,
+      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+    ),
+  );
+
+  Widget _buildSpacer() => const SizedBox(height: 10);
 }

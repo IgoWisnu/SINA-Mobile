@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sina_mobile/View/Lib/WaktuFormatter.dart';
 
 class ItemJadwalMurid extends StatelessWidget{
   final String waktu_mulai;
@@ -18,16 +19,16 @@ class ItemJadwalMurid extends StatelessWidget{
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
-      height: 50,
+      height: 60,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(
               children: [
-                Text(waktu_mulai),
-                Text(waktu_selesai)
+                Text(WaktuFormatter.format(waktu_mulai)),
+                Text(WaktuFormatter.format(waktu_selesai))
               ],
             ),
             Text(mata_pelajaran),

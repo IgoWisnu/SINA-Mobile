@@ -21,13 +21,13 @@ class _CustomDropdownState extends State<CustomDropdown> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 32,
-      width: 120,
+      height: 50,
+      width: 160,
       padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       decoration: BoxDecoration(
         border:  Border.all(color: Colors.grey),
-        color: AppColors.primary,
         borderRadius: BorderRadius.circular(8),
+
       ),
       child: DropdownButton<String>(
         isExpanded: true,

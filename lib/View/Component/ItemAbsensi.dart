@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 
-class ItemAbsensi extends StatefulWidget{
-
+class ItemAbsensi extends StatefulWidget {
   @override
   State<ItemAbsensi> createState() => _ItemAbsensiState();
 }
 
 class _ItemAbsensiState extends State<ItemAbsensi> {
-  String? _selectedStatus; // Menyimpan status yang dipilih
+  String? _selectedStatus;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedStatus = 'H'; // Set default value
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,47 +26,32 @@ class _ItemAbsensiState extends State<ItemAbsensi> {
             Text("data"),
             Row(
               children: [
-                Radio<String>(
-                  value: 'H',
-                  groupValue: _selectedStatus,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedStatus = value;
-                    });
-                  },
-                ),
-                Radio<String>(
-                  value: 'I',
-                  groupValue: _selectedStatus,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedStatus = value;
-                    });
-                  },
-                ),
-                Radio<String>(
-                  value: 'S',
-                  groupValue: _selectedStatus,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedStatus = value;
-                    });
-                  },
-                ),
-                Radio<String>(
-                  value: 'A',
-                  groupValue: _selectedStatus,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedStatus = value;
-                    });
-                  },
-                ),
+                _buildRadio('H', ''),
+                _buildRadio('I', ''),
+                _buildRadio('S', ''),
+                _buildRadio('A', ''),
               ],
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildRadio(String value, String label) {
+    return Row(
+      children: [
+        Radio<String>(
+          value: value,
+          groupValue: _selectedStatus,
+          onChanged: (value) {
+            setState(() {
+              _selectedStatus = value;
+            });
+          },
+        ),
+        Text(label),
+      ],
     );
   }
 }
