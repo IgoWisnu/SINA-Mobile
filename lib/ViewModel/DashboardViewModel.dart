@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sina_mobile/Model/DashboardSiswa.dart';
 import 'package:sina_mobile/Model/SiswaResponse.dart';
-import 'package:sina_mobile/View/dashboard.dart';
 import 'package:sina_mobile/service/repository/BiodataRepository.dart';
 import 'package:sina_mobile/service/repository/DashboardRepository.dart';
-
 
 class DashboardViewModel extends ChangeNotifier {
   final DashboardRepository repository;
@@ -34,5 +32,4 @@ class DashboardViewModel extends ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
-
 }

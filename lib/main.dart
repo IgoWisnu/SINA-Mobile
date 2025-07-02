@@ -5,12 +5,7 @@ import 'package:sina_mobile/View/regisPage.dart';
 import 'package:sina_mobile/View/registerPage.dart';
 import 'package:sina_mobile/ViewModel/BeritaViewModel.dart';
 import 'package:sina_mobile/ViewModel/DashboardViewModel.dart';
-import 'package:sina_mobile/ViewModel/Guru/DashboardGuruViewModel.dart';
-import 'package:sina_mobile/ViewModel/Guru/JadwalGuruViewModel.dart';
-import 'package:sina_mobile/ViewModel/Guru/KelasDetailGuruViewModel.dart';
-import 'package:sina_mobile/ViewModel/Guru/KelasGuruViewModel.dart';
-import 'package:sina_mobile/ViewModel/Guru/PengumumanGuruViewModel.dart';
-import 'package:sina_mobile/ViewModel/Guru/TugasDetailGuruViewModel.dart';
+
 import 'package:sina_mobile/ViewModel/JadwalViewModel.dart';
 import 'package:sina_mobile/ViewModel/KelasDetailViewModel.dart';
 import 'package:sina_mobile/ViewModel/KelasViewModel.dart';
@@ -38,10 +33,7 @@ import 'package:sina_mobile/service/repository/AuthRepository.dart';
 import 'package:sina_mobile/service/repository/BeritaRepository.dart';
 import 'package:sina_mobile/service/repository/BiodataRepository.dart';
 import 'package:sina_mobile/service/repository/DashboardRepository.dart';
-import 'package:sina_mobile/service/repository/Guru/BeritaGuruRepository.dart';
-import 'package:sina_mobile/service/repository/Guru/DashboardGuruRepository.dart';
-import 'package:sina_mobile/service/repository/Guru/JadwalGuruRepository.dart';
-import 'package:sina_mobile/service/repository/Guru/KelasGuruRepository.dart';
+
 import 'package:sina_mobile/service/repository/JadwalRepository.dart';
 import 'package:sina_mobile/service/repository/KelasRepository.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -119,43 +111,7 @@ class MyApp extends StatelessWidget {
                 repository: DashboardRepository(ApiService()),
               ),
         ),
-        ChangeNotifierProvider(
-          create:
-              (_) => DashboardGuruViewModel(
-                repository: DashboardGuruRepository(ApiServiceGuru()),
-              ),
-        ),
-        ChangeNotifierProvider(
-          create:
-              (_) => JadwalGuruViewModel(
-                repository: JadwalGuruRepository(ApiServiceGuru()),
-              ),
-        ),
-        ChangeNotifierProvider(
-          create:
-              (_) => KelasGuruViewModel(
-                repository: KelasGuruRepository(ApiServiceGuru()),
-              ),
-        ),
-        ChangeNotifierProvider(
-          create:
-              (_) => KelasDetailGuruViewModel(
-                repository: KelasGuruRepository(ApiServiceGuru()),
-              ),
-        ),
-        ChangeNotifierProvider(
-          create:
-              (_) => KelasDetailGuruViewModel(
-                repository: KelasGuruRepository(ApiServiceGuru()),
-              ),
-        ),
-        ChangeNotifierProvider(create: (_) => TugasDetailGuruViewModel()),
-        ChangeNotifierProvider(
-          create:
-              (_) => PengumumanGuruViewModel(
-                repository: BeritaGuruRepository(ApiServiceGuru()),
-              ),
-        ),
+
         ChangeNotifierProvider(
           create:
               (_) => ProfilOrtuViewModel(

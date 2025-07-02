@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sina_mobile/View/Murid/DashboardMurid.dart';
 import 'package:sina_mobile/View/OrangTua/DashboardOrangTua.dart';
-import 'package:sina_mobile/View/dashboard.dart';
 import '../ViewModel/AuthViewModel.dart';
 
 class LoginPage extends StatefulWidget {
@@ -20,7 +18,15 @@ class _LoginPageState extends State<LoginPage> {
   String? emailError;
   String? passwordError;
 
-  final sqlKeywords = ['select', 'drop', 'insert', 'update', 'delete', '--', ';'];
+  final sqlKeywords = [
+    'select',
+    'drop',
+    'insert',
+    'update',
+    'delete',
+    '--',
+    ';',
+  ];
 
   bool containsSqlInjection(String input) {
     final lower = input.toLowerCase();
@@ -64,19 +70,11 @@ class _LoginPageState extends State<LoginPage> {
     if (success) {
       if (!mounted) return;
 
-      final role = vm.user?.data.role.toLowerCase(); // Pastikan vm.user sudah diset setelah login
+      final role =
+          vm.user?.data.role
+              .toLowerCase(); // Pastikan vm.user sudah diset setelah login
 
-      if (role == 'siswa') {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => DashboardMurid()),
-        );
-      } else if (role == 'guru') {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => dashboard()),
-        );
-      } else if (role == 'ortu') {
+      if (role == 'ortu') {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => Dashboardorangtua()),
@@ -91,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
         passwordError = 'Login gagal. Periksa kembali email dan password anda';
       });
     }
-}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +121,10 @@ class _LoginPageState extends State<LoginPage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Email', style: TextStyle(fontWeight: FontWeight.bold)),
+                    const Text(
+                      'Email',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     const SizedBox(height: 8),
                     TextField(
                       controller: emailController,
@@ -131,7 +132,9 @@ class _LoginPageState extends State<LoginPage> {
                       decoration: InputDecoration(
                         hintText: 'Masukan Email Anda',
                         counterText: '',
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
                       ),
                     ),
                     if (emailError != null)
@@ -150,7 +153,10 @@ class _LoginPageState extends State<LoginPage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Kata Sandi', style: TextStyle(fontWeight: FontWeight.bold)),
+                    const Text(
+                      'Kata Sandi',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     const SizedBox(height: 8),
                     TextField(
                       controller: passwordController,
@@ -161,7 +167,9 @@ class _LoginPageState extends State<LoginPage> {
                         counterText: '',
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                            _isPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
                           ),
                           onPressed: () {
                             setState(() {
@@ -169,7 +177,9 @@ class _LoginPageState extends State<LoginPage> {
                             });
                           },
                         ),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
                       ),
                     ),
                     if (passwordError != null)
@@ -187,25 +197,25 @@ class _LoginPageState extends State<LoginPage> {
                 vm.isLoading
                     ? const CircularProgressIndicator()
                     : SizedBox(
-                  width: double.infinity,
-                  height: 48,
-                  child: ElevatedButton(
-                    onPressed: () => validateAndLogin(vm),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF2F66F8),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                      width: double.infinity,
+                      height: 48,
+                      child: ElevatedButton(
+                        onPressed: () => validateAndLogin(vm),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF2F66F8),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: const Text(
+                          'Masuk',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
-                    child: const Text(
-                      'Masuk',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
                 const SizedBox(height: 16),
 
                 // Link ke registrasi

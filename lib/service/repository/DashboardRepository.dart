@@ -4,9 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sina_mobile/Model/DashboardSiswa.dart';
 import 'package:sina_mobile/Model/Materi.dart';
 import 'package:sina_mobile/Model/SiswaResponse.dart';
-import 'package:sina_mobile/View/dashboard.dart';
 import '../../service/api/ApiService.dart';
-
 
 class DashboardRepository {
   final ApiService apiService;
@@ -19,7 +17,10 @@ class DashboardRepository {
 
     final response = await apiService.client.get(
       apiService.buildUrl('dashboard'),
-      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
     );
 
     if (response.statusCode == 200) {
@@ -30,5 +31,4 @@ class DashboardRepository {
       throw Exception('Gagal mengambil data tugas : ${response.body}');
     }
   }
-
 }
