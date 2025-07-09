@@ -61,10 +61,10 @@ class ItemDaftarIzin extends StatelessWidget {
                   decoration: BoxDecoration(
                     color:
                         status == 'menunggu'
-                            ? AppColors.warning
+                            ? AppColors.orange
                             : status == 'disetujui'
-                            ? AppColors.success
-                            : AppColors.error,
+                            ? AppColors.green
+                            : AppColors.red,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(

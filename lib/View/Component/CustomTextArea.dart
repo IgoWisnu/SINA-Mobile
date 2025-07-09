@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sina_mobile/View/Lib/Colors.dart';
 
 class CustomTextArea extends StatelessWidget {
   final TextEditingController controller;
@@ -18,6 +19,8 @@ class CustomTextArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return TextField(
       readOnly: disable,
       controller: controller,
@@ -35,12 +38,13 @@ class CustomTextArea extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: AppColors.primary)
         ),
-        filled: true,
-        fillColor: disable ? Colors.grey.shade300 : Colors.white,
+        filled: disable,
+        fillColor: disable ? isDarkMode? AppColors.dark : Colors.grey.shade300 : Colors.white,
       ),
       style: TextStyle(
-        color: disable ? Colors.grey.shade800 : Colors.black,
+        color: disable ? isDarkMode? Colors.white : Colors.grey.shade800 : isDarkMode? Colors.white : Colors.black,
       ),
     );
   }

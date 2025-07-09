@@ -80,17 +80,17 @@ class _ListRapotSiswaState extends State<ListRapotSiswa> {
   }
 
   Widget _buildHeader(NilaiRaporViewModel viewModel) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
           "List Rapot Siswa",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
+        SizedBox(height: 20,),
         Row(
           children: [
-            SizedBox(
-              width: 150,
+            Expanded(
               child: CustomDropdown(
                 items: viewModel.mapelList.map((e) => e.namaMapel).toList(),
                 selectedItem:
@@ -104,8 +104,7 @@ class _ListRapotSiswaState extends State<ListRapotSiswa> {
               ),
             ),
             const SizedBox(width: 10),
-            SizedBox(
-              width: 150,
+            Expanded(
               child: CustomDropdown(
                 items: viewModel.kelasList.map((e) => e.namaKelas).toList(),
                 selectedItem:

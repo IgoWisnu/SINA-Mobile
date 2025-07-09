@@ -13,11 +13,12 @@ import 'package:sina_mobile/View/Component/Murid/ItemTugasMurid.dart';
 import 'package:sina_mobile/View/Component/RegularButton.dart';
 import 'package:sina_mobile/View/Component/StatusTugas.dart';
 import 'package:sina_mobile/View/Component/TitleBarLine.dart';
+import 'package:sina_mobile/View/Lib/Colors.dart';
 import 'package:sina_mobile/View/MateriDetailGuru.dart';
 import 'package:sina_mobile/View/TambahMateri.dart';
 import 'package:sina_mobile/View/TambahTugas.dart';
-import 'package:sina_mobile/View/TugasDetail.dart';
 import 'package:provider/provider.dart';
+import 'package:sina_mobile/View/TugasDetailView.dart';
 import 'package:sina_mobile/ViewModel/Guru/KelasDetailGuruViewModel.dart';
 import 'package:sina_mobile/Model/JenisItem.dart';
 
@@ -104,7 +105,102 @@ class _KelasDetailState extends State<KelasDetail> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
-            ClassCard(judul: widget.mapelJudul, onTap: (){}),
+            Container(
+              height: 200,
+              decoration: BoxDecoration(
+                gradient: AppColors.blueToBlueGradient,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primary.withOpacity(0.6),
+                    blurRadius: 12,
+                    spreadRadius: 1,
+                    offset: Offset(0, 0),
+                  )
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Top row
+                    Row(
+                      children: [
+                        Icon(Icons.library_books, color: Colors.white, size: 50),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            widget.mapelJudul,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const Spacer(),
+
+                    // Bottom Row with text + avatar stack
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Text
+                          Padding(
+                            padding: const EdgeInsets.only(right: 12),
+                            child: Text(
+                              '1 Siswa Di Kelas',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+
+                          // Avatar stack
+                          SizedBox(
+                            height: 50,
+                            width: 120,
+                            child: Stack(
+                              children: [
+                                Positioned(
+                                  left: 0,
+                                  child: CircleAvatar(
+                                    radius: 25,
+                                    backgroundImage: AssetImage('lib/asset/image/male_avatar.png'),
+                                  ),
+                                ),
+                                Positioned(
+                                  left: 30,
+                                  child: CircleAvatar(
+                                    radius: 25,
+                                    backgroundImage: AssetImage('lib/asset/image/female_vector.png'),
+                                  ),
+                                ),
+                                Positioned(
+                                  left: 60,
+                                  child: CircleAvatar(
+                                    radius: 25,
+                                    backgroundImage: AssetImage('lib/asset/image/female2_vector.png'),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
             SizedBox(height: 20,),
             vm.isLoading
                 ? const Center(child: CircularProgressIndicator())
@@ -123,7 +219,7 @@ class _KelasDetailState extends State<KelasDetail> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => TugasDetail(tugas: tugas, mapelId: widget.mapelId,),
+                              builder: (context) => TugasDetailView(tugas: tugas, mapelId: widget.mapelId,),
                             ),
                           );
                         },
@@ -148,6 +244,7 @@ class _KelasDetailState extends State<KelasDetail> {
                               ),
                             ),
                           );
+                          vm.fetchTugasMateri(widget.mapelId);
                         },
                         judul: materi.namaMateri,
                         upload_date: materi.createdAt,

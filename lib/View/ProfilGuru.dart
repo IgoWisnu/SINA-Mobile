@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:sina_mobile/Model/Guru/Guru.dart';
 import 'package:sina_mobile/View/Component/CustomAppBar.dart';
 import 'package:sina_mobile/View/Component/CustomDatePicker.dart';
+import 'package:sina_mobile/View/Component/CustomSnackbar.dart';
 import 'package:sina_mobile/View/Component/CustomTextArea.dart';
 import 'package:sina_mobile/View/Component/CustomTextField.dart';
 import 'package:sina_mobile/View/Component/Custom_drawer.dart';
@@ -12,9 +13,11 @@ import 'package:sina_mobile/View/Component/RegularButton.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sina_mobile/View/Lib/Colors.dart';
+import 'package:sina_mobile/View/UbahPassword.dart';
 import 'package:sina_mobile/ViewModel/Guru/ProfilGuruViewModel.dart';
 import 'package:provider/provider.dart';
 import 'package:barcode_widget/barcode_widget.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 
 
 class ProfilGuru extends StatefulWidget{
@@ -74,19 +77,86 @@ class _ProfilGuruState extends State<ProfilGuru> {
   String selectedAgama = 'Hindu'; // nilai default/dummy
 
   Future<void> _pickImage() async {
-    var status = await Permission.photos.request();
+    final deviceInfo = DeviceInfoPlugin();
+    final androidInfo = await deviceInfo.androidInfo;
+    final sdkInt = androidInfo.version.sdkInt;
 
-    if (status.isGranted) {
-      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-      if (pickedFile != null) {
-        setState(() {
-          _profileImage = File(pickedFile.path);
-        });
+    Permission permission;
+
+    if (Platform.isAndroid) {
+      if (sdkInt >= 33) {
+        permission = Permission.mediaLibrary; // Android 13+
+      } else {
+        permission = Permission.storage; // Android < 13
       }
     } else {
-      // Opsional: tampilkan snackbar atau dialog
+      permission = Permission.photos; // iOS
+    }
+
+    final status = await permission.request();
+
+    if (status.isGranted) {
+      final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (picked != null) {
+        setState(() {
+          _profileImage = File(picked.path);
+        });
+      }
+    } else if (status.isPermanentlyDenied) {
+      openAppSettings();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Izin galeri ditolak permanen. Buka pengaturan.')),
+      );
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Akses galeri ditolak')),
+      );
+    }
+  }
+
+  Future<void> _updateBiodata() async {
+    final vm = Provider.of<ProfilGuruViewModel>(context, listen: false);
+
+    // Validasi minimal (opsional, tambahkan validasi lain jika diperlukan)
+    if (namaController.text.isEmpty || tempatLahirController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Mohon lengkapi data terlebih dahulu.")),
+      );
+      return;
+    }
+
+    try {
+      // Buat objek Guru yang sudah diperbarui
+      Guru updated = Guru(
+        userId: vm.guru!.userId,
+        createdAt: vm.guru!.createdAt,
+        nip: vm.guru!.nip,
+        namaGuru: vm.guru!.namaGuru,
+        tempatLahirGuru: tempatLahirController.text,
+        tanggalLahirGuru: DateTime.parse(tanggalLahirController.text),
+        alamat: alamatController.text,
+        fotoProfil: vm.guru!.fotoProfil,
+        noTelepon: nomorTeleponController.text,
+        agamaGuru: selectedAgama,
+        jenisKelaminGuru: vm.guru!.jenisKelaminGuru,
+      );
+
+      await vm.updateProfilGuru(updated, imageFile: _profileImage);
+      await vm.fetchBiodataGuru();
+
+      //set image from network
+      setState(() {
+        _profileImage = null;
+      });
+
+      //Unfocus semua field
+      FocusScope.of(context).unfocus();
+
+
+      CustomSnackbar.showSuccess(context, "Berhasil Memperbaharui Profil");
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Gagal memperbarui profil: $e")),
       );
     }
   }
@@ -240,9 +310,14 @@ class _ProfilGuruState extends State<ProfilGuru> {
                       value == null || value.isEmpty ? 'Agama tidak boleh kosong' : null,
                     ),
                     SizedBox(height: 20,),
-                    RegularButton(onTap: (){}, judul: "Ubah Password"),
+                    RegularButton(onTap: (){
+                      Navigator.push(
+                          context,
+                        MaterialPageRoute(builder: (context) => UbahPassword())
+                      );
+                    }, judul: "Ubah Password"),
                     SizedBox(height: 10,),
-                    RegularButton(onTap: (){}, judul: "Perbarui Profil"),
+                    RegularButton(onTap: _updateBiodata, judul: "Perbarui Profil"),
                     SizedBox(height: 20,)
                   ],
                 ),

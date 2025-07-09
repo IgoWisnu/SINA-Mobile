@@ -58,13 +58,15 @@ dev_dependencies:
   html: ^0.15.4
   intl: ^0.19.0
   image_picker: ^1.0.4
-  permission_handler: ^11.0.0
+  permission_handler: ^11.3.0
   pie_chart: ^5.3.2
   lottie: ^3.3.1
   barcode_widget: ^2.0.1
   pdfx: ^2.4.0
   open_file: ^3.3.2
   flutter_native_splash: ^2.3.10
+  device_info_plus: ^9.1.2
+
 
   #preview
   flutter_pdfview: ^1.2.5 # For PDF
@@ -99,10 +101,16 @@ flutter:
     - lib/asset/image/SINA.png
     - lib/asset/image/SINA v2.png
     - lib/asset/image/loginLogo.png
+    - lib/asset/image/mesh.jpg
+    - lib/asset/image/mesh2.jpg
+    - lib/asset/image/reading.png
     - lib/asset/animation/success.lottie
     - lib/asset/Animation/success.json
     - lib/asset/Animation/failed.json
     - lib/asset/Animation/loading.json
+    - lib/asset/image/bg_light.png
+    - lib/asset/image/bg_light2 - 1.png
+    - lib/asset/image/bg_dark2.png
     - assets/animations/success.json
     - assets/animations/failed.json
   #   - images/a_dot_ham.jpeg

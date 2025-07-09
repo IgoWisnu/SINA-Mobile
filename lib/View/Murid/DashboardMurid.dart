@@ -1,25 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sina_mobile/ViewModel/DashboardViewModel.dart';
 import 'package:sina_mobile/View/Component/Box.dart';
 import 'package:sina_mobile/View/Component/ClassCard.dart';
 import 'package:sina_mobile/View/Component/CustomAppBar.dart';
-import 'package:sina_mobile/View/Component/CustomAppBarNoDrawer.dart';
-import 'package:sina_mobile/View/Component/Custom_drawer.dart';
-import 'package:sina_mobile/View/Component/ItemAbsensi.dart';
-import 'package:sina_mobile/View/Component/ItemTugas.dart';
 import 'package:sina_mobile/View/Component/Murid/CustomMuridDrawer.dart';
 import 'package:sina_mobile/View/Component/Murid/ItemTugasMurid.dart';
 import 'package:sina_mobile/View/Component/TitleBar.dart';
-import 'package:sina_mobile/View/Murid/DetailTugasMurid.dart';
-import 'package:sina_mobile/ViewModel/DashboardViewModel.dart';
-import 'package:provider/provider.dart';
 
 class DashboardMurid extends StatefulWidget {
-  DashboardMurid({super.key});
+  const DashboardMurid({super.key});
 
   @override
   State<DashboardMurid> createState() => _DashboardMuridState();
-
-
 }
 
 class _DashboardMuridState extends State<DashboardMurid> {
@@ -42,13 +35,9 @@ class _DashboardMuridState extends State<DashboardMurid> {
 
     return Scaffold(
       key: _scaffoldKey,
-      drawer: CustomMuridDrawer(
-        selectedMenu: currentMenu,
-      ),
+      drawer: CustomMuridDrawer(selectedMenu: currentMenu),
       appBar: CustomAppBar(
-        onMenuPressed: () {
-          _scaffoldKey.currentState?.openDrawer();
-        },
+        onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
       ),
       body: status == null
           ? const Center(child: CircularProgressIndicator())
@@ -57,7 +46,7 @@ class _DashboardMuridState extends State<DashboardMurid> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Ringkasan Box
+            // Ringkasan
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -90,21 +79,15 @@ class _DashboardMuridState extends State<DashboardMurid> {
             const SizedBox(height: 20),
 
             // Tugas Terbaru
-            TitleBar(judul: "Tugas Terbaru"),
+            const TitleBar(judul: "Tugas Terbaru"),
             const SizedBox(height: 10),
             ...status.tugasTerbaru.map((tugas) {
               return ItemTugasMurid(
-                judul: tugas.judul+'/'+tugas.mapel,
-                upload_date: tugas.dibuatPada,
-                tenggat: tugas.tenggatKumpul,
-                status: tugas.status,
+                tugas: tugas,
                 onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => DetailTugasMurid(tugas: tugas),
-                  //   ),
-                  // );
+                  // Navigator.push(context, MaterialPageRoute(
+                  //   builder: (context) => DetailTugasMurid(tugas: tugas),
+                  // ));
                 },
               );
             }).toList(),
@@ -112,17 +95,15 @@ class _DashboardMuridState extends State<DashboardMurid> {
             const SizedBox(height: 20),
 
             // Kelas Hari Ini
-            TitleBar(judul: "Kelas Hari Ini"),
+            const TitleBar(judul: "Kelas Hari Ini"),
             const SizedBox(height: 10),
             ...status.kelasHariIni.map((kelas) {
-              return Column(
-                children: [
-                  ClassCard(
-                    judul: kelas['nama_kelas'] ?? 'Tanpa Nama',
-                    onTap: () {},
-                  ),
-                  const SizedBox(height: 5),
-                ],
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: ClassCard(
+                  judul: kelas.namaMapel,
+                  onTap: () {},
+                ),
               );
             }).toList(),
           ],

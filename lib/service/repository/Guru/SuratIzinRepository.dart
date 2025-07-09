@@ -12,13 +12,14 @@ class SuratIzinRepository {
   Future<List<SuratIzinModel>> getSuratIzin() async {
     final response = await apiService.client.get(
       apiService.buildUrl(
-        'dashboard/surat-izin?status=menunggu',
+        'dashboard/surat-izin?status=menunggu,status=terima',
       ), // Filter by status
       headers: await _getHeaders(),
     );
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
+      print(data);
       if (data['success'] == true) {
         return (data['data'] as List)
             .map((e) => SuratIzinModel.fromJson(e))

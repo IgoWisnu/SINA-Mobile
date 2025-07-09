@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sina_mobile/View/Lib/Colors.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -14,6 +15,8 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     final disabledTextColor = Colors.grey.shade600;
     final disabledBgColor = Colors.grey.shade200;
 
@@ -21,12 +24,12 @@ class CustomTextField extends StatelessWidget {
       controller: controller,
       enabled: enabled,
       style: TextStyle(
-        color: enabled ? Colors.black : disabledTextColor,
+        color: enabled ? isDarkMode? Colors.white : Colors.black : isDarkMode? Colors.white : disabledTextColor,
       ),
       decoration: InputDecoration(
         hintText: hintText,
         filled: !enabled, // Aktifkan warna latar belakang hanya saat disabled
-        fillColor: !enabled ? disabledBgColor : null,
+        fillColor: !enabled ? isDarkMode? AppColors.dark : disabledBgColor : null,
         contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -37,7 +40,7 @@ class CustomTextField extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 2),
+          borderSide: BorderSide(color: AppColors.primary, width: 2),
         ),
         disabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),

@@ -45,6 +45,7 @@ class PengumpulanTugasData {
 class SudahMengumpulkan {
   final String nis;
   final String namaSiswa;
+  final String krsId;
   final DateTime tanggalPengumpulan;
   final String uraian;
   final String fileJawaban;
@@ -56,6 +57,7 @@ class SudahMengumpulkan {
   SudahMengumpulkan({
     required this.nis,
     required this.namaSiswa,
+    required this.krsId,
     required this.tanggalPengumpulan,
     required this.uraian,
     required this.fileJawaban,
@@ -69,6 +71,7 @@ class SudahMengumpulkan {
     return SudahMengumpulkan(
       nis: json['nis'],
       namaSiswa: json['nama_siswa'],
+      krsId: json['krs_id'],
       tanggalPengumpulan: DateTime.parse(json['tanggal_pengumpulan']),
       uraian: json['uraian'],
       fileJawaban: json['file_jawaban'],

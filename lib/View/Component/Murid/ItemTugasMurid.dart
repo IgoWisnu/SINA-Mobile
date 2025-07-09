@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:sina_mobile/Model/Tugas.dart';
 import 'package:sina_mobile/View/Lib/Colors.dart';
 import 'package:sina_mobile/View/Lib/DateFormatter.dart';
 import 'package:sina_mobile/View/Murid/DetailMateriMurid.dart';
-import 'package:sina_mobile/View/TugasDetail.dart';
+import 'package:sina_mobile/View/TugasDetailView.dart';
 
 class ItemTugasMurid extends StatelessWidget {
-  final String judul;
-  final DateTime upload_date;
-  final DateTime tenggat;
+  final Tugas tugas;
   final VoidCallback onTap;
-  final String status;
 
   const ItemTugasMurid({
     super.key,
-    required this.judul,
-    required this.upload_date,
-    required this.tenggat,
-    required this.onTap,
-    required this.status,
+    required this.tugas,
+    required this.onTap
   });
 
   @override
@@ -42,7 +37,7 @@ class ItemTugasMurid extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(judul, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  Text(tugas.namaTugas, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   Text("20/28")
                 ],
               ),
@@ -51,7 +46,7 @@ class ItemTugasMurid extends StatelessWidget {
                 children: [
                   Icon(Icons.arrow_upward_outlined),
                   const SizedBox(width: 5),
-                  Text(DateFormatter.format(upload_date)),
+                  Text(DateFormatter.format(tugas.createAt ?? DateTime.now())),
                 ],
               ),
               const SizedBox(height: 5),
@@ -62,7 +57,7 @@ class ItemTugasMurid extends StatelessWidget {
                     children: [
                       Icon(Icons.access_time),
                       const SizedBox(width: 5),
-                      Text(DateFormatter.format(tenggat)),
+                      Text(DateFormatter.format(tugas.tenggatKumpul ?? DateTime.now())),
                     ],
                   ),
                   Container(
@@ -77,7 +72,34 @@ class ItemTugasMurid extends StatelessWidget {
                   ),
                 ],
               ),
-              if (status.toLowerCase() == "done") ...[
+              if (tugas.status.toLowerCase() == "done" && tugas.nilai != null) ...[
+                const SizedBox(height: 10),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.shade100,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Row(
+                       children: [
+                         Icon(Icons.check_circle, color: Colors.green),
+                         SizedBox(width: 8),
+                         Text(
+                           "Sudah Dinilai",
+                           style: TextStyle(color: AppColors.blueActive, fontWeight: FontWeight.bold),
+                         ),
+                       ],
+                      ),
+                      Text('${tugas.nilai}/100' ?? '', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.blueActive),)
+                    ],
+                  ),
+                ),
+              ],
+              if (tugas.status.toLowerCase() == "done" && tugas.nilai == null) ...[
                 const SizedBox(height: 10),
                 Container(
                   width: double.infinity,

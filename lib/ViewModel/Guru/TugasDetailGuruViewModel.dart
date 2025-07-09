@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:sina_mobile/Model/Guru/PengumpulanTugasResponse.dart';
+import 'package:sina_mobile/Model/Guru/TugasDetailResponse.dart';
+import 'package:sina_mobile/Model/Guru/TugasGuru.dart';
 import 'package:sina_mobile/service/api/ApiServiceGuru.dart';
 import 'package:sina_mobile/service/repository/Guru/KelasGuruRepository.dart';
 
@@ -54,6 +56,73 @@ class TugasDetailGuruViewModel with ChangeNotifier {
       );
     } catch (e) {
       rethrow; // dibiarkan naik ke UI untuk ditampilkan ke user
+    }
+  }
+
+
+  Future<TugasDetail> getDetailTugas({
+    required String idTugas,
+  }) async {
+    try {
+      TugasDetail item = await repository.getDetailTugas(idTugas: idTugas);
+      print('item : $item');
+      return item;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> getDetailMateri({
+    required String idMateri
+  }) async {
+    try {
+      await repository.getDetailMateri(
+        idMateri : idMateri,
+      );
+    } catch (e) {
+      rethrow; // dibiarkan naik ke UI untuk ditampilkan ke user
+    }
+  }
+
+  Future<void> editTugas({
+    required String idTugas,
+    required String judul,
+    required String deskripsi,
+    required String tenggat,
+    String? filePath,
+  }) async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      await repository.editTugas(
+          idTugas: idTugas,
+          judul: judul,
+          deskripsi: deskripsi,
+          tenggat: tenggat,
+          filePath: filePath ?? ""
+      );
+    } catch (e) {
+      rethrow; // dibiarkan naik ke UI untuk ditampilkan ke user
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> deleteTugas({
+    required String idTugas
+  }) async {
+    _isLoading = true;
+    notifyListeners();
+    try{
+      await repository.deleteTugas(
+          idTugas: idTugas
+      );
+    } catch (e) {
+      rethrow;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
   }
 
