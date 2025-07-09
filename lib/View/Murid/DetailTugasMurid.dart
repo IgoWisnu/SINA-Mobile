@@ -15,6 +15,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:pdfx/pdfx.dart';
 import 'package:open_file/open_file.dart';
+import 'package:lottie/lottie.dart';
 
 
 class DetailTugasMurid extends StatefulWidget {
@@ -94,6 +95,7 @@ class _DetailTugasMuridState extends State<DetailTugasMurid> {
 
       CustomSnackbar.showSuccess(context, "Berhasil Mengumpul Tugas");
 
+      Navigator.pop(context); // menutup halaman pertama
       Navigator.pop(context, true); // mengirim flag "data berubah"
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -108,6 +110,8 @@ class _DetailTugasMuridState extends State<DetailTugasMurid> {
 
   bool get _tugasSudahDikumpulkan =>
       widget.tugas.uraian != null || widget.tugas.fileJawaban != null;
+  bool get _tugasSudahDinilai =>
+      widget.tugas.nilai != null ;
 
   @override
   Widget build(BuildContext context) {
@@ -150,6 +154,61 @@ class _DetailTugasMuridState extends State<DetailTugasMurid> {
                     },
                   ),
                 ),
+                SizedBox(height: 10,),
+                if (_tugasSudahDikumpulkan && _tugasSudahDinilai) ...[
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.blue.shade100,
+                      border: Border.all(color: Colors.green),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    width: double.infinity,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Lottie.asset(
+                                'assets/animations/success.json',
+                                width: 60,
+                                height: 60,
+                                repeat: false,
+                              ),
+                              SizedBox(width: 3,),
+                              Text('Tugas Sudah Dinilai',),
+                            ],
+                          ),
+                          Text(widget.tugas.nilai.toString()+'/100', style: TextStyle(fontSize: 18, color: Colors.black,fontWeight: FontWeight.bold),)
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+                if (_tugasSudahDikumpulkan && !_tugasSudahDinilai) ...[
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.green.shade100,
+                      border: Border.all(color: Colors.green),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    width: double.infinity,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Lottie.asset(
+                          'assets/animations/success.json',
+                          width: 60,
+                          height: 60,
+                          repeat: false,
+                        ),
+                        SizedBox(width: 5,),
+                        Text('Tugas Sudah Dikumpulkan',)
+                      ],
+                    ),
+                  )
+                ],
                 SizedBox(height: 20),
                 RegularButton(onTap: openWithExternalApp, judul: "Buka dengan"),
                 SizedBox(height: 5,),

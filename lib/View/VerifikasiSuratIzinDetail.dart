@@ -131,7 +131,7 @@ class VerifikasiSuratIzinDetail extends StatelessWidget {
                           width: 150,
                         ),
                         SizedBox(width: 100),
-                        Text(surat.surat),
+                        Expanded(child: Text(surat.surat)),
                       ],
                     ),
                   ],
@@ -160,28 +160,30 @@ class VerifikasiSuratIzinDetail extends StatelessWidget {
                 if (viewModel.isLoading)
                   CircularProgressIndicator()
                 else
-                  RegularButton(
-                    // Di dalam onTap:
-                    onTap: () async {
-                      final navigator = Navigator.of(context);
-                      final scaffold = ScaffoldMessenger.of(context);
+                  if(surat.statusSurat == 'menunggu')...[
+                    RegularButton(
+                      // Di dalam onTap:
+                      onTap: () async {
+                        final navigator = Navigator.of(context);
+                        final scaffold = ScaffoldMessenger.of(context);
 
-                      final confirmed = await showConfirmationDialog(context);
-                      if (!confirmed) return;
+                        final confirmed = await showConfirmationDialog(context);
+                        if (!confirmed) return;
 
-                      final success = await viewModel.approveLetter(
-                        surat.absensiId,
-                      );
-
-                      if (success) {
-                        navigator.pop();
-                        scaffold.showSnackBar(
-                          SnackBar(content: Text('Berhasil disetujui')),
+                        final success = await viewModel.approveLetter(
+                          surat.absensiId,
                         );
-                      }
-                    },
-                    judul: "Setujui",
-                  ),
+
+                        if (success) {
+                          navigator.pop();
+                          scaffold.showSnackBar(
+                            SnackBar(content: Text('Berhasil disetujui')),
+                          );
+                        }
+                      },
+                      judul: "Setujui",
+                    ),
+                  ],
               ],
             );
           },

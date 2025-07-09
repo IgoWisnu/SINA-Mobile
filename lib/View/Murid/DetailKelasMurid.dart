@@ -78,10 +78,7 @@ class _DetailKelasMuridState extends State<DetailKelasMurid> {
                             vm.fetchTugasMateri(widget.mapelId);
                           }
                         },
-                        judul: tugas.namaTugas,
-                        upload_date: tugas.createAt ?? DateTime.now(),
-                        tenggat: tugas.tenggatKumpul ?? DateTime.now(),
-                        status: tugas.status,
+                        tugas: tugas,
                       );
 
                     case JenisItem.materi:
@@ -94,6 +91,7 @@ class _DetailKelasMuridState extends State<DetailKelasMurid> {
                               builder: (context) => DetailMateriMurid(materi: materi),
                             ),
                           );
+                          vm.fetchTugasMateri(widget.mapelId);
                         },
                         judul: materi.namaMateri,
                         upload_date: materi.tanggalPengumpulan,

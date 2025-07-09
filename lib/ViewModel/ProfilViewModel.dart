@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:sina_mobile/Model/SiswaResponse.dart';
 import 'package:sina_mobile/service/repository/AuthRepository.dart';
@@ -30,6 +32,40 @@ class ProfilViewModel extends ChangeNotifier {
 
     try {
       _siswa = await repository.fetchBiodataSiswa();
+    } catch (e) {
+      _error = e.toString();
+    }
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> updateProfilSiswa(Siswa updatedSiswa, {File? imageFile}) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      await repository.UpdateBiodataSiswa(updatedSiswa, imageFile: imageFile);
+      await fetchBiodataSiswa(); // Refresh data
+    } catch (e) {
+      _error = e.toString();
+    }
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> updatePassword(
+      String pwLama,
+      String pwBaru
+      ) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      await repository.updatePassword(pwLama, pwBaru);
     } catch (e) {
       _error = e.toString();
     }

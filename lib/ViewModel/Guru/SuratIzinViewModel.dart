@@ -32,6 +32,11 @@ class SuratIzinViewModel with ChangeNotifier {
       } else {
         _suratIzinList = newData;
         _errorMessage = '';
+
+        // Simpan jumlah 'belum' ke local
+        final belumCount = suratIzinList.where((s) => s.statusSurat == 'menunggu').length;
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setInt('jumlah_surat_izin_belum', belumCount);
       }
     } catch (e) {
       _errorMessage = e.toString();

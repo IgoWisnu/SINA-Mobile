@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:sina_mobile/Model/Guru/Guru.dart';
 import 'package:sina_mobile/Model/SiswaResponse.dart';
@@ -38,4 +40,39 @@ class ProfilGuruViewModel extends ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
+
+  Future<void> updateProfilGuru(Guru updatedGuru, {File? imageFile}) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      await repository.UpdateBiodataGuru(updatedGuru, imageFile: imageFile);
+      await fetchBiodataGuru(); // Refresh data
+    } catch (e) {
+      _error = e.toString();
+    }
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> updatePassword(
+      String pwLama,
+      String pwBaru
+      ) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      await repository.updatePassword(pwLama, pwBaru);
+    } catch (e) {
+      _error = e.toString();
+    }
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
 }

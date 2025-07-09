@@ -1,3 +1,5 @@
+import 'package:sina_mobile/Model/Tugas.dart';
+
 class RingkasanDashboardSiswaResponse {
   final String message;
   final int status;
@@ -21,8 +23,8 @@ class RingkasanDashboardSiswaResponse {
 class RingkasanDashboardData {
   final Ringkasan ringkasan;
   final List<MateriHariIni> materiHariIni;
-  final List<TugasTerbaru> tugasTerbaru;
-  final List<dynamic> kelasHariIni;
+  final List<Tugas> tugasTerbaru;
+  final List<KelasHariIni> kelasHariIni; // ✅ Sudah benar
 
   RingkasanDashboardData({
     required this.ringkasan,
@@ -37,10 +39,12 @@ class RingkasanDashboardData {
       materiHariIni: List<MateriHariIni>.from(
         json['materi_hari_ini'].map((x) => MateriHariIni.fromJson(x)),
       ),
-      tugasTerbaru: List<TugasTerbaru>.from(
-        json['tugas_terbaru'].map((x) => TugasTerbaru.fromJson(x)),
+      tugasTerbaru: List<Tugas>.from(
+        json['tugas_terbaru'].map((x) => Tugas.fromDashboardJson(x)),
       ),
-      kelasHariIni: List<dynamic>.from(json['kelas_hari_ini']),
+      kelasHariIni: List<KelasHariIni>.from(
+        json['kelas_hari_ini'].map((x) => KelasHariIni.fromJson(x)),
+      ),
     );
   }
 }
@@ -143,5 +147,30 @@ class TugasTerbaru {
       status: json['status'],
       dibuatPada: DateTime.parse(json['dibuat_pada']),
     );
+  }
+}
+
+class KelasHariIni {
+  final String namaMapel;
+  final String jam;
+  final String ruangan;
+
+  KelasHariIni({
+    required this.namaMapel,
+    required this.jam,
+    required this.ruangan,
+  });
+
+  factory KelasHariIni.fromJson(Map<String, dynamic> json) {
+    return KelasHariIni(
+      namaMapel: json['nama_mapel'],
+      jam: json['jam'],
+      ruangan: json['ruangan'],
+    );
+  }
+
+  @override
+  String toString() {
+    return 'Kelas: $namaMapel, Jam: $jam, Ruang: $ruangan';
   }
 }

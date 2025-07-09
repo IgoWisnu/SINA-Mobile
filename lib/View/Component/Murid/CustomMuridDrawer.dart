@@ -26,6 +26,8 @@ class CustomMuridDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Drawer(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -158,7 +160,7 @@ class CustomMuridDrawer extends StatelessWidget {
       selectedTileColor: Colors.blue, // latar biru saat aktif
       leading: Icon(
         icon,
-        color: isSelected ? Colors.white : Colors.black, // icon putih saat aktif
+        color: isSelected ? Colors.white :  Colors.black, // icon putih saat aktif
       ),
       title: Text(
         title,

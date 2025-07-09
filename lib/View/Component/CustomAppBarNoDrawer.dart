@@ -24,11 +24,19 @@ class CustomAppBarNoDrawer extends StatelessWidget implements PreferredSizeWidge
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
                     decoration: BoxDecoration(
+                      color: AppColors.primary,
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.blue
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.primary.withOpacity(0.6),
+                          blurRadius: 12,
+                          spreadRadius: 1,
+                          offset: Offset(0, 0),
+                        ),
+                      ],
                     ),
                     child: IconButton(
-                      icon: const Icon(Icons.arrow_back, color: Colors.black, size: 30),
+                      icon: const Icon(Icons.arrow_back, color: Colors.white, size: 30),
                       onPressed: () {
                         Navigator.pop(context);
                       },

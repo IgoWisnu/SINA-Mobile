@@ -14,9 +14,18 @@ class TitleBar extends StatelessWidget{
     return Container(
       alignment: Alignment.centerLeft,
       width: MediaQuery.of(context).size.width,
-      height: 44,
+      height: 50,
       decoration: BoxDecoration(
-        color: AppColors.primary
+        color: AppColors.primary,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary.withOpacity(0.6),
+            blurRadius: 12,
+            spreadRadius: 1,
+            offset: Offset(0, 0),
+          ),
+        ],
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),

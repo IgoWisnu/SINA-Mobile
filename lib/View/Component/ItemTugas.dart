@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sina_mobile/View/Lib/Colors.dart';
 import 'package:sina_mobile/View/Lib/DateFormatter.dart';
 import 'package:sina_mobile/View/Murid/DetailMateriMurid.dart';
-import 'package:sina_mobile/View/TugasDetail.dart';
 
 class ItemTugas extends StatelessWidget{
   final judul;
@@ -24,6 +23,8 @@ class ItemTugas extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     // TODO: implement build
     return GestureDetector(
       onTap: onTap,
@@ -31,7 +32,7 @@ class ItemTugas extends StatelessWidget{
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
-              color: Colors.black, // Set your desired color
+              color: isDarkMode? AppColors.primary : Colors.black, // Set your desired color
               width: 2.0,         // Set your desired width
             ),
           ),

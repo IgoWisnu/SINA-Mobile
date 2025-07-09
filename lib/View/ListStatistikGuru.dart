@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:sina_mobile/Model/Guru/KelasGuru.dart';
 import 'package:sina_mobile/View/Component/CustomAppBar.dart';
 import 'package:sina_mobile/View/Component/CustomDropdown.dart';
+import 'package:sina_mobile/View/Component/CustomFlexDropdown.dart';
 import 'package:sina_mobile/View/Component/Custom_drawer.dart';
 import 'package:sina_mobile/View/Component/ItemStatistikSiswa.dart';
 import 'package:sina_mobile/View/Lib/Colors.dart';
 import 'package:sina_mobile/View/Murid/StatistikSiswa.dart';
 import 'package:sina_mobile/View/StatistikGuruDetail.dart';
+import 'package:sina_mobile/ViewModel/Guru/StatistikGuruViewModel.dart';
+import 'package:provider/provider.dart';
 
 class ListStatistikGuru extends StatefulWidget{
 
@@ -17,73 +21,95 @@ class _ListStatistikGuruState extends State<ListStatistikGuru> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   String currentMenu = 'statistik';
-  String selectedValue = 'X.1';
+  KelasItem? selectedKelas;
+
+  @override
+  void initState() {
+    super.initState();
+    final viewModel = Provider.of<StatistikGuruViewModel>(context, listen: false);
+    viewModel.fetchKelas();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    final viewModel = Provider.of<StatistikGuruViewModel>(context);
+
     return Scaffold(
-      key: _scaffoldKey, // ← INI YANG BELUM ADA
-      drawer: CustomDrawer(
-        selectedMenu: currentMenu,
-      ),
+      key: _scaffoldKey,
+      drawer: CustomDrawer(selectedMenu: currentMenu),
       appBar: CustomAppBar(
-        onMenuPressed: () {
-          _scaffoldKey.currentState?.openDrawer();
-        },
+        onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
+            // Dropdown Kelas
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text("Statistik Nilai Siswa", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
-                CustomDropdown(
-                  items: ['X.1','X.2','X.3',],
-                  selectedItem: selectedValue,
+                Text("Statistik Nilai Siswa", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                viewModel.listmapel == null
+                    ? CircularProgressIndicator()
+                    : CustomFlexDropdown<KelasItem>(
+                  items: viewModel.listmapel!,
+                  selectedItem: selectedKelas,
+                  itemToString: (item) => item.namaMapel ?? '-',
                   onChanged: (newValue) {
                     setState(() {
-                      selectedValue = newValue!;
+                      selectedKelas = newValue!;
                     });
+                    viewModel.fetchListSiswa(selectedKelas!.mapelId.toString());
                   },
-                )
+                ),
               ],
             ),
-            SizedBox(height: 20,),
+            SizedBox(height: 20),
+
+            // Header
             Container(
-             height: 50,
-             width: double.infinity,
-             decoration: BoxDecoration(
-               color: AppColors.primary
-             ),
+              height: 50,
+              width: double.infinity,
+              decoration: BoxDecoration(color: AppColors.primary),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("No", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),),
+                  children: const [
+                    Text("No", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
                     Text("Nama", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
-                    Text("Detail", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16))
+                    Text("Detail", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
                   ],
                 ),
               ),
             ),
-            ItemStatistikSiswa(
-                no: "1",
-                nama: "I Gede Igo",
-                ontap: (){
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => StatistikGuruDetail()),
+
+            // Daftar siswa dari viewModel
+            Expanded(
+              child: viewModel.isLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : viewModel.listsiwa == null
+                  ? Center(child: Text("Pilih kelas terlebih dahulu"))
+                  : ListView.builder(
+                itemCount: viewModel.listsiwa!.length,
+                itemBuilder: (context, index) {
+                  final siswa = viewModel.listsiwa![index];
+                  return ItemStatistikSiswa(
+                    no: "${index + 1}",
+                    nama: siswa.nama ?? "-",
+                    ontap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => StatistikGuruDetail(krsId: siswa.krsId,)),
+                      );
+                    },
                   );
-                }
-            )
+                },
+              ),
+            ),
           ],
         ),
       ),
-
     );
   }
 }

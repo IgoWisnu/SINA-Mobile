@@ -20,11 +20,14 @@ import 'package:sina_mobile/ViewModel/BeritaViewModel.dart';
 import 'package:sina_mobile/ViewModel/DashboardViewModel.dart';
 import 'package:sina_mobile/ViewModel/Guru/AbsensiGuruViewModel.dart';
 import 'package:sina_mobile/ViewModel/Guru/DashboardGuruViewModel.dart';
+import 'package:sina_mobile/ViewModel/Guru/DetailTugasSiswaVIewModel.dart';
+import 'package:sina_mobile/ViewModel/Guru/EditTugasGuruViewModel.dart';
 import 'package:sina_mobile/ViewModel/Guru/JadwalGuruViewModel.dart';
 import 'package:sina_mobile/ViewModel/Guru/KelasDetailGuruViewModel.dart';
 import 'package:sina_mobile/ViewModel/Guru/KelasGuruViewModel.dart';
 import 'package:sina_mobile/ViewModel/Guru/PengumumanGuruViewModel.dart';
 import 'package:sina_mobile/ViewModel/Guru/ProfilGuruViewModel.dart';
+import 'package:sina_mobile/ViewModel/Guru/StatistikGuruViewModel.dart';
 import 'package:sina_mobile/ViewModel/Guru/TugasDetailGuruViewModel.dart';
 import 'package:sina_mobile/ViewModel/JadwalViewModel.dart';
 import 'package:sina_mobile/ViewModel/KelasDetailViewModel.dart';
@@ -47,6 +50,7 @@ import 'package:sina_mobile/service/repository/Guru/BiodataGuruRepository.dart';
 import 'package:sina_mobile/service/repository/Guru/DashboardGuruRepository.dart';
 import 'package:sina_mobile/service/repository/Guru/JadwalGuruRepository.dart';
 import 'package:sina_mobile/service/repository/Guru/KelasGuruRepository.dart';
+import 'package:sina_mobile/service/repository/Guru/StatistikGuruRepository.dart';
 import 'package:sina_mobile/service/repository/JadwalRepository.dart';
 import 'package:sina_mobile/service/repository/KelasRepository.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -191,6 +195,24 @@ class MyApp extends StatelessWidget {
               (_) => AbsensiGuruViewModel(
                 repository: AbsensiGuruRepository(ApiServiceGuru()),
               ),
+        ),
+        ChangeNotifierProvider(
+          create:
+              (_) => DetailTugasSiswaViewModel(
+            repository: KelasGuruRepository(ApiServiceGuru()),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create:
+              (_) => StatistikGuruViewModel(
+            repository: StatistikGuruRepository(ApiServiceGuru()),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create:
+              (_) => EditTugasGuruViewModel(
+            repository: KelasGuruRepository(ApiServiceGuru()),
+          ),
         ),
       ],
       child: MaterialApp(

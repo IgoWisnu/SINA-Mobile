@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
 
-class ItemRiwayatAbsensi extends StatelessWidget{
+class ItemRiwayatAbsensi extends StatefulWidget{
+  final String keterangan;
+  final String tanggal;
+  const ItemRiwayatAbsensi({super.key, required this.keterangan, required this.tanggal});
+
+  @override
+  State<ItemRiwayatAbsensi> createState() => _ItemRiwayatAbsensiState();
+}
+
+class _ItemRiwayatAbsensiState extends State<ItemRiwayatAbsensi> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -10,8 +19,8 @@ class ItemRiwayatAbsensi extends StatelessWidget{
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Izin", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-            Text("05/07/2025", style: TextStyle(),),
+            Text(widget.keterangan, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+            Text(widget.tanggal, style: TextStyle(),),
             Row(
               children: [
                 Text("Surat Izin"),
@@ -24,5 +33,4 @@ class ItemRiwayatAbsensi extends StatelessWidget{
       ),
     );
   }
-
 }

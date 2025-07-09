@@ -59,4 +59,23 @@ class Tugas {
       status: json['status']
     );
   }
+
+  // ✅ Tambahkan named constructor untuk data dari dashboard
+  factory Tugas.fromDashboardJson(Map<String, dynamic> json) {
+    return Tugas(
+      tugasId: json['id'],
+      namaTugas: json['judul'],
+      deskripsi: json['deskripsi'],
+      lampiran: json['lampiran_guru'],
+      uraian: json['uraian_jawaban'],
+      fileJawaban: json['file_jawaban'],
+      createAt: json['dibuat_pada'] != null ? DateTime.tryParse(json['dibuat_pada']) : null,
+      tenggatKumpul: json['tenggat_kumpul'] != null ? DateTime.tryParse(json['tenggat_kumpul']) : null,
+      tanggalPengumpulan: json['dikumpulkan_pada'] != null
+          ? DateTime.tryParse(json['dikumpulkan_pada'])
+          : null,
+      nilai: json['nilai']?.toString(),
+      status: json['status'],
+    );
+  }
 }

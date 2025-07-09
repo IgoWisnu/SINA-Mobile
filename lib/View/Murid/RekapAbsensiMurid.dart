@@ -36,6 +36,9 @@ class _RekapAbsensiMuridState extends State<RekapAbsensiMurid> {
     // Ambil data kelas saat widget dibuka
     Future.microtask(() =>
         Provider.of<RekapAbsensiViewModel>(context, listen: false).getRekapAbsen());
+    Future.microtask(() {
+      Provider.of<RekapAbsensiViewModel>(context, listen: false).getRiwayatAbsen();
+    });
   }
 
   @override
@@ -170,9 +173,21 @@ class _RekapAbsensiMuridState extends State<RekapAbsensiMurid> {
               ),
               SizedBox(height: 20,),
               TitleBar(judul: "Riwayat Absensi"),
-              ItemRiwayatAbsensi(),
-              ItemRiwayatAbsensi(),
-              ItemRiwayatAbsensi(),
+              Container(
+                height: 300, // atau pakai constraints.maxHeight * 0.5
+                child: vm.suratAbsen == null || vm.suratAbsen!.isEmpty
+                    ? Center(child: Text('Tidak ada data surat absen'))
+                    : ListView.builder(
+                  itemCount: vm.suratAbsen!.length,
+                  itemBuilder: (context, index) {
+                    final surat = vm.suratAbsen![index];
+                    return ItemRiwayatAbsensi(
+                      keterangan: surat.keterangan,
+                      tanggal: surat.tanggal,
+                    );
+                  },
+                ),
+              ),
               SizedBox(height: 20,),
               RegularButton(onTap: (){}, judul: "Lebih Banyak",)
             ],
