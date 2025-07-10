@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sina_mobile/View/Component/CustomAppBarNoDrawer.dart';
+import 'package:sina_mobile/View/Component/OrangTua/TitleBarRiwayatAbsensi.dart';
 import 'package:sina_mobile/View/Component/TitleBar.dart';
 import 'package:sina_mobile/ViewModel/OrangTua/RiwayatAbsensiViewModel.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -17,7 +18,6 @@ class _RiwayatAbsensiPageState extends State<RiwayatAbsensiPage> {
   @override
   void initState() {
     super.initState();
-    // Memuat data saat pertama kali dibuka
     Future.microtask(() {
       Provider.of<RiwayatAbsensiViewModel>(
         context,
@@ -31,7 +31,7 @@ class _RiwayatAbsensiPageState extends State<RiwayatAbsensiPage> {
     return Scaffold(
       appBar: CustomAppBarNoDrawer(),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(16.0),
         child: Consumer<RiwayatAbsensiViewModel>(
           builder: (context, vm, child) {
             if (vm.isLoading) {
@@ -58,53 +58,85 @@ class _RiwayatAbsensiPageState extends State<RiwayatAbsensiPage> {
                   listen: false,
                 ).fetchRiwayatAbsensi();
               },
-              child: ListView.separated(
-                padding: const EdgeInsets.all(16),
-                itemCount: vm.riwayat.length + 1,
-                separatorBuilder: (_, __) => const Divider(height: 1),
-                itemBuilder: (context, index) {
-                  if (index == 0) {
-                    return const TitleBar(judul: "Riwayat Absensi");
-                  }
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TitleBarRiwayatAbsensi(judul: "Riwayat Absensi"),
+                  const SizedBox(height: 10),
+                  Expanded(
+                    child: ListView.separated(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      itemCount: vm.riwayat.length,
+                      separatorBuilder:
+                          (_, __) =>
+                              const Divider(height: 1, color: Colors.black),
+                      itemBuilder: (context, index) {
+                        final absen = vm.riwayat[index];
+                        final formattedDate = DateFormat(
+                          'dd/MM/yyyy',
+                        ).format(DateTime.parse(absen.tanggal));
 
-                  final absen = vm.riwayat[index - 1];
-                  final formattedDate = DateFormat(
-                    'dd/MM/yyyy',
-                  ).format(DateTime.parse(absen.tanggal));
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12.0),
+                          child: Row(
+                            children: [
+                              // Status
+                              Expanded(
+                                flex: 2,
+                                child: Text(
+                                  absen.status,
+                                  style: TextStyle(
+                                    color:
+                                        absen.status == "Alpha"
+                                            ? Colors.red
+                                            : Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
 
-                  return ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(
-                      absen.status,
-                      style: TextStyle(
-                        color:
-                            absen.status == "Alpha" ? Colors.red : Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    subtitle: Text(formattedDate),
-                    trailing:
-                        absen.suratUrl.isNotEmpty
-                            ? InkWell(
-                              onTap: () => _launchDocument(absen.suratUrl),
-                              child: const Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    "Lihat Surat",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 13,
+                              // Tanggal
+                              Expanded(
+                                flex: 2,
+                                child: Text(
+                                  formattedDate,
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                              ),
+
+                              // Surat Izin
+                              if (absen.suratUrl.isNotEmpty)
+                                Expanded(
+                                  flex: 3,
+                                  child: InkWell(
+                                    onTap:
+                                        () => _launchDocument(absen.suratUrl),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: const [
+                                        Text(
+                                          "Surat Izin",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 13,
+                                          ),
+                                        ),
+                                        SizedBox(width: 4),
+                                        Icon(Icons.arrow_forward_ios, size: 16),
+                                      ],
                                     ),
                                   ),
-                                  SizedBox(width: 4),
-                                  Icon(Icons.arrow_forward_ios, size: 20),
-                                ],
-                              ),
-                            )
-                            : null,
-                  );
-                },
+                                )
+                              else
+                                const Expanded(flex: 3, child: SizedBox()),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             );
           },
@@ -115,23 +147,17 @@ class _RiwayatAbsensiPageState extends State<RiwayatAbsensiPage> {
 
   Future<void> _launchDocument(String url) async {
     try {
-      // Pastikan URL tidak null atau kosong
-      if (url.isEmpty) {
-        throw Exception('URL dokumen kosong');
-      }
+      if (url.isEmpty) throw Exception('URL dokumen kosong');
 
-      // Pastikan UPPERCASE pada "Upload"
       String fullUrl =
           url.startsWith('http')
               ? url
               : "http://sina.pnb.ac.id:3006${url.replaceFirst('/uploads', '/Upload')}";
 
-      // Cek apakah URL bisa diluncurkan
       if (await canLaunchUrl(Uri.parse(fullUrl))) {
-        // Buka dengan browser default
         await launchUrl(
           Uri.parse(fullUrl),
-          mode: LaunchMode.externalApplication, // Buka di aplikasi eksternal
+          mode: LaunchMode.externalApplication,
         );
       } else {
         throw Exception('Tidak bisa membuka URL: $fullUrl');

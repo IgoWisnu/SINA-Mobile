@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sina_mobile/View/OrangTua/DashboardOrangTua.dart';
+import 'package:sina_mobile/View/regisPage.dart';
 import '../ViewModel/AuthViewModel.dart';
 
 class LoginPage extends StatefulWidget {
@@ -221,7 +222,10 @@ class _LoginPageState extends State<LoginPage> {
                 // Link ke registrasi
                 TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/regisPage');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => RegisPage()),
+                    );
                   },
                   child: const Text(
                     'Mendaftar Orang Tua',

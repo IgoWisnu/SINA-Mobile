@@ -172,46 +172,67 @@ class _DashboardorangtuaState extends State<Dashboardorangtua> {
                     // Box info siswa
                     if (selectedSiswa != null)
                       Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
+                        margin: EdgeInsets.symmetric(
+                          horizontal: 16,
                           vertical: 8,
                         ),
+                        padding: EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: Colors.green[400],
+                          color: Color(0xFFDFF5E1), // Warna hijau pastel elegan
                           borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.2),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
                         ),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              selectedSiswa!.namaSiswa,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              '(NIS : ${selectedSiswa!.nis})',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const Spacer(),
-                            Text(
-                              data.notifikasiAnak.statusKehadiran,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
+                            Icon(Icons.person, color: Colors.green.shade800),
+                            SizedBox(width: 10),
+                            Expanded(
+                              // Expanded agar tidak overflow
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Mulyanto Puspasari',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.green.shade900,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    'NIS: 1001003019',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.green.shade700,
+                                    ),
+                                  ),
+                                  SizedBox(height: 2),
+                                  Text(
+                                    'Belum mengisi absensi',
+
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.redAccent,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
-                      ),
-
-                    const SizedBox(height: 20),
+                      )
+                    else
+                      SizedBox(height: 20),
                     TitleBar(judul: 'Pengumuman'),
                     const SizedBox(height: 10),
                     PengumumanOrtuDashboard(),

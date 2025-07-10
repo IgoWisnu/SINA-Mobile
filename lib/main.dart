@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sina_mobile/View/OrangTua/TokenVerifikasiPage.dart';
 import 'package:sina_mobile/View/loginPage.dart';
 import 'package:sina_mobile/View/regisPage.dart';
-import 'package:sina_mobile/View/registerPage.dart';
+import 'package:sina_mobile/View/RegisterFinalPage.dart';
 import 'package:sina_mobile/ViewModel/BeritaViewModel.dart';
 import 'package:sina_mobile/ViewModel/DashboardViewModel.dart';
 
@@ -16,6 +17,7 @@ import 'package:sina_mobile/ViewModel/OrangTua/JadwalHarianVIewModel.dart';
 import 'package:sina_mobile/ViewModel/OrangTua/ProfilOrtuViewModel.dart';
 import 'package:sina_mobile/ViewModel/OrangTua/RaporDetailViewModel.dart';
 import 'package:sina_mobile/ViewModel/OrangTua/RaporOrtuViewModel.dart';
+import 'package:sina_mobile/ViewModel/OrangTua/RegisterViewModel.dart';
 import 'package:sina_mobile/ViewModel/OrangTua/RekapAbsensiOrtuViewModel.dart';
 import 'package:sina_mobile/ViewModel/OrangTua/RingkasanPengajuanViewModel.dart';
 import 'package:sina_mobile/ViewModel/OrangTua/RiwayatAbsensiViewModel.dart';
@@ -45,6 +47,7 @@ import 'package:sina_mobile/service/repository/OrangTua/DashboardOrtuRepository.
 import 'package:sina_mobile/service/repository/OrangTua/JadwalHarianRepository.dart';
 import 'package:sina_mobile/service/repository/OrangTua/RaporDetailRepository.dart';
 import 'package:sina_mobile/service/repository/OrangTua/RaporRepository.dart';
+import 'package:sina_mobile/service/repository/OrangTua/RegisterRepository.dart';
 import 'package:sina_mobile/service/repository/OrangTua/RiwayatAbsensiRepository.dart';
 import 'package:sina_mobile/service/repository/OrangTua/StatistikNilaiRepository.dart';
 import 'package:sina_mobile/service/repository/OrangTua/SuratIjinDetailRepository.dart';
@@ -193,6 +196,12 @@ class MyApp extends StatelessWidget {
                 repository: UbahPasswordRepository(ApiServiceOrangTua()),
               ),
         ),
+        ChangeNotifierProvider(
+          create:
+              (_) => RegisterViewModel(
+                repository: RegisterRepository(apiService: ApiServiceAuth()),
+              ),
+        ),
       ],
       child: MaterialApp(
         title: 'SINA_Mobile',
@@ -228,12 +237,7 @@ class MyApp extends StatelessWidget {
             titleSmall: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ),
-        home: const LoginPage(),
-        routes: {
-          '/loginPage': (context) => LoginPage(),
-          '/regisPage': (context) => RegisPage(),
-          '/registerPage': (context) => RegisterPage(),
-        },
+        home: LoginPage(),
       ),
     );
   }

@@ -22,27 +22,24 @@ class JadwalResponse {
 }
 
 class Jadwal {
-  final String hari;
-  final String start;
-  final String finish;
-  final String namaMapel;
-  final String namaGuru;
+  final String jam;
+  final String mataPelajaran;
+  final String guru;
+  final String ruangan;
 
   Jadwal({
-    required this.hari,
-    required this.start,
-    required this.finish,
-    required this.namaMapel,
-    required this.namaGuru,
+    required this.jam,
+    required this.mataPelajaran,
+    required this.guru,
+    required this.ruangan,
   });
 
   factory Jadwal.fromJson(Map<String, dynamic> json) {
     return Jadwal(
-      hari: json['hari'] ?? '',
-      start: json['start'] ?? '',
-      finish: json['finish'] ?? '',
-      namaMapel: json['nama_mapel'] ?? '',
-      namaGuru: json['nama_guru'] ?? '',
+      jam: json['jam'] ?? '',
+      mataPelajaran: json['mata_pelajaran'] ?? '',
+      guru: json['guru'] ?? '',
+      ruangan: json['ruangan'] ?? '',
     );
   }
 }

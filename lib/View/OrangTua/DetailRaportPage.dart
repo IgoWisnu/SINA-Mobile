@@ -75,103 +75,133 @@ class _DetailRapotPageState extends State<DetailRapotPage> {
             return const Center(child: Text('Data rapor tidak ditemukan.'));
           }
 
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TitleBarLine(judul: "Rapot"),
-                const SizedBox(height: 20),
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TitleBarLine(judul: "Rapot"),
+                  const SizedBox(height: 20),
 
-                // Tabel Nilai
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: DataTable(
-                    headingRowColor: MaterialStateProperty.all(Colors.blue),
-                    headingTextStyle: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                  // Tabel Nilai
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.blue),
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    columns: const [
-                      DataColumn(label: Text("Mata Pelajaran")),
-                      DataColumn(label: Text("Nilai")),
-                      DataColumn(label: Text("Kategori")),
-                    ],
-                    rows:
-                        data.nilai
-                            .map(
-                              (mapel) => DataRow(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: DataTable(
+                        columnSpacing: 30, // Add spacing between columns
+                        horizontalMargin: 12, // Add margin on sides
+                        headingRowHeight: 40, // Set heading row height
+                        dataRowHeight: 40, // Set data row height
+                        headingRowColor: MaterialStateProperty.all(Colors.blue),
+                        headingTextStyle: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                        columns: const [
+                          DataColumn(label: Text("Mata Pelajaran")),
+                          DataColumn(label: Text("Nilai"), numeric: true),
+                          DataColumn(label: Text("Kategori")),
+                        ],
+                        rows:
+                            data.nilai.map((mapel) {
+                              return DataRow(
                                 cells: [
-                                  DataCell(Text(mapel.namaMapel)),
-                                  DataCell(Text(mapel.nilai.toString())),
+                                  DataCell(
+                                    Container(
+                                      constraints: BoxConstraints(
+                                        maxWidth: 200,
+                                      ), // Set max width for mapel name
+                                      child: Text(
+                                        mapel.namaMapel,
+                                        overflow:
+                                            TextOverflow
+                                                .ellipsis, // Add ellipsis if text is too long
+                                      ),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    Center(child: Text(mapel.nilai.toString())),
+                                  ),
                                   DataCell(Text(mapel.kategori)),
                                 ],
-                              ),
-                            )
-                            .toList(),
-                  ),
-                ),
-
-                const SizedBox(height: 24),
-
-                const Text(
-                  "Lampiran File",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                const SizedBox(height: 8),
-
-                Expanded(
-                  child:
-                      (data.pdfUrl == null || data.pdfUrl!.isEmpty)
-                          ? const Center(child: Text("Tidak ada file tersedia"))
-                          : FutureBuilder<File>(
-                            future: () {
-                              final fullUrl =
-                                  'http://sina.pnb.ac.id:3001${data.downloadUrl}';
-                              return viewModel.downloadPdfFileLocal(
-                                fullUrl,
-                                data.downloadUrl ?? '',
                               );
-                            }(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              } else if (snapshot.hasError) {
-                                return const Center(
-                                  child: Text('Gagal memuat file PDF'),
-                                );
-                              } else {
-                                final file = snapshot.data!;
-                                return PdfViewPinch(
-                                  controller: PdfControllerPinch(
-                                    document: PdfDocument.openFile(file.path),
-                                  ),
-                                );
-                              }
-                            },
-                          ),
-                ),
-
-                ElevatedButton.icon(
-                  onPressed: _unduhRapor,
-                  icon: const Icon(Icons.download),
-                  label: const Text("Unduh Rapor"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueAccent,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 12,
+                            }).toList(),
+                      ),
                     ),
                   ),
-                ),
-              ],
+
+                  const SizedBox(height: 24),
+
+                  const Text(
+                    "Lampiran File",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  const SizedBox(height: 8),
+
+                  (data.pdfUrl == null || data.pdfUrl!.isEmpty)
+                      ? const Center(child: Text("Tidak ada file tersedia"))
+                      : FutureBuilder<File>(
+                        future: () {
+                          final fullUrl =
+                              'http://sina.pnb.ac.id:3001${data.downloadUrl}';
+                          return viewModel.downloadPdfFileLocal(
+                            fullUrl,
+                            data.downloadUrl ?? '',
+                          );
+                        }(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else if (snapshot.hasError) {
+                            return const Center(
+                              child: Text('Gagal memuat file PDF'),
+                            );
+                          } else {
+                            final file = snapshot.data!;
+                            return Container(
+                              height:
+                                  400, // agar PDF tidak menyebabkan overflow
+                              child: PdfViewPinch(
+                                controller: PdfControllerPinch(
+                                  document: PdfDocument.openFile(file.path),
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+
+                  const SizedBox(height: 16),
+
+                  // Tombol Unduh
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: _unduhRapor,
+                      icon: const Icon(Icons.download),
+                      label: const Text("Unduh Rapor"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blueAccent,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 12,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                ],
+              ),
             ),
           );
         },

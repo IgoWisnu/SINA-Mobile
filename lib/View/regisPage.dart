@@ -1,4 +1,9 @@
+// Halaman awal registrasi orang tua (input NIS dan status ortu)
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sina_mobile/View/OrangTua/TokenVerifikasiPage.dart';
+import 'package:sina_mobile/View/loginPage.dart';
+import 'package:sina_mobile/ViewModel/OrangTua/RegisterViewModel.dart';
 
 class RegisPage extends StatefulWidget {
   const RegisPage({super.key});
@@ -8,99 +13,150 @@ class RegisPage extends StatefulWidget {
 }
 
 class _RegisPageState extends State<RegisPage> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _nisController = TextEditingController();
+  String? selectedKategori;
+  final List<String> kategoriList = ['Ibu', 'Ayah', 'Wali'];
+
   @override
   Widget build(BuildContext context) {
+    final registerViewModel = Provider.of<RegisterViewModel>(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Form(
+            key: _formKey,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Logo and Title
-                Column(
-                  children: [
-                    Image.asset(
-                      'lib/asset/image/loginLogo.png',
-                      height: 200,
-                      width: 300,
-                    ),
-                  ],
-                ),
+                const SizedBox(height: 30),
+                Image.asset('lib/asset/image/loginLogo.png', height: 150),
                 const SizedBox(height: 20),
-
-                // Register
                 const Text(
-                  'Mendaftar',
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
+                  'Register',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 10),
-
-                // Username TextField
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Masukan Token Yang diberikan oleh Admin pada',
-                      style: TextStyle(fontWeight: FontWeight.normal),
-                    ),
-                    const SizedBox(height: 8),
-                  ],
+                const SizedBox(height: 12),
+                const Text(
+                  'Masukkan NIS siswa untuk membuat akun orang tua',
+                  textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 24),
 
-                // Token
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Token',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                // Status Ortu
+                DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                    labelText: 'Daftar Sebagai',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    const SizedBox(height: 8),
-                    TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Masukan Token',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                      ),
+                  ),
+                  value: selectedKategori,
+                  onChanged:
+                      (value) => setState(() => selectedKategori = value),
+                  validator:
+                      (value) =>
+                          value == null
+                              ? 'Pilih kategori terlebih dahulu'
+                              : null,
+                  items:
+                      kategoriList.map((kategori) {
+                        return DropdownMenuItem<String>(
+                          value: kategori.toLowerCase(),
+                          child: Text(kategori),
+                        );
+                      }).toList(),
+                ),
+                const SizedBox(height: 16),
+
+                // NIS
+                TextFormField(
+                  controller: _nisController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: 'NIS',
+                    hintText: 'Masukkan NIS Siswa',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                  ],
+                  ),
+                  validator:
+                      (value) =>
+                          value == null || value.isEmpty
+                              ? 'NIS wajib diisi'
+                              : null,
                 ),
                 const SizedBox(height: 30),
 
-                // Login Button
+                // Tombol Lanjutkan
                 SizedBox(
                   width: double.infinity,
                   height: 48,
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/registerPage');
-                    },
+                    onPressed:
+                        registerViewModel.isLoading
+                            ? null
+                            : () async {
+                              if (_formKey.currentState!.validate()) {
+                                await registerViewModel.startRegistration(
+                                  _nisController.text,
+                                  selectedKategori!,
+                                );
+
+                                if (registerViewModel.errorMessage == null &&
+                                    registerViewModel.registerData != null) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder:
+                                          (_) => TokenVerifikasiPage(
+                                            nis: _nisController.text,
+                                            statusOrtu: selectedKategori!,
+                                            registerData:
+                                                registerViewModel.registerData,
+                                          ),
+                                    ),
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        registerViewModel.errorMessage ??
+                                            'Gagal',
+                                      ),
+                                    ),
+                                  );
+                                }
+                              }
+                            },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF2F66F8),
+                      backgroundColor: const Color(0xFF2F66F8),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: const Text(
-                      'Mendaftar',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
+                    child:
+                        registerViewModel.isLoading
+                            ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                            : const Text(
+                              'Lanjutkan',
+                              style: TextStyle(color: Colors.white),
+                            ),
                   ),
                 ),
                 const SizedBox(height: 16),
 
-                // Register Link
+                // Sudah punya akun?
                 TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/loginPage');
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (_) => const LoginPage()),
+                    );
                   },
                   child: const Text(
                     'Sudah punya akun? Login',

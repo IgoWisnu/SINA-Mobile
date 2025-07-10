@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sina_mobile/View/Component/OrangTua/CustomAppBarOrangTua.dart';
 import 'package:sina_mobile/View/Component/OrangTua/CustomOrangTuaDrawer.dart';
+import 'package:sina_mobile/View/Component/OrangTua/LineBar.dart';
 import 'package:sina_mobile/View/OrangTua/DetailRaportPage.dart';
 import 'package:sina_mobile/ViewModel/OrangTua/RaporOrtuViewModel.dart';
 

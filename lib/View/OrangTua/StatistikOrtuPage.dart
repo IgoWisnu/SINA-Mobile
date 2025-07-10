@@ -77,7 +77,7 @@ class _StatistikOrtuPageState extends State<StatistikOrtuPage> {
             x: i,
             barRods: [
               BarChartRodData(
-                toY: item.nilai.toDouble(),
+                toY: (item.nilai ?? 0).toDouble(),
                 width: 14,
                 color: Colors.blueAccent,
                 borderRadius: BorderRadius.circular(4),

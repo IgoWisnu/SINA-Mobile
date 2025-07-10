@@ -123,10 +123,10 @@ class _JadwalPelajaranPageState extends State<JadwalPelajaranPage> {
                       itemBuilder: (context, index) {
                         final j = vm.jadwalList[index];
                         return ItemJadwalOrtu(
-                          waktu_mulai: j.start,
-                          waktu_selesai: j.finish,
-                          mata_pelajaran: j.namaMapel,
-                          guru: j.namaGuru,
+                          waktu_mulai: j.jam.split('-')[0].substring(0, 5),
+                          waktu_selesai: j.jam.split('-')[1].substring(0, 5),
+                          mata_pelajaran: j.mataPelajaran,
+                          guru: j.guru,
                         );
                       },
                     );

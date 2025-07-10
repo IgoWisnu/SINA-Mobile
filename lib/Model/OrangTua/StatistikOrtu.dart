@@ -23,13 +23,9 @@ class StatistikOrtu {
 class StatistikMapel {
   final String kelas;
   final String mapel;
-  final int nilai;
+  final int? nilai;
 
-  StatistikMapel({
-    required this.kelas,
-    required this.mapel,
-    required this.nilai,
-  });
+  StatistikMapel({required this.kelas, required this.mapel, this.nilai});
 
   factory StatistikMapel.fromJson(Map<String, dynamic> json) {
     return StatistikMapel(
