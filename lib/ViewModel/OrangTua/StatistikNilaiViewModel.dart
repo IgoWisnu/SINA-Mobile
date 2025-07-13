@@ -28,5 +28,16 @@ class StatistikNilaiViewModel extends ChangeNotifier {
       _loading = false;
       notifyListeners();
     }
+
+    try {
+      _statistikOrtu = await repository.fetchStatistik();
+      print("Data siswa: ${_statistikOrtu?.siswa}");
+      print("Kelas: ${_statistikOrtu?.kelasTersedia}");
+      print("Data jumlah mapel: ${_statistikOrtu?.data.length}");
+    } catch (e) {
+      _error = e.toString();
+      print("ERROR: $e");
+    }
+    notifyListeners();
   }
 }

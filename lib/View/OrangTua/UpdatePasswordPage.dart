@@ -100,9 +100,9 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
                         }
 
                         final request = UpdatePasswordRequest(
-                          passwordLama: current,
-                          passwordBaru: newPass,
-                          konfirmasiPassword: confirm,
+                          password_lama: current,
+                          password_baru: newPass,
+                          konfirmasi_password: confirm,
                         );
 
                         try {

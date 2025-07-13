@@ -16,6 +16,7 @@ class AjukanSuratViewModel extends ChangeNotifier {
     required String uraian,
     required String tanggalAbsensi,
     required String filePath,
+    required String password,
   }) async {
     isLoading = true;
     notifyListeners();
@@ -27,6 +28,7 @@ class AjukanSuratViewModel extends ChangeNotifier {
         uraian: uraian,
         tanggalAbsensi: tanggalAbsensi,
         filePath: filePath,
+        password: password,
       );
       errorMessage = null;
       return response;

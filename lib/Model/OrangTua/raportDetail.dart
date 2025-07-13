@@ -1,13 +1,9 @@
 class NilaiMapel {
   final String namaMapel;
-  final int nilai;
+  final double? nilai;
   final String kategori;
 
-  NilaiMapel({
-    required this.namaMapel,
-    required this.nilai,
-    required this.kategori,
-  });
+  NilaiMapel({required this.namaMapel, this.nilai, required this.kategori});
 
   factory NilaiMapel.fromJson(Map<String, dynamic> json) {
     return NilaiMapel(
@@ -21,22 +17,24 @@ class NilaiMapel {
 class RaporDetail {
   final String krsId;
   final String nama;
-  final String kelas;
+  final String nis;
+  final String? kelas;
   final String semester;
   final List<NilaiMapel> nilai;
-  final String lampiranUrl; // ✅ Tambahan
-  String? downloadUrl; // ✅ Tambahan jika perlu,
-  String? pdfUrl; // ✅ Tambahan jika perlu
+  final String lampiranUrl;
+  final String downloadUrl;
+  final String pdfUrl;
 
   RaporDetail({
     required this.krsId,
     required this.nama,
-    required this.kelas,
+    required this.nis,
+    this.kelas,
     required this.semester,
     required this.nilai,
     required this.lampiranUrl,
-    this.downloadUrl, // ✅ Tambahan
-    this.pdfUrl, // ✅ Tambahan
+    required this.downloadUrl,
+    required this.pdfUrl,
   });
 
   factory RaporDetail.fromJson(Map<String, dynamic> json) {
@@ -46,14 +44,15 @@ class RaporDetail {
             .toList();
 
     return RaporDetail(
-      krsId: json['krs_id'] ?? '',
-      nama: json['nama'] ?? '',
-      kelas: json['kelas'] ?? '',
-      semester: json['semester'] ?? '',
+      krsId: json['krs_id']?.toString() ?? '',
+      nama: json['nama']?.toString() ?? '',
+      nis: json['nis']?.toString() ?? '',
+      kelas: json['kelas']?.toString(),
+      semester: json['semester']?.toString() ?? '',
       nilai: nilaiList,
-      lampiranUrl: json['lampiranUrl'] ?? '',
-      downloadUrl: json['downloadUrl'], // ✅ Tambahan jika perlu
-      pdfUrl: json['pdfUrl'], // ✅ Tambahan jika perlu
+      lampiranUrl: json['lampiranUrl']?.toString() ?? '',
+      downloadUrl: json['downloadUrl']?.toString() ?? '',
+      pdfUrl: json['pdfUrl']?.toString() ?? '',
     );
   }
 }

@@ -16,14 +16,14 @@ class RekapAbsensiPage extends StatelessWidget {
   final Map<String, Color> colorMap = {
     "Hadir": Colors.blue,
     "Izin": Colors.teal,
-    "Sakit": Colors.yellow,
+    "Sakit": Colors.orange,
     "Alpha": Colors.red,
   };
 
   final List<Map<String, String>> riwayat = [
-    {"status": "Alpha", "tanggal": "35/04/2025", "keterangan": ""},
-    {"status": "Sakit", "tanggal": "35/04/2025", "keterangan": "Surat Izin"},
-    {"status": "Sakit", "tanggal": "35/04/2025", "keterangan": "Surat Izin"},
+    {"status": "Alpha", "tanggal": "05/04/2025", "keterangan": ""},
+    {"status": "Sakit", "tanggal": "06/04/2025", "keterangan": "Surat Izin"},
+    {"status": "Izin", "tanggal": "07/04/2025", "keterangan": "Surat Izin"},
   ];
 
   @override
@@ -37,7 +37,6 @@ class RekapAbsensiPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Dropdown x/1
             Align(
               alignment: Alignment.centerRight,
               child: Container(
@@ -46,7 +45,7 @@ class RekapAbsensiPage extends StatelessWidget {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.blue[100],
+                  color: Colors.blue.shade100,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Text(
@@ -56,25 +55,29 @@ class RekapAbsensiPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-
-            // Pie Chart
             Center(
-              child: PieChart(
-                dataMap: dataMap,
-                animationDuration: const Duration(milliseconds: 800),
-                chartLegendSpacing: 32,
-                colorList: colorMap.values.toList(),
-                chartRadius: MediaQuery.of(context).size.width / 2,
-                legendOptions: const LegendOptions(showLegends: false),
-                chartValuesOptions: const ChartValuesOptions(
-                  showChartValues: false,
+              child: Card(
+                elevation: 6,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: PieChart(
+                    dataMap: dataMap,
+                    animationDuration: const Duration(milliseconds: 800),
+                    chartLegendSpacing: 32,
+                    colorList: colorMap.values.toList(),
+                    chartRadius: MediaQuery.of(context).size.width / 2.2,
+                    legendOptions: const LegendOptions(showLegends: false),
+                    chartValuesOptions: const ChartValuesOptions(
+                      showChartValues: false,
+                    ),
+                  ),
                 ),
               ),
             ),
-
             const SizedBox(height: 16),
-
-            // Keterangan warna
             Wrap(
               spacing: 20,
               runSpacing: 10,
@@ -83,21 +86,25 @@ class RekapAbsensiPage extends StatelessWidget {
                     return Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Container(width: 16, height: 16, color: colorMap[key]),
+                        Container(
+                          width: 16,
+                          height: 16,
+                          decoration: BoxDecoration(
+                            color: colorMap[key],
+                            shape: BoxShape.circle,
+                          ),
+                        ),
                         const SizedBox(width: 6),
                         Text("$key : ${dataMap[key]!.toInt()}"),
                       ],
                     );
                   }).toList(),
             ),
-
             const SizedBox(height: 16),
-
-            // Keterangan bawah
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: Colors.grey.shade200,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Text(
@@ -105,13 +112,13 @@ class RekapAbsensiPage extends StatelessWidget {
                 style: TextStyle(fontSize: 12),
               ),
             ),
-
             const SizedBox(height: 24),
-
-            // Riwayat Absensi
             Container(
               width: double.infinity,
-              color: Colors.blue[700],
+              decoration: BoxDecoration(
+                color: Colors.blue.shade700,
+                borderRadius: BorderRadius.circular(8),
+              ),
               padding: const EdgeInsets.all(12),
               child: const Text(
                 "Riwayat Absensi",
@@ -122,56 +129,51 @@ class RekapAbsensiPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-
             ...riwayat.map((absen) {
-              return Column(
-                children: [
-                  ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(
-                      absen["status"]!,
-                      style: TextStyle(
-                        color:
-                            absen["status"] == "Alpha"
-                                ? Colors.red
-                                : Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
+              return Card(
+                margin: const EdgeInsets.symmetric(vertical: 6),
+                elevation: 2,
+                child: ListTile(
+                  title: Text(
+                    absen["status"]!,
+                    style: TextStyle(
+                      color:
+                          absen["status"] == "Alpha"
+                              ? Colors.red
+                              : Colors.black,
+                      fontWeight: FontWeight.bold,
                     ),
-                    subtitle: Text(absen["tanggal"]!),
-                    trailing:
-                        absen["keterangan"] != ""
-                            ? Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  absen["keterangan"]!,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                const SizedBox(width: 4),
-                                const Icon(Icons.arrow_forward_ios, size: 16),
-                              ],
-                            )
-                            : null,
                   ),
-                  const Divider(height: 1),
-                ],
+                  subtitle: Text(absen["tanggal"]!),
+                  trailing:
+                      absen["keterangan"] != ""
+                          ? Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                absen["keterangan"]!,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              const SizedBox(width: 4),
+                              const Icon(Icons.arrow_forward_ios, size: 16),
+                            ],
+                          )
+                          : null,
+                ),
               );
             }).toList(),
-
             const SizedBox(height: 16),
-
-            // Tombol "Lebih Banyak"
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue[700],
+                  backgroundColor: Colors.blue.shade700,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
                 onPressed: () {
                   Navigator.pushNamed(context, '/riwayat-absensi');

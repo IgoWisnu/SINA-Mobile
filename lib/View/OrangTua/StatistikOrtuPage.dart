@@ -1,3 +1,4 @@
+// ✅ FINAL UI StatistikOrtuPage dengan MVVM, Bar Chart, dan Tampilan Cantik
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -40,28 +41,56 @@ class _StatistikOrtuPageState extends State<StatistikOrtuPage> {
       ),
       body:
           vm.isLoading
-              ? Center(child: CircularProgressIndicator())
+              ? const Center(child: CircularProgressIndicator())
               : statistik == null
-              ? Center(child: Text("Belum ada data statistik"))
+              ? const Center(child: Text("Belum ada data statistik"))
               : SingleChildScrollView(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Siswa: ${statistik.siswa}",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                    Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 2,
+                      color: Colors.blue.shade50,
+                      child: ListTile(
+                        leading: const Icon(Icons.person, color: Colors.blue),
+                        title: Text(
+                          "Siswa: ${statistik.siswa}",
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        subtitle: Text(
+                          "Kelas: ${statistik.kelasTersedia.join(", ")}",
+                        ),
                       ),
                     ),
-                    SizedBox(height: 10),
-                    Text(
-                      "Kelas tersedia: ${statistik.kelasTersedia.join(", ")}",
-                    ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     TitleBarLine(judul: 'Statistik Nilai'),
-                    SizedBox(height: 200, child: buildBarChart(statistik.data)),
+                    const SizedBox(height: 10),
+                    statistik.data.isEmpty
+                        ? const Text("Tidak ada data nilai.")
+                        : Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.2),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          height: 300,
+                          child: buildBarChart(statistik.data),
+                        ),
                   ],
                 ),
               ),
@@ -73,11 +102,12 @@ class _StatistikOrtuPageState extends State<StatistikOrtuPage> {
       BarChartData(
         barGroups: List.generate(data.length, (i) {
           final item = data[i];
+          final double nilaiDouble = item.nilai ?? 0;
           return BarChartGroupData(
             x: i,
             barRods: [
               BarChartRodData(
-                toY: (item.nilai ?? 0).toDouble(),
+                toY: nilaiDouble,
                 width: 14,
                 color: Colors.blueAccent,
                 borderRadius: BorderRadius.circular(4),
@@ -100,11 +130,11 @@ class _StatistikOrtuPageState extends State<StatistikOrtuPage> {
                     angle: -0.5,
                     child: Text(
                       data[index].mapel,
-                      style: TextStyle(fontSize: 10),
+                      style: const TextStyle(fontSize: 10),
                     ),
                   );
                 }
-                return Text('');
+                return const Text('');
               },
             ),
           ),

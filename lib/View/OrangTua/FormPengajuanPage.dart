@@ -3,6 +3,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sina_mobile/Model/OrangTua/Siswa.dart';
 import 'package:sina_mobile/View/Component/CustomAppBarNoDrawer.dart';
 import 'package:sina_mobile/View/Component/OrangTua/CustomOrangTuaDrawer.dart';
@@ -22,6 +23,7 @@ class FormPengajuanPage extends StatefulWidget {
 class _FormPengajuanPageState extends State<FormPengajuanPage> {
   final TextEditingController _uraianController = TextEditingController();
   final TextEditingController _tanggalController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   String _selectedJenis = 's';
@@ -40,6 +42,7 @@ class _FormPengajuanPageState extends State<FormPengajuanPage> {
   void dispose() {
     _uraianController.dispose();
     _tanggalController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -64,12 +67,16 @@ class _FormPengajuanPageState extends State<FormPengajuanPage> {
     final picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2020),
+      firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
     if (picked != null) {
+      // Pastikan tanggal dalam format yyyy-MM-dd tanpa jam
+      final formatted = DateFormat(
+        'yyyy-MM-dd',
+      ).format(DateTime(picked.year, picked.month, picked.day));
       setState(() {
-        _tanggalController.text = DateFormat('yy-MM-dd').format(picked);
+        _tanggalController.text = formatted;
       });
     }
   }
@@ -83,11 +90,9 @@ class _FormPengajuanPageState extends State<FormPengajuanPage> {
       if (result != null && result.files.single.path != null) {
         final fileSize = result.files.single.size;
         if (fileSize > 5 * 1024 * 1024) {
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Ukuran file maksimal 5MB")),
-            );
-          }
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Ukuran file maksimal 5MB")),
+          );
           return;
         }
         setState(() {
@@ -95,27 +100,17 @@ class _FormPengajuanPageState extends State<FormPengajuanPage> {
         });
       }
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text("Gagal memilih file: $e")));
-      }
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Gagal memilih file: $e")));
     }
   }
 
   void _showKonfirmasiDialog() {
     if (!_formKey.currentState!.validate()) return;
-    if (selectedSiswa == null) {
+    if (selectedSiswa == null || _file == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Pilih anak terlebih dahulu")),
-      );
-      return;
-    }
-    if (_file == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Unggah dokumen pendukung terlebih dahulu"),
-        ),
+        const SnackBar(content: Text("Lengkapi semua isian terlebih dahulu.")),
       );
       return;
     }
@@ -125,16 +120,20 @@ class _FormPengajuanPageState extends State<FormPengajuanPage> {
       barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Konfirmasi Pengajuan"),
+          title: const Text("Konfirmasi Password"),
           content: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("Apakah Anda yakin ingin mengirim pengajuan?"),
-              const SizedBox(height: 10),
-              Text("Nama Siswa: ${selectedSiswa!.namaSiswa}"),
-              Text("Tanggal: ${_tanggalController.text}"),
-              Text("Jenis: ${_selectedJenis == 's' ? 'Sakit' : 'Izin'}"),
+              const Text("Masukkan password untuk mengirim pengajuan:"),
+              const SizedBox(height: 12),
+              TextField(
+                controller: _passwordController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  hintText: "Password",
+                  border: OutlineInputBorder(),
+                ),
+              ),
             ],
           ),
           actions: [
@@ -143,7 +142,18 @@ class _FormPengajuanPageState extends State<FormPengajuanPage> {
               child: const Text("Batal"),
             ),
             ElevatedButton(
-              onPressed: () => _submitPengajuan(),
+              onPressed: () {
+                if (_passwordController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Password tidak boleh kosong"),
+                    ),
+                  );
+                  return;
+                }
+                Navigator.pop(context);
+                _submitPengajuan();
+              },
               child: const Text("Kirim"),
             ),
           ],
@@ -153,7 +163,6 @@ class _FormPengajuanPageState extends State<FormPengajuanPage> {
   }
 
   Future<void> _submitPengajuan() async {
-    Navigator.pop(context);
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
 
@@ -165,6 +174,7 @@ class _FormPengajuanPageState extends State<FormPengajuanPage> {
         uraian: _uraianController.text,
         tanggalAbsensi: _tanggalController.text,
         filePath: _file!.path,
+        password: _passwordController.text,
       );
 
       if (response.data != null && mounted) {
@@ -250,7 +260,7 @@ class _FormPengajuanPageState extends State<FormPengajuanPage> {
                         siswaList.map((siswa) {
                           return DropdownMenuItem<Siswa>(
                             value: siswa,
-                            child: Text(siswa.namaSiswa),
+                            child: Text(siswa.nama),
                           );
                         }).toList(),
                     onChanged: (value) {
@@ -260,33 +270,16 @@ class _FormPengajuanPageState extends State<FormPengajuanPage> {
                 ),
               ),
               const SizedBox(height: 16),
-              if (selectedSiswa != null) ...[
-                const Text("NIS Siswa"),
-                const SizedBox(height: 6),
-                TextField(
-                  controller: TextEditingController(text: selectedSiswa!.nis),
-                  enabled: false,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.grey[200],
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-              ],
               const Text("Tanggal Izin *"),
               const SizedBox(height: 6),
               TextFormField(
                 controller: _tanggalController,
                 readOnly: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Harap pilih tanggal izin';
-                  }
-                  return null;
-                },
+                validator:
+                    (value) =>
+                        value == null || value.isEmpty
+                            ? 'Harap pilih tanggal izin'
+                            : null,
                 onTap: _pickTanggalIzin,
                 decoration: InputDecoration(
                   hintText: "yy-MM-dd",
@@ -301,19 +294,16 @@ class _FormPengajuanPageState extends State<FormPengajuanPage> {
               const SizedBox(height: 6),
               DropdownButtonFormField<String>(
                 value: _selectedJenis,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Harap pilih jenis izin';
-                  }
-                  return null;
-                },
+                validator:
+                    (value) =>
+                        value == null || value.isEmpty
+                            ? 'Harap pilih jenis izin'
+                            : null,
                 items: const [
                   DropdownMenuItem(value: 's', child: Text('Sakit')),
                   DropdownMenuItem(value: 'i', child: Text('Izin')),
                 ],
-                onChanged: (value) {
-                  setState(() => _selectedJenis = value!);
-                },
+                onChanged: (value) => setState(() => _selectedJenis = value!),
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -326,12 +316,11 @@ class _FormPengajuanPageState extends State<FormPengajuanPage> {
               TextFormField(
                 controller: _uraianController,
                 maxLines: 4,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Harap isi uraian';
-                  }
-                  return null;
-                },
+                validator:
+                    (value) =>
+                        value == null || value.isEmpty
+                            ? 'Harap isi uraian'
+                            : null,
                 decoration: InputDecoration(
                   hintText: "Contoh: Anak saya sedang ada acara keluarga",
                   border: OutlineInputBorder(

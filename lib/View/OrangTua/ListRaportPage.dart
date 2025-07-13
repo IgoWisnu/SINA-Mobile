@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sina_mobile/View/Component/OrangTua/CustomAppBarOrangTua.dart';
 import 'package:sina_mobile/View/Component/OrangTua/CustomOrangTuaDrawer.dart';
-import 'package:sina_mobile/View/Component/OrangTua/LineBar.dart';
 import 'package:sina_mobile/View/OrangTua/DetailRaportPage.dart';
 import 'package:sina_mobile/ViewModel/OrangTua/RaporOrtuViewModel.dart';
 
@@ -31,15 +30,13 @@ class _ListRapotPageState extends State<ListRapotPage> {
 
   @override
   Widget build(BuildContext context) {
-    String currentMenu = 'list_rapot';
+    const String currentMenu = 'list_rapot';
 
     return Scaffold(
-      drawer: CustomOrangTuaDrawer(selectedMenu: currentMenu),
       key: _scaffoldKey,
+      drawer: const CustomOrangTuaDrawer(selectedMenu: currentMenu),
       appBar: CustomAppBarOrangTua(
-        onMenuPressed: () {
-          _scaffoldKey.currentState?.openDrawer();
-        },
+        onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
       ),
       body: SafeArea(
         child: Padding(
@@ -65,81 +62,104 @@ class _ListRapotPageState extends State<ListRapotPage> {
                 children: [
                   const SizedBox(height: 16),
 
-                  // Nama siswa
-
-                  // Label Biru
+                  // Label Header
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 10,
-                    ),
+                    padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: const Color(0xFF2972FE),
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 6,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
                     ),
                     child: const Text(
-                      "Kelas/Semester",
+                      "Daftar Rapor Siswa",
                       style: TextStyle(
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
                     ),
                   ),
 
-                  // List Rapot
+                  const SizedBox(height: 12),
+
+                  // List Rapor
                   Expanded(
-                    child: Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 10,
-                      ),
-                      child: ListView.separated(
-                        itemCount: rapor.riwayatRapor.length,
-                        separatorBuilder:
-                            (context, index) => const Divider(thickness: 1),
-                        itemBuilder: (context, index) {
-                          final item = rapor.riwayatRapor[index];
-                          return Row(
-                            children: [
-                              Expanded(
-                                flex: 2,
-                                child: Text(
-                                  item.namaKelas,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w500,
+                    child: ListView.separated(
+                      itemCount: rapor.riwayatRapor.length,
+                      separatorBuilder:
+                          (context, index) => const SizedBox(height: 12),
+                      itemBuilder: (context, index) {
+                        final item = rapor.riwayatRapor[index];
+
+                        return Material(
+                          elevation: 2,
+                          borderRadius: BorderRadius.circular(10),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 3,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        item.namaKelas,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        rapor.nama,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontSize: 13,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ),
-                              Expanded(
-                                flex: 5,
-                                child: Text(
-                                  rapor.nama,
-                                  overflow: TextOverflow.ellipsis,
+                                const SizedBox(width: 10),
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.arrow_circle_right_outlined,
+                                    color: Colors.blue,
+                                    size: 26,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder:
+                                            (_) =>
+                                                DetailRapotPage(nis: rapor.nis),
+                                      ),
+                                    );
+                                  },
                                 ),
-                              ),
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.arrow_circle_right_outlined,
-                                  size: 20,
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder:
-                                          (_) => DetailRapotPage(
-                                            krsId: item.krsId,
-                                          ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],

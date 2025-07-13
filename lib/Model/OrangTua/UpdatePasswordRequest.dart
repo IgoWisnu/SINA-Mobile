@@ -1,17 +1,17 @@
 class UpdatePasswordRequest {
-  final String passwordLama;
-  final String passwordBaru;
-  final String konfirmasiPassword;
+  final String password_lama;
+  final String password_baru;
+  final String konfirmasi_password;
 
   UpdatePasswordRequest({
-    required this.passwordLama,
-    required this.passwordBaru,
-    required this.konfirmasiPassword,
+    required this.password_lama,
+    required this.password_baru,
+    required this.konfirmasi_password,
   });
 
   Map<String, dynamic> toJson() => {
-    'password_lama': passwordLama,
-    'password_baru': passwordBaru,
-    'konfirmasi_password': konfirmasiPassword,
+    'password_lama': password_lama,
+    'password_baru': password_baru,
+    'konfirmasi_password': konfirmasi_password,
   };
 }

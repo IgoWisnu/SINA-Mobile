@@ -16,6 +16,7 @@ import 'package:sina_mobile/ViewModel/OrangTua/DashboardOrtuViewModel.dart';
 import 'package:sina_mobile/ViewModel/OrangTua/JadwalHarianVIewModel.dart';
 import 'package:sina_mobile/ViewModel/OrangTua/ProfilOrtuViewModel.dart';
 import 'package:sina_mobile/ViewModel/OrangTua/RaporDetailViewModel.dart';
+import 'package:sina_mobile/ViewModel/OrangTua/RaporFileViewModel.dart';
 import 'package:sina_mobile/ViewModel/OrangTua/RaporOrtuViewModel.dart';
 import 'package:sina_mobile/ViewModel/OrangTua/RegisterViewModel.dart';
 import 'package:sina_mobile/ViewModel/OrangTua/RekapAbsensiOrtuViewModel.dart';
@@ -46,6 +47,7 @@ import 'package:sina_mobile/service/repository/OrangTua/BiodataOrtuRepository.da
 import 'package:sina_mobile/service/repository/OrangTua/DashboardOrtuRepository.dart';
 import 'package:sina_mobile/service/repository/OrangTua/JadwalHarianRepository.dart';
 import 'package:sina_mobile/service/repository/OrangTua/RaporDetailRepository.dart';
+import 'package:sina_mobile/service/repository/OrangTua/RaporFileRepository.dart';
 import 'package:sina_mobile/service/repository/OrangTua/RaporRepository.dart';
 import 'package:sina_mobile/service/repository/OrangTua/RegisterRepository.dart';
 import 'package:sina_mobile/service/repository/OrangTua/RiwayatAbsensiRepository.dart';
@@ -200,6 +202,12 @@ class MyApp extends StatelessWidget {
           create:
               (_) => RegisterViewModel(
                 repository: RegisterRepository(apiService: ApiServiceAuth()),
+              ),
+        ),
+        ChangeNotifierProvider(
+          create:
+              (_) => RaporFileViewModel(
+                repository: RaporFileRepository(ApiServiceOrangTua()),
               ),
         ),
       ],

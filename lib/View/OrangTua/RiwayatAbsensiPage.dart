@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sina_mobile/View/Component/CustomAppBarNoDrawer.dart';
 import 'package:sina_mobile/View/Component/OrangTua/TitleBarRiwayatAbsensi.dart';
-import 'package:sina_mobile/View/Component/TitleBar.dart';
 import 'package:sina_mobile/ViewModel/OrangTua/RiwayatAbsensiViewModel.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -24,6 +23,32 @@ class _RiwayatAbsensiPageState extends State<RiwayatAbsensiPage> {
         listen: false,
       ).fetchRiwayatAbsensi();
     });
+  }
+
+  Color _getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case "alpha":
+        return Colors.red;
+      case "sakit":
+        return Colors.orange;
+      case "izin":
+        return Colors.blue;
+      default:
+        return Colors.black;
+    }
+  }
+
+  IconData _getStatusIcon(String status) {
+    switch (status.toLowerCase()) {
+      case "alpha":
+        return Icons.cancel;
+      case "sakit":
+        return Icons.sick;
+      case "izin":
+        return Icons.assignment_turned_in;
+      default:
+        return Icons.help_outline;
+    }
   }
 
   @override
@@ -52,12 +77,7 @@ class _RiwayatAbsensiPageState extends State<RiwayatAbsensiPage> {
             }
 
             return RefreshIndicator(
-              onRefresh: () async {
-                await Provider.of<RiwayatAbsensiViewModel>(
-                  context,
-                  listen: false,
-                ).fetchRiwayatAbsensi();
-              },
+              onRefresh: () => vm.fetchRiwayatAbsensi(),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -65,72 +85,65 @@ class _RiwayatAbsensiPageState extends State<RiwayatAbsensiPage> {
                   const SizedBox(height: 10),
                   Expanded(
                     child: ListView.separated(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       itemCount: vm.riwayat.length,
-                      separatorBuilder:
-                          (_, __) =>
-                              const Divider(height: 1, color: Colors.black),
+                      separatorBuilder: (_, __) => const SizedBox(height: 10),
                       itemBuilder: (context, index) {
                         final absen = vm.riwayat[index];
                         final formattedDate = DateFormat(
                           'dd/MM/yyyy',
                         ).format(DateTime.parse(absen.tanggal));
 
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12.0),
-                          child: Row(
-                            children: [
-                              // Status
-                              Expanded(
-                                flex: 2,
-                                child: Text(
-                                  absen.status,
-                                  style: TextStyle(
-                                    color:
-                                        absen.status == "Alpha"
-                                            ? Colors.red
-                                            : Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
+                        return Card(
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  _getStatusIcon(absen.status),
+                                  color: _getStatusColor(absen.status),
                                 ),
-                              ),
-
-                              // Tanggal
-                              Expanded(
-                                flex: 2,
-                                child: Text(
-                                  formattedDate,
-                                  style: const TextStyle(fontSize: 14),
-                                ),
-                              ),
-
-                              // Surat Izin
-                              if (absen.suratUrl.isNotEmpty)
+                                const SizedBox(width: 12),
                                 Expanded(
-                                  flex: 3,
-                                  child: InkWell(
-                                    onTap:
-                                        () => _launchDocument(absen.suratUrl),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: const [
-                                        Text(
-                                          "Surat Izin",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 13,
-                                          ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        absen.status,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: _getStatusColor(absen.status),
+                                          fontSize: 16,
                                         ),
-                                        SizedBox(width: 4),
-                                        Icon(Icons.arrow_forward_ios, size: 16),
-                                      ],
-                                    ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        formattedDate,
+                                        style: const TextStyle(fontSize: 14),
+                                      ),
+                                    ],
                                   ),
-                                )
-                              else
-                                const Expanded(flex: 3, child: SizedBox()),
-                            ],
+                                ),
+                                if (absen.suratUrl != null &&
+                                    absen.suratUrl!.isNotEmpty)
+                                  IconButton(
+                                    onPressed:
+                                        () => _launchDocument(absen.suratUrl!),
+                                    icon: const Icon(
+                                      Icons.picture_as_pdf,
+                                      color: Colors.indigo,
+                                    ),
+                                    tooltip: "Lihat Surat",
+                                  ),
+                              ],
+                            ),
                           ),
                         );
                       },
@@ -149,16 +162,15 @@ class _RiwayatAbsensiPageState extends State<RiwayatAbsensiPage> {
     try {
       if (url.isEmpty) throw Exception('URL dokumen kosong');
 
-      String fullUrl =
+      final fullUrl =
           url.startsWith('http')
               ? url
               : "http://sina.pnb.ac.id:3006${url.replaceFirst('/uploads', '/Upload')}";
 
-      if (await canLaunchUrl(Uri.parse(fullUrl))) {
-        await launchUrl(
-          Uri.parse(fullUrl),
-          mode: LaunchMode.externalApplication,
-        );
+      final uri = Uri.parse(fullUrl);
+
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
       } else {
         throw Exception('Tidak bisa membuka URL: $fullUrl');
       }
@@ -171,7 +183,6 @@ class _RiwayatAbsensiPageState extends State<RiwayatAbsensiPage> {
           ),
         );
       }
-      debugPrint('Error launching document: $e');
     }
   }
 }

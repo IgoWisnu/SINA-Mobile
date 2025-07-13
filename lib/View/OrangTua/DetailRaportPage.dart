@@ -1,16 +1,17 @@
+// FINAL CODE: DetailRapotPage (Rapih & Responsif Table)
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sina_mobile/View/Component/CustomAppBarNoDrawer.dart';
 import 'package:sina_mobile/View/Component/TitleBarLine.dart';
 import 'package:pdfx/pdfx.dart';
-import 'package:sina_mobile/ViewModel/OrangTua/RaporDetailViewModel.dart';
+import 'package:sina_mobile/ViewModel/OrangTua/RaporFileViewModel.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class DetailRapotPage extends StatefulWidget {
-  final String krsId;
-
-  const DetailRapotPage({super.key, required this.krsId});
+  final String nis;
+  const DetailRapotPage({super.key, required this.nis});
 
   @override
   State<DetailRapotPage> createState() => _DetailRapotPageState();
@@ -21,36 +22,25 @@ class _DetailRapotPageState extends State<DetailRapotPage> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      final vm = Provider.of<RaporDetailViewModel>(context, listen: false);
-      vm.fetchDetail(widget.krsId);
+      final vm = Provider.of<RaporFileViewModel>(context, listen: false);
+      vm.fetchRapor(widget.nis);
     });
   }
 
   Future<void> _unduhRapor() async {
-    final vm = Provider.of<RaporDetailViewModel>(context, listen: false);
+    final vm = Provider.of<RaporFileViewModel>(context, listen: false);
 
     try {
-      final fileName = vm.raporDetail!.downloadUrl!.split('/').last;
-      final fullUrl =
-          'http://sina.pnb.ac.id:3001${vm.raporDetail!.downloadUrl}';
-
-      final status = await Permission.storage.request();
-      if (!status.isGranted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Izin penyimpanan ditolak')));
-        return;
-      }
-
-      final file = await vm.downloadAndSavePdf(fullUrl, fileName);
+      final fileName = vm.rapor!.filename;
+      final file = await vm.downloadRaporFile(vm.rapor!.raporUrl, fileName);
 
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('File berhasil diunduh')));
+      ).showSnackBar(const SnackBar(content: Text('File berhasil diunduh')));
     } catch (e) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Gagal mengunduh file')));
+      ).showSnackBar(const SnackBar(content: Text('Gagal mengunduh file')));
     }
   }
 
@@ -59,7 +49,7 @@ class _DetailRapotPageState extends State<DetailRapotPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBarNoDrawer(),
-      body: Consumer<RaporDetailViewModel>(
+      body: Consumer<RaporFileViewModel>(
         builder: (context, viewModel, child) {
           if (viewModel.isLoading) {
             return const Center(child: CircularProgressIndicator());
@@ -69,7 +59,7 @@ class _DetailRapotPageState extends State<DetailRapotPage> {
             return Center(child: Text(viewModel.errorMessage!));
           }
 
-          final data = viewModel.raporDetail;
+          final data = viewModel.rapor;
 
           if (data == null) {
             return const Center(child: Text('Data rapor tidak ditemukan.'));
@@ -84,8 +74,9 @@ class _DetailRapotPageState extends State<DetailRapotPage> {
                   TitleBarLine(judul: "Rapot"),
                   const SizedBox(height: 20),
 
-                  // Tabel Nilai
+                  // Tabel Nilai Rapih dan Responsif
                   Container(
+                    width: double.infinity,
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.blue),
                       borderRadius: BorderRadius.circular(8),
@@ -93,10 +84,8 @@ class _DetailRapotPageState extends State<DetailRapotPage> {
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: DataTable(
-                        columnSpacing: 30, // Add spacing between columns
-                        horizontalMargin: 12, // Add margin on sides
-                        headingRowHeight: 40, // Set heading row height
-                        dataRowHeight: 40, // Set data row height
+                        columnSpacing: 20,
+                        horizontalMargin: 12,
                         headingRowColor: MaterialStateProperty.all(Colors.blue),
                         headingTextStyle: const TextStyle(
                           color: Colors.white,
@@ -105,30 +94,51 @@ class _DetailRapotPageState extends State<DetailRapotPage> {
                         ),
                         columns: const [
                           DataColumn(label: Text("Mata Pelajaran")),
-                          DataColumn(label: Text("Nilai"), numeric: true),
-                          DataColumn(label: Text("Kategori")),
+                          DataColumn(label: Text("Pengetahuan"), numeric: true),
+                          DataColumn(
+                            label: Text("Keterampilan"),
+                            numeric: true,
+                          ),
+                          DataColumn(label: Text("KKM"), numeric: true),
+                          DataColumn(label: Text("Status")),
+                          DataColumn(label: Text("Guru Pengampu")),
                         ],
                         rows:
                             data.nilai.map((mapel) {
                               return DataRow(
                                 cells: [
                                   DataCell(
-                                    Container(
-                                      constraints: BoxConstraints(
-                                        maxWidth: 200,
-                                      ), // Set max width for mapel name
+                                    SizedBox(
+                                      width: 180,
                                       child: Text(
                                         mapel.namaMapel,
-                                        overflow:
-                                            TextOverflow
-                                                .ellipsis, // Add ellipsis if text is too long
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                   ),
                                   DataCell(
-                                    Center(child: Text(mapel.nilai.toString())),
+                                    Text(
+                                      mapel.pengetahuan?.toStringAsFixed(1) ??
+                                          '-',
+                                    ),
                                   ),
-                                  DataCell(Text(mapel.kategori)),
+                                  DataCell(
+                                    Text(
+                                      mapel.keterampilan?.toStringAsFixed(1) ??
+                                          '-',
+                                    ),
+                                  ),
+                                  DataCell(Text(mapel.kkm.toString())),
+                                  DataCell(Text(mapel.status)),
+                                  DataCell(
+                                    SizedBox(
+                                      width: 120,
+                                      child: Text(
+                                        mapel.guruPengampu ?? '-',
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               );
                             }).toList(),
@@ -144,41 +154,31 @@ class _DetailRapotPageState extends State<DetailRapotPage> {
                   ),
                   const SizedBox(height: 8),
 
-                  (data.pdfUrl == null || data.pdfUrl!.isEmpty)
-                      ? const Center(child: Text("Tidak ada file tersedia"))
-                      : FutureBuilder<File>(
-                        future: () {
-                          final fullUrl =
-                              'http://sina.pnb.ac.id:3001${data.downloadUrl}';
-                          return viewModel.downloadPdfFileLocal(
-                            fullUrl,
-                            data.downloadUrl ?? '',
-                          );
-                        }(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          } else if (snapshot.hasError) {
-                            return const Center(
-                              child: Text('Gagal memuat file PDF'),
-                            );
-                          } else {
-                            final file = snapshot.data!;
-                            return Container(
-                              height:
-                                  400, // agar PDF tidak menyebabkan overflow
-                              child: PdfViewPinch(
-                                controller: PdfControllerPinch(
-                                  document: PdfDocument.openFile(file.path),
-                                ),
-                              ),
-                            );
-                          }
-                        },
-                      ),
+                  FutureBuilder<File>(
+                    future: viewModel.downloadRaporFile(
+                      data.raporUrl,
+                      data.filename,
+                    ),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return const Center(
+                          child: Text('Gagal memuat file PDF'),
+                        );
+                      } else {
+                        final file = snapshot.data!;
+                        return SizedBox(
+                          height: 400,
+                          child: PdfViewPinch(
+                            controller: PdfControllerPinch(
+                              document: PdfDocument.openFile(file.path),
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  ),
 
                   const SizedBox(height: 16),
 

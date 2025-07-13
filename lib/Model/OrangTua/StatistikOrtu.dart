@@ -23,15 +23,23 @@ class StatistikOrtu {
 class StatistikMapel {
   final String kelas;
   final String mapel;
-  final int? nilai;
+  final double nilai;
 
-  StatistikMapel({required this.kelas, required this.mapel, this.nilai});
+  StatistikMapel({
+    required this.kelas,
+    required this.mapel,
+    required this.nilai,
+  });
 
   factory StatistikMapel.fromJson(Map<String, dynamic> json) {
     return StatistikMapel(
       kelas: json['kelas'],
       mapel: json['mapel'],
-      nilai: json['nilai'],
+      nilai:
+          (json['nilai'] is int)
+              ? (json['nilai'] as int).toDouble()
+              : (json['nilai'] ?? 0)
+                  .toDouble(), // Default to '0' if nilai is null
     );
   }
 }

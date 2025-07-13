@@ -16,6 +16,7 @@ class AjukanSuratRepository {
     required String uraian,
     required String tanggalAbsensi,
     required String filePath,
+    required String password,
   }) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('auth_token');
@@ -32,6 +33,7 @@ class AjukanSuratRepository {
     request.fields['keterangan'] = keterangan;
     request.fields['uraian'] = uraian;
     request.fields['tanggal_absensi'] = tanggalAbsensi;
+    request.fields['password'] = password; // Tambahkan password ke fields
 
     request.files.add(
       await http.MultipartFile.fromPath(

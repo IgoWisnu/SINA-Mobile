@@ -19,6 +19,8 @@ class ItemRiwayatAbsensiOrtu extends StatelessWidget {
             final formattedDate = DateFormat(
               'dd/MM/yyyy',
             ).format(DateTime.parse(absen.tanggal));
+            final bool hasSurat =
+                absen.suratUrl != null && absen.suratUrl!.isNotEmpty;
 
             return Column(
               children: [
@@ -34,10 +36,10 @@ class ItemRiwayatAbsensiOrtu extends StatelessWidget {
                   ),
                   subtitle: Text(formattedDate),
                   trailing:
-                      absen.suratUrl.isNotEmpty
+                      hasSurat
                           ? InkWell(
                             onTap:
-                                () => _launchDocument(context, absen.suratUrl),
+                                () => _launchDocument(context, absen.suratUrl!),
                             child: const Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -66,11 +68,13 @@ class ItemRiwayatAbsensiOrtu extends StatelessWidget {
     try {
       if (url.isEmpty) throw Exception('URL dokumen kosong');
 
-      // Perbaiki jalur menjadi huruf besar "Upload"
       final fullUrl =
           url.startsWith('http')
               ? url
-              : "http://sina.pnb.ac.id:3006${url.replaceFirst('/uploads', '/Upload')}";
+              : "http://sina.pnb.ac.id:3006" +
+                  (url.startsWith('/uploads')
+                      ? url.replaceFirst('/uploads', '/Upload')
+                      : url);
 
       final uri = Uri.parse(fullUrl);
 
